@@ -769,4 +769,7 @@
 
     <!-- Whether to show a custom view for FOD -->
     <bool name="config_needCustomFODView">true</bool>
+
+    <!-- Color of the FOD view -->
+    <color name="config_fodColor">#00ffffff</color>
 </resources>
