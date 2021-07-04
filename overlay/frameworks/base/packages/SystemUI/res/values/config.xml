@@ -45,4 +45,7 @@
 
     <!-- Update battery info every second when device is charging -->
     <bool name="config_alternateFastchargeInfoUpdate">true</bool>
+    
+    <!-- The bottom margin of the keyguard security container -->
+    <dimen name="kg_security_container_min_bottom_margin">469px</dimen>
 </resources>
