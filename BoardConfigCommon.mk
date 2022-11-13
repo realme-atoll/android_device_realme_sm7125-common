@@ -252,7 +252,8 @@ SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 
 # SurfaceFlinger
-#TARGET_USE_AOSP_SURFACEFLINGER := true
+# SurfaceFlinger
+TARGET_USE_AOSP_SURFACEFLINGER := true
 
 # WiFi
 BOARD_WLAN_DEVICE := qcwcn
