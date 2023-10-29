@@ -486,6 +486,7 @@ PRODUCT_PACKAGES += \
     android.frameworks.serservice@1.0.vendor \
     android.frameworks.stats@1.0.vendor \
     android.hardware.atrace@1.0.vendor \
+    android.frameworks.sensorservice@1.0.vendor \
     android.hardware.audio.common@4.0.vendor \
     android.hardware.audio.common@5.0.vendor \
     android.hardware.audio.common@6.0.vendor \
