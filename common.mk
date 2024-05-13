@@ -60,15 +60,14 @@ PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/audio/vendor/,$(TARGET_COPY_OUT_VENDOR)/etc)
 
 # AVB
-PRODUCT_PACKAGES += \
-    q-gsi.avbpubkey \
-    r-gsi.avbpubkey \
-    s-gsi.avbpubkey
+#PRODUCT_PACKAGES += \
+#    q-gsi.avbpubkey \
+#    r-gsi.avbpubkey \
+#    s-gsi.avbpubkey
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    audio.bluetooth.default \
-    libbthost_if
+    audio.bluetooth.default
 
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth.audio-impl \
@@ -108,9 +107,7 @@ PRODUCT_PACKAGES += \
     gralloc.atoll \
     hwcomposer.atoll \
     libdisplayconfig.qti \
-    libdisplayconfig.qti.vendor \
     libqdMetaData \
-    libtinyxml \
     libgui_vendor \
     memtrack.atoll \
     libsdmcore \
@@ -118,7 +115,6 @@ PRODUCT_PACKAGES += \
     libvulkan
 
 PRODUCT_PACKAGES += \
-    android.hardware.graphics.composer@2.4-impl \
     android.hardware.graphics.composer@2.4-service \
     android.hardware.graphics.mapper@3.0-impl-qti-display \
     android.hardware.graphics.mapper@4.0-impl-qti-display \
@@ -135,8 +131,8 @@ PRODUCT_PACKAGES += \
     vendor.display.config@2.0.vendor
 
 # DRM
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.4-service.clearkey
+#PRODUCT_PACKAGES += \
+#    android.hardware.drm@1.4-service.clearkey
 
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0.vendor \
@@ -242,7 +238,6 @@ PRODUCT_PACKAGES += \
     libOmxQcelp13Enc \
     libOmxVdec \
     libOmxVenc \
-    libOmxSwVdec \
     libstagefrighthw
 
 PRODUCT_COPY_FILES += \
@@ -409,8 +404,8 @@ PRODUCT_PACKAGES += \
     TetheringConfigOverlay
 
 # TextClassifier
-PRODUCT_PACKAGES += \
-    textclassifier.bundle1
+#PRODUCT_PACKAGES += \
+#    textclassifier.bundle1
 
 # Touchscreen
 PRODUCT_COPY_FILES += \
@@ -483,7 +478,6 @@ PRODUCT_PACKAGES += \
     android.frameworks.cameraservice.service@2.1.vendor \
     android.frameworks.displayservice@1.0.vendor \
     android.frameworks.schedulerservice@1.0.vendor \
-    android.frameworks.serservice@1.0.vendor \
     android.frameworks.stats@1.0.vendor \
     android.hardware.atrace@1.0.vendor \
     android.frameworks.sensorservice@1.0.vendor \
@@ -587,19 +581,12 @@ PRODUCT_PACKAGES += \
     android.hardware.secure_element@1.0.vendor \
     android.hardware.secure_element@1.1.vendor \
     android.hardware.secure_element@1.2.vendor \
-    android.hardware.sers@1.0.vendor \
-    android.hardware.sers@2.0.vendor \
-    android.hardware.sers@2.1.vendor \
-    android.hardwareundtrigger@2.1.vendor \
-    android.hardwareundtrigger@2.2.vendor \
-    android.hardwareundtrigger@2.3.vendor \
     android.hardware.tetheroffload.config@1.0.vendor \
     android.hardware.tetheroffload.control@1.0.vendor \
     android.hardware.thermal@1.0.vendor \
     android.hardware.thermal@1.1.vendor \
     android.hardware.thermal@2.0.vendor \
     android.hardware.tv.cec@1.0.vendor \
-    android.hardware.tv.cec@2.0.vendor \
     android.hardware.tv.input@1.0.vendor \
     android.hardware.tv.tuner@1.0.vendor \
     android.hardware.usb.gadget@1.0.vendor \
@@ -616,7 +603,6 @@ PRODUCT_PACKAGES += \
     android.hardware.wifi.hostapd@1.0.vendor \
     android.hardware.wifi.hostapd@1.1.vendor \
     android.hardware.wifi.hostapd@1.2.vendor \
-    android.hardware.wifi.offload@1.0.vendor \
     android.hardware.wifi.supplicant@1.0.vendor \
     android.hardware.wifi.supplicant@1.1.vendor \
     android.hardware.wifi.supplicant@1.2.vendor \
@@ -631,12 +617,10 @@ PRODUCT_PACKAGES += \
     android.system.net.netd@1.0.vendor \
     android.system.net.netd@1.1.vendor \
     android.system.wifi.keystore@1.0.vendor \
-    libadf.vendor \
     libstdc++_vendor \
     vendor.qti.hardware.camera.device@1.0.vendor \
     android.hardware.health.storage@1.0.vendor \
     android.hardware.health@1.0.vendor \
     android.hardware.health@2.0.vendor \
     android.hardware.health@2.1.vendor \
-    android.hardware.power.stats@1.0.vendor \
-    libtinyxml.vendor
+    android.hardware.power.stats@1.0.vendor
