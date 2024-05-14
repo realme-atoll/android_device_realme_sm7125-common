@@ -28,6 +28,10 @@ LOCAL_PACKAGE_NAME := RealmeParts
 LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 
+LOCAL_OPTIONAL_USES_LIBRARIES := \
+    androidx.window.extensions \
+    androidx.window.sidecar
+
 LOCAL_RESOURCE_DIR := \
     $(LOCAL_PATH)/res
 
