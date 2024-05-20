@@ -223,3 +223,5 @@ vendor.usb.use_gadget_hal=0
 # Seamless transfer
 sys.fflag.override.settings_seamless_transfer=true
 
+# default refresh rate threshold
+debug.sf.frame_rate_multiple_threshold=0
