@@ -48,6 +48,7 @@ ro.surface_flinger.supports_background_blur=0
 ro.surface_flinger.wcg_composition_dataspace=143261696
 ro.vendor.display.sensortype=2
 ro.vendor.display.svi=1
+debug.hwui.renderer=opengl
 
 # DPM
 persist.dpm.feature=1
@@ -125,6 +126,9 @@ ro.zram.mark_idle_delay_mins=60
 ro.zram.first_wb_delay_mins=180
 ro.zram.periodic_wb_delay_hours=24
 
+#SkiaGL
+debug.renderengine.backend=skiaglthreaded
+renderthread.skia.reduceopstasksplitting=true 
 
 # Disable vsync for cpu rendered apps
 debug.cpurend.vsync=false
