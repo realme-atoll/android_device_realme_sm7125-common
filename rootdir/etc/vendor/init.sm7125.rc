@@ -29,10 +29,6 @@ on boot
     chown system system /sys/class/leds/vibrator/vmax_mv
     chmod 0644 /sys/class/leds/vibrator/vmax_mv
 
-    # OTG
-    chown system system /sys/class/power_supply/usb/otg_switch
-    chmod 0644 /sys/class/power_supply/usb/otg_switch
-
 on property:ro.boot.product.hardware.sku=nfc
     start secure_element_hal_service
     start vendor.nfc_hal_service

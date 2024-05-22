@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
-import org.aospextended.device.RealmeParts;
 import org.aospextended.device.gestures.TouchGestures;
 import org.aospextended.device.util.Utils;
 import org.aospextended.device.doze.DozeUtils;
@@ -44,8 +43,6 @@ public class BootReceiver extends BroadcastReceiver {
                 TouchGestures.PREF_GESTURE_ENABLE, false));
             TouchGestures.enableDt2w(prefs.getBoolean(
                 TouchGestures.PREF_DT2W_ENABLE, true));
-            RealmeParts.enableOTG(prefs.getBoolean(
-                RealmeParts.PREF_OTG, false));
         }
         DozeUtils.checkDozeService(context);
 //        VibratorStrengthPreference.restore(context);
