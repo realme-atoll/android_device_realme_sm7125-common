@@ -137,7 +137,7 @@ on post-fs-data
     mkdir /data/vendor/nnhal 0700 system system
 
 on boot
-    start rmt_storage
+    start vendor.rmt_storage
     start rfs_access
 
 on property:sys.boot_completed=1
