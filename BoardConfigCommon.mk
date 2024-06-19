@@ -178,7 +178,7 @@ BOARD_USES_METADATA_PARTITION := true
 
 BOARD_FLASH_BLOCK_SIZE := 262144
 
--include vendor/lineage/config/BoardConfigReservedSize.mk
+-include vendor/derp/config/BoardConfigReservedSize.mk
 
 # Platform
 TARGET_BOARD_PLATFORM := atoll
