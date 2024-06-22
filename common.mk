@@ -230,8 +230,8 @@ PRODUCT_PACKAGES += \
 $(call inherit-product-if-exists, vendor/lawnchair/lawnchair.mk)
 
 # LiveDisplay
-# PRODUCT_PACKAGES += \
-#     vendor.lineage.livedisplay@2.0-service-sdm
+PRODUCT_PACKAGES += \
+    vendor.lineage.livedisplay@2.0-service-sdm
 
 # Media
 PRODUCT_PACKAGES += \
@@ -286,7 +286,7 @@ PRODUCT_PACKAGES += \
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-derp
+    $(LOCAL_PATH)/overlay-lineage
 
 # Perf
 PRODUCT_PACKAGES += \
@@ -301,7 +301,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Power
 PRODUCT_PACKAGES += \
-    android.hardware.power-service.derp-libperfmgr \
+    android.hardware.power-service.lineage-libperfmgr \
     android.hardware.power@1.2.vendor \
     libqti-perfd-client
 
@@ -369,7 +369,7 @@ PRODUCT_SOONG_NAMESPACES += \
     kernel/realme/sm7125 \
     hardware/google/interfaces \
     hardware/google/pixel \
-    hardware/derp/interfaces/power-libperfmgr \
+    hardware/lineage/interfaces/power-libperfmgr \
     hardware/oplus \
     hardware/qcom-caf/common/libqti-perfd-client
 
