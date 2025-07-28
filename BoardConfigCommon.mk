@@ -110,7 +110,6 @@ ODM_MANIFEST_SKUS += nfc
 ODM_MANIFEST_NFC_FILES := $(COMMON_PATH)/manifest_nfc.xml
 
 # Init
-TARGET_INIT_VENDOR_LIB := //$(COMMON_PATH):libinit_realme_sm7125
 TARGET_RECOVERY_DEVICE_MODULES := libinit_realme_sm7125
 
 # Kernel
