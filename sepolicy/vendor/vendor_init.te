@@ -14,3 +14,16 @@ allow vendor_init proc_fw_update:file { write };
 
 set_prop(vendor_init, vendor_freq_prop);
 set_prop(vendor_init, vendor_camera_prop);
+
+# Allow setting properties
+allow vendor_init vendor_cgroup_follow_prop:property_service set;
+
+
+
+allow vendor_ssr_setup sysfs:file { write };
+allow vendor_init tmpfs:dir { search };
+allow vendor_init tmpfs:file { getattr open read };
+allow vendor_init vendor_default_prop:property_service { set };
+
+allow vendor_init rm_vendor_radio_vendor_data_file:dir { getattr ioctl open read };
+

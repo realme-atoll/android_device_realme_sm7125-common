@@ -1,0 +1,7 @@
+# Block device access
+allow fsck vendor_modem_efs_partition_device:blk_file { read write };
+allow fsck fsck:capability { kill };
+
+allow fsck block_device:blk_file { ioctl };
+allow fsck self:capability kill;
+allow fsck vendor_modem_efs_partition_device:blk_file { open read };

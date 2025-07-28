@@ -1,0 +1,57 @@
+# Property access
+get_prop(untrusted_app, aac_drc_prop)
+get_prop(untrusted_app, ab_update_gki_prop)
+
+allow untrusted_app aac_drc_prop:file { getattr map open };
+allow untrusted_app ab_update_gki_prop:file { getattr open };
+allow untrusted_app proc_zoneinfo:file { getattr open };
+
+# ADB (optional)
+allow untrusted_app adb_data_file:dir getattr;
+
+# Specific allowed proc files
+allow untrusted_app proc_max_map_count:file r_file_perms;
+allow untrusted_app proc_zoneinfo:file r_file_perms;
+
+# General /proc access (only metadata)
+allow untrusted_app media_rw_data_file:file relabelfrom;
+allow untrusted_app proc:file getattr;
+
+
+# Optional safe /proc entries
+allow untrusted_app proc_keys:file r_file_perms;
+allow untrusted_app proc_misc:file r_file_perms;
+allow untrusted_app media_rw_data_file:file relabelto;
+allow untrusted_app proc_iomem:file getattr;
+allow untrusted_app proc_kmsg:file getattr;
+allow untrusted_app proc_locks:file getattr;
+allow untrusted_app proc_oppo_fp:file getattr;
+allow untrusted_app proc_stat:file getattr;
+
+allow untrusted_app proc_cmdline:file getattr;
+allow untrusted_app proc_loadavg:file getattr;
+allow untrusted_app proc_modules:file getattr;
+allow untrusted_app proc_swaps:file getattr;
+allow untrusted_app proc_uptime:file getattr;
+allow untrusted_app proc_version:file getattr;
+allow untrusted_app proc_vmstat:file getattr;
+allow untrusted_app rootfs:dir read;
+allow untrusted_app sysfs_net:dir search;
+
+allow untrusted_app proc_buddyinfo:file getattr;
+allow untrusted_app proc_kallsyms:file getattr;
+allow untrusted_app proc_lcd:file getattr;
+allow untrusted_app proc_slabinfo:file getattr;
+allow untrusted_app proc_timer:file getattr;
+allow untrusted_app rootfs:dir open;
+
+
+allow untrusted_app net_dns_prop:file { getattr map open };
+allow untrusted_app proc_diskstats:file getattr;
+allow untrusted_app proc_flash:file getattr;
+allow untrusted_app proc_interrupts:file getattr;
+allow untrusted_app proc_kpageflags:file getattr;
+
+# For accessing system characteristics
+allow untrusted_app proc_pagetypeinfo:file getattr;
+allow untrusted_app proc_sysrq:file getattr;

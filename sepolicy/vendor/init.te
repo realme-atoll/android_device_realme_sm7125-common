@@ -1,0 +1,10 @@
+allow init hidl_base_hwservice:hwservice_manager add;
+allow init hwservicemanager:binder { call transfer };
+
+#!!!! This avc is allowed in the current policy
+allow init same_process_hal_file:file execute;
+allow init vendor_file:file execute;
+allow init vendor_modem_efs_partition_device:lnk_file relabelto;
+allow init hal_fingerprint_default:process ptrace;
+allow init debugfs_tracing_debug:dir mounton;
+
