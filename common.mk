@@ -111,7 +111,7 @@ $(call inherit-product-if-exists, vendor/certprops/Android.mk)
 PRODUCT_PACKAGES += \
     disable_configstore \
     gralloc.atoll \
-    hwcomposer.atoll \
+    hwcomposer.qcom \
     libdisplayconfig.qti \
     libqdMetaData \
     libgui_vendor \
