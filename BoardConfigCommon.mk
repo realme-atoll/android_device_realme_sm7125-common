@@ -182,6 +182,9 @@ TARGET_COPY_OUT_ODM := odm
 
 BOARD_USES_METADATA_PARTITION := true
 
+# Explicitly disable virtual A/B
+BOARD_VIRTUAL_AB_ENABLE := false
+
 BOARD_FLASH_BLOCK_SIZE := 262144
 
 -include vendor/lineage/config/BoardConfigReservedSize.mk
