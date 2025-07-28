@@ -91,4 +91,114 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             <instance>slot2</instance>
         </interface>
     </hal>
+    <!-- Light HAL -->
+    <hal format="hidl">
+        <name>android.hardware.light</name>
+        <version>2.0</version>
+        <optional>false</optional>
+    </hal>
+    
+    <!-- FactoryAta HAL -->
+    <hal format="hidl">
+        <name>interfaces.factoryAta</name>
+        <version>1.0</version>
+        <optional>false</optional>
+    </hal>
+    
+    <!-- FactoryInterface HAL -->
+    <hal format="hidl">
+        <name>interfaces.factoryInterface</name>
+        <version>1.0</version>
+        <optional>false</optional>
+    </hal>
+    
+    <!-- Vendor HALs (from vendor-specific interfaces) -->
+    
+    <!-- Dolby DMS HAL -->
+    <hal format="hidl">
+        <name>vendor.dolby.hardware.dms</name>
+        <version>2.0</version>
+        <optional>true</optional> <!-- Optional since it's vendor-specific -->
+    </hal>
+    
+    <!-- NXP NFC HALs -->
+    <hal format="hidl">
+        <name>vendor.nxp.nxpese</name>
+        <version>1.0</version>
+        <optional>true</optional>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.nxp.nxpnfc</name>
+        <version>1.0</version>
+        <optional>true</optional>
+    </hal>
+    
+    <!-- Oplus Specific HALs -->
+    
+    <!-- App Radio HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.appradio</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOplusAppRadio</name>
+            <instance>oplus_app_slot1</instance>
+            <instance>oplus_app_slot2</instance>
+        </interface>
+    </hal>
+
+    <!-- Biometrics HALs -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.biometrics.face</name>
+        <version>1.0</version>
+        <optional>true</optional>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.biometrics.fingerprint</name>
+        <version>2.1</version>
+        <optional>true</optional>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.biometrics.fingerprintpay</name>
+        <version>1.0</version>
+        <optional>true</optional>
+    </hal>
+    
+    <!-- CryptoEng HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.cryptoeng</name>
+        <version>1.0</version>
+        <optional>true</optional>
+    </hal>
+    
+    <!-- IMS HALs -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.ims</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOplusImsRadio</name>
+            <instance>oplusimsradio0</instance>
+            <instance>oplusimsradio1</instance>
+        </interface>
+    </hal>
+    
+    <!-- ORMS HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.orms.ormsHalService</name>
+        <version>1.0</version>
+        <optional>true</optional>
+    </hal>
+    
+    <!-- Radio HALs -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.radio</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOplusRadio</name>
+            <instance>oplus_slot1</instance>
+            <instance>oplus_slot2</instance>
+        </interface>
+    </hal>
 </compatibility-matrix>
