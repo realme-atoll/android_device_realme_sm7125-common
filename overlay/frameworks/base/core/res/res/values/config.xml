@@ -434,22 +434,18 @@
 
     <!-- Default list of files pinned by the Pinner Service -->
     <string-array translatable="false" name="config_defaultPinnerServiceFiles">
-        <item>"/system/bin/surfaceflinger"</item>
-        <item>"/system/framework/arm64/boot-framework.oat"</item>
-        <item>"/system/framework/framework.jar"</item>
-        <item>"/system/framework/oat/arm64/services.odex"</item>
-        <item>"/system/framework/services.jar"</item>
         <item>"/apex/com.android.art/javalib/core-oj.jar"</item>
         <item>"/apex/com.android.art/javalib/core-libart.jar"</item>
-        <item>"/system_ext/priv-app/SystemUIGoogle/SystemUIGoogle.apk"</item>
-        <item>"/system_ext/priv-app/SystemUI/oat/arm64/SystemUI.odex"</item>
-        <item>"/system/lib64/libRScpp.so"</item>
-        <item>"/system/lib64/libRS.so"</item>
-        <item>"/system/lib64/libRS_internal.so"</item>
-        <item>"/system/lib64/libbcinfo.so"</item>
-        <item>"/system/lib64/libRSDriver.so"</item>
-        <item>"/system/lib64/libRSCpuRef.so"</item>
-        <item>"/system/lib64/libblas.so"</item>
+        <item>"/system/bin/surfaceflinger"</item>
+        <item>"/system/framework/framework.jar"</item>
+        <item>"/system/framework/services.jar"</item>
+        <item>"/system/framework/ext.jar"</item>
+        <item>"/system/lib64/libEGL.so"</item>
+        <item>"/system/lib64/libhwui.so"</item>
+        <item>"/system_ext/priv-app/SystemUI/SystemUI.apk"</item>
+        <item>"/vendor/lib64/egl/libGLESv2_adreno.so"</item>
+        <item>"/vendor/lib64/libgsl.so"</item>
+        <item>"/vendor/lib64/libllvm-qgl.so"</item>
     </string-array>
 
     <!-- Should the pinner service pin the Home application? -->
@@ -587,4 +583,13 @@
 
     <!-- Determines whether the shell features all run on another thread. -->
     <bool name="config_enableShellMainThread">true</bool>
+
+    <!-- The max scale for the wallpaper when it's zoomed in -->
+    <item name="config_wallpaperMaxScale" format="float" type="dimen">1</item>
+
+    <!-- Turbulence effect -->
+    <bool name="config_mediaControlsTurbulenceByDefault">false</bool>
+
+    <!-- Whether we use large screen shade header which takes only one row compared to QS header -->
+    <bool name="config_use_large_screen_shade_header">true</bool>
 </resources>
