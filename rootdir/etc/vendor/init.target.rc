@@ -102,6 +102,14 @@ on fs
     mkdir /mnt/vendor/persist/bms 0700 root system
 #endif /*VENDOR_EDIT*/
 
+on late-init
+    # Start services for bootanim
+    start surfaceflinger
+    start bootanim
+    start vendor.hwcomposer-2-4
+    start vendor.configstore-hal
+    start vendor.qti.hardware.display.allocator
+
 on post-fs
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
