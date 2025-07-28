@@ -233,9 +233,6 @@ BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 # SurfaceFlinger
 TARGET_USE_AOSP_SURFACEFLINGER := true
 
-# Treble
-BOARD_VNDK_VERSION := current
-
 # UDFPS
 TARGET_SURFACEFLINGER_UDFPS_LIB := //$(COMMON_PATH):libudfps_extension.realme_sm7125
 
