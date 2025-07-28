@@ -953,7 +953,7 @@ service poweroffhandler /system/vendor/bin/poweroffhandler
 # Logcat dump daemon, dumps logs to logdump partition
 service logdumpd /system/bin/logcat -b all -v threadtime -D -w /dev/block/bootdevice/by-name/logdump
     class core
-    writepid /dev/cpuset/system-background/tasks
+    task_profiles ServiceCapacityLow
     seclabel u:r:logdumpd:s0
     disabled
 
@@ -1108,7 +1108,7 @@ service vendor.hwcomposer-2-4 /vendor/bin/hw/android.hardware.graphics.composer@
     group graphics drmrpc
     capabilities SYS_NICE
     onrestart restart surfaceflinger
-    writepid /dev/cpuset/system-background/tasks
+    task_profiles ServiceCapacityLow
     socket pps stream 0660 system system
 
 service vendor.power /vendor/bin/hw/android.hardware.power-service-qti
