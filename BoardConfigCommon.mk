@@ -135,10 +135,6 @@ TARGET_KERNEL_CONFIG := atoll_defconfig
 KERNEL_SUPPORTS_LLVM_TOOLS := true
 
 
-# Clang
-TARGET_KERNEL_CLANG_VERSION := proton
-KERNEL_TOOLCHAIN_PATH := $(shell pwd)/prebuilts/clang/host/linux-x86/clang-proton
-
 BOARD_KERNEL_CMDLINE += androidboot.console=ttyMSM0
 BOARD_KERNEL_CMDLINE += androidboot.fstab_suffix=default
 BOARD_KERNEL_CMDLINE += androidboot.hardware=qcom
