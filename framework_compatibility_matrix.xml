@@ -47,7 +47,7 @@
     <!-- Power HAL -->
     <hal format="aidl">
         <name>android.hardware.power</name>
-        <version>4</version>
+        <version>5</version>
         <optional>false</optional>
         <interface>
             <name>IPower</name>
