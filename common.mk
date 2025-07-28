@@ -203,22 +203,53 @@ PRODUCT_PACKAGES += \
 # Init
 $(call soong_config_set,libinit,vendor_init_lib,//$(LOCAL_PATH):libinit_realme_sm7125)
 
-# Init scripts
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/etc/fstab.default:$(TARGET_COPY_OUT_RAMDISK)/fstab.default \
-    $(LOCAL_PATH)/rootdir/etc/fstab.default:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.default
+# Init files and scripts for RMX2061
+PRODUCT_PACKAGES += \
+    fstab.default \
+    ueventd.qcom.rc
 
+# Ramdisk fstab copy
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/rootdir/etc/odm/,$(TARGET_COPY_OUT_ODM)/etc/init/hw) \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/rootdir/etc/vendor/,$(TARGET_COPY_OUT_VENDOR)/etc/init/hw)
+    $(LOCAL_PATH)/rootdir/etc/fstab.default:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
 
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/rootdir/bin/,$(TARGET_COPY_OUT_VENDOR)/bin)
+    # ODM init files
+PRODUCT_PACKAGES += \
+    init.oppo.debug.diag.rc \
+    init.oppo.display.rc_odm
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/ueventd.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
-    $(LOCAL_PATH)/recovery/root/init.recovery.qcom.rc:recovery/root/init.recovery.qcom.rc \
-    $(LOCAL_PATH)/recovery/root/init.recovery.usb.rc:recovery/root/init.recovery.usb.rc
+# Vendor init files
+PRODUCT_PACKAGES += \
+    init.oppo.display.rc_vendor \
+    init.qcom.rc \
+    init.qti.ufs.rc \
+    init.target.rc \
+    init.qcom.factory.rc \
+    init.qcom.usb.rc \
+    init.sm7125.rc
+
+# Recovery init script
+PRODUCT_PACKAGES += \
+    init.recovery.qcom.sh
+
+# Vendor shell scripts
+PRODUCT_PACKAGES += \
+    init.at.class_main.sh \
+    init.qcom.class_core.sh \
+    init.qcom.sdio.sh \
+    init.qti.dcvs.sh \
+    init.at.post_boot.sh \
+    init.qcom.coex.sh \
+    init.qcom.sensors.sh \
+    init.qti.qcv.sh \
+    init.class_main.sh \
+    init.qcom.early_boot.sh \
+    init.qcom.sh \
+    init.crda.sh \
+    init.qcom.efs.sync.sh \
+    init.qcom.usb.sh \
+    init.mdm.sh \
+    init.qcom.post_boot.sh \
+    init.qti.chg_policy.sh
 
 # IPACM
 PRODUCT_PACKAGES += \
