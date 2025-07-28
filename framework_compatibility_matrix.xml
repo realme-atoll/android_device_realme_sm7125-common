@@ -1,0 +1,248 @@
+<compatibility-matrix version="1.0" type="framework">
+    
+    <!-- Biometrics Fingerprint HAL -->
+    <hal format="hidl">
+        <name>android.hardware.biometrics.fingerprint</name>
+        <version>2.3</version>
+        <optional>false</optional>
+        <interface>
+            <name>IBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    
+    <!-- Bluetooth Audio HAL -->
+   <hal format="aidl">
+        <name>android.hardware.bluetooth.audio</name>
+        <version>4</version>
+        <optional>false</optional>
+        <interface>
+            <name>IBluetoothAudioProviderFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Media CAS HAL -->
+    <hal format="aidl">
+        <name>android.hardware.cas</name>
+        <version>1</version>
+        <optional>false</optional>
+        <interface>
+            <name>IMediaCasService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Light HAL -->
+    <hal format="hidl">
+        <name>android.hardware.light</name>
+        <version>2.0</version>
+        <optional>false</optional>
+        <interface>
+            <name>ILight</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Power HAL -->
+    <hal format="aidl">
+        <name>android.hardware.power</name>
+        <version>4</version>
+        <optional>false</optional>
+        <interface>
+            <name>IPower</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Vibrator HAL -->
+    <hal format="aidl">
+        <name>android.hardware.vibrator</name>
+        <version>2</version>
+        <optional>false</optional>
+        <interface>
+            <name>IVibrator</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- WiFi HAL -->
+    <hal format="aidl">
+        <name>android.hardware.wifi</name>
+        <version>2</version>
+        <optional>false</optional>
+        <interface>
+            <name>IWifi</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- WiFi Hostapd HAL -->
+    <hal format="aidl">
+        <name>android.hardware.wifi.hostapd</name>
+        <version>2</version>
+        <optional>false</optional>
+        <interface>
+            <name>IHostapd</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- WiFi Supplicant HAL -->
+    <hal format="aidl">
+        <name>android.hardware.wifi.supplicant</name>
+        <version>3</version>
+        <optional>false</optional>
+        <interface>
+            <name>ISupplicant</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- FactoryAta HAL -->
+    <hal format="hidl">
+        <name>interfaces.factoryAta</name>
+        <version>1.0</version>
+        <optional>false</optional>
+        <interface>
+            <name>IFactoryAta</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- FactoryInterface HAL -->
+    <hal format="hidl">
+        <name>interfaces.factoryInterface</name>
+        <version>1.0</version>
+        <optional>false</optional>
+        <interface>
+            <name>IFactoryInterface</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Dolby DMS HAL -->
+    <hal format="hidl">
+        <name>vendor.dolby.hardware.dms</name>
+        <version>2.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IDms</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- NXP eSE HAL -->
+    <hal format="hidl">
+        <name>vendor.nxp.nxpese</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>INxpEse</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- NXP NFC HAL -->
+    <hal format="hidl">
+        <name>vendor.nxp.nxpnfc</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>INxpNfc</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus App Radio HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.appradio</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOplusAppRadio</name>
+            <instance>oplus_app_slot1</instance>
+            <instance>oplus_app_slot2</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus Biometrics Face HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.biometrics.face</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IBiometricsFace</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus Biometrics Fingerprint HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.biometrics.fingerprint</name>
+        <version>2.1-3</version>
+        <optional>false</optional>
+        <interface>
+            <name>IBiometricsFingerprint</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus Fingerprint Pay HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.biometrics.fingerprintpay</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IFingerprintPay</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus CryptoEng HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.cryptoeng</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>ICryptoeng</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus IMS HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.ims</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOplusImsRadio</name>
+            <instance>oplusimsradio0</instance>
+            <instance>oplusimsradio1</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus ORMS HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.orms.ormsHalService</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOrmsHalService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
+    <!-- Oplus Radio HAL -->
+    <hal format="hidl">
+        <name>vendor.oplus.hardware.radio</name>
+        <version>1.0</version>
+        <optional>true</optional>
+        <interface>
+            <name>IOplusRadio</name>
+            <instance>oplus_slot1</instance>
+            <instance>oplus_slot2</instance>
+        </interface>
+    </hal>
+
+</compatibility-matrix>
