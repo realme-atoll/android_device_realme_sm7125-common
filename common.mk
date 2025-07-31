@@ -38,6 +38,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     audio.usb.default \
     audio.r_submix.default \
+    libprocessgroup.vendor \
     libaudio-resampler
 
 PRODUCT_PACKAGES += \
