@@ -36,6 +36,10 @@
          Leave 1 if you have mA, put 1000 if you have µA-->
     <integer name="config_battCurrentDivider" translatable="false">1</integer>
     
+
+    <!-- Charging info current divider, if needed -->
+    <integer name="config_currentInfoDivider" translatable="false">1</integer>
+
     <!-- Update battery info every second when device is charging -->
     <bool name="config_alternateFastchargeInfoUpdate">true</bool>
 </resources>
