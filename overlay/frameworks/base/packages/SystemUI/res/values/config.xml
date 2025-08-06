@@ -42,4 +42,7 @@
 
     <!-- Update battery info every second when device is charging -->
     <bool name="config_alternateFastchargeInfoUpdate">true</bool>
+
+         <!-- Fingerprint Animation -->
+     <bool name="config_show_fingerprint_animation">false</bool>
 </resources>
