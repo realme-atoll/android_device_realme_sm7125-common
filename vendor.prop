@@ -165,7 +165,9 @@ keyguard.no_require_sim=true
 ro.hardware.keystore_desede=true
 
 # Media
+debug.media.codec2=2
 debug.stagefright.c2inputsurface=-1
+vendor.media.omx=0
 drm.service.enabled=true
 
 # NFC
