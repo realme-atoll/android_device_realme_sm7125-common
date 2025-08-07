@@ -450,6 +450,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     TetheringConfigOverlay
 
+# Thermal
+PRODUCT_PACKAGES += \
+    android.hardware.thermal-service.qti
+
 # TextClassifier
 #PRODUCT_PACKAGES += \
 #    textclassifier.bundle1
