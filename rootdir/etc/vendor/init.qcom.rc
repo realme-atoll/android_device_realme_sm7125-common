@@ -775,11 +775,6 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service battery_monitor /system/bin/battery_monitor
-    user system
-    group system
-    disabled
-
 service vendor.ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
     user radio
@@ -811,11 +806,6 @@ service vendor.ssr_diag /system/vendor/bin/ssr_diag
     class late_start
     user system
     group system
-    disabled
-
-service charger_monitor /system/bin/charger_monitor
-    user root
-    group root
     disabled
 
 service qbcharger /charger -m 1
@@ -851,28 +841,11 @@ on property:persist.sys.qlogd=1
 on property:persist.sys.qlogd=0
     stop qlogd
 
-service vm_bms /vendor/bin/vm_bms
-    user root
-    group root
-    disabled
-
 service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
     class core
     user root
     group root
-    disabled
 
-service vendor.msm_irqbal_lb /vendor/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance_little_big.conf
-    class core
-    user root
-    group root
-    disabled
-
-service vendor.msm_irqbl_sdm630 /vendor/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance_sdm630.conf
-    class core
-    user root
-    group root
-    disabled
 
 # service for USERDEBUG
 service vendor.LKCore-dbg /vendor/bin/LKCore
