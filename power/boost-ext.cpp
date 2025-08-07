@@ -91,10 +91,13 @@ static int process_interaction_hint(void* data) {
 using ::aidl::android::hardware::power::Boost;
 
 namespace aidl {
-namespace android {
+namespace google {
 namespace hardware {
 namespace power {
 namespace impl {
+namespace pixel {
+
+
 
 bool isDeviceSpecificBoostSupported(Boost type, bool *_aidl_return) {
     switch (type) {
@@ -119,5 +122,6 @@ bool setDeviceSpecificBoost(Boost type, int32_t durationMs) {
 } // namespace impl
 } // namespace power
 } // namespace hardware
-} // namespace android
+} // namespace google
 } // namespace aidl
+} // namespace pixel
