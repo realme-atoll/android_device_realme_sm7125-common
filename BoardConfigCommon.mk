@@ -150,7 +150,6 @@ BOARD_KERNEL_CMDLINE += kpti=off
 
 # Media
 TARGET_USES_ION := true
-TARGET_DISABLED_UBWC := true
 
 # Core Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864             # 64MB
