@@ -272,8 +272,8 @@ PRODUCT_PACKAGES += \
 $(call inherit-product-if-exists, vendor/lawnchair/lawnchair.mk)
 
 # LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.0-service-sdm
+# PRODUCT_PACKAGES += \
+#     vendor.lineage.livedisplay@2.0-service-sdm
 
 # Media
 PRODUCT_PACKAGES += \
