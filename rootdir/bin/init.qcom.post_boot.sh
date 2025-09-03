@@ -4054,20 +4054,50 @@ case "$target" in
 
     #colocation v3 settings
     echo 740000 > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+    
+    # ---------- Little cluster cores (6 Kryo 465 Silver cores) ----------
+    echo "schedutil" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    echo 600 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us
+    echo 8000 > /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us
+    echo 1800000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    echo "schedutil" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+    echo 600 > /sys/devices/system/cpu/cpu1/cpufreq/schedutil/up_rate_limit_us
+    echo 8000 > /sys/devices/system/cpu/cpu1/cpufreq/schedutil/down_rate_limit_us
+    echo 1800000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+    echo "schedutil" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+    echo 600 > /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us
+    echo 8000 > /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us
+    echo 1800000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq
+    echo "schedutil" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+    echo 600 > /sys/devices/system/cpu/cpu3/cpufreq/schedutil/up_rate_limit_us
+    echo 8000 > /sys/devices/system/cpu/cpu3/cpufreq/schedutil/down_rate_limit_us
+    echo 1800000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu3/cpufreq/scaling_min_freq
+    echo "schedutil" > /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor
+    echo 600 > /sys/devices/system/cpu/cpu6/cpufreq/schedutil/up_rate_limit_us
+    echo 8000 > /sys/devices/system/cpu/cpu6/cpufreq/schedutil/down_rate_limit_us
+    echo 1800000 > /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu6/cpufreq/scaling_min_freq
+    echo "schedutil" > /sys/devices/system/cpu/cpu7/cpufreq/scaling_governor
+    echo 600 > /sys/devices/system/cpu/cpu7/cpufreq/schedutil/up_rate_limit_us
+    echo 8000 > /sys/devices/system/cpu/cpu7/cpufreq/schedutil/down_rate_limit_us
+    echo 1800000 > /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu7/cpufreq/scaling_min_freq
 
-    # configure governor settings for little cluster
-    echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-    echo 500 > /sys/devices/system/cpu/cpu0/cpufreq/performance/up_rate_limit_us
-    echo 20000 > /sys/devices/system/cpu/cpu0/cpufreq/performance/down_rate_limit_us
-    echo 1248000 > /sys/devices/system/cpu/cpu0/cpufreq/performance/hispeed_freq
-    echo 576000 > /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-
-    # configure governor settings for big cluster
-    echo "performance" > /sys/devices/system/cpu/cpu6/cpufreq/scaling_governor
-    echo 500 > /sys/devices/system/cpu/cpu6/cpufreq/performance/up_rate_limit_us
-    echo 20000 > /sys/devices/system/cpu/cpu6/cpufreq/performance/down_rate_limit_us
-    echo 1267200 > /sys/devices/system/cpu/cpu6/cpufreq/performance/hispeed_freq
-    echo 652800 > /sys/devices/system/cpu/cpu6/cpufreq/scaling_min_freq
+    # ---------- Big cluster cores (2 Kryo 465 Gold cores) ----------
+    echo "schedutil" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+    echo 200 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/up_rate_limit_us
+    echo 10000 > /sys/devices/system/cpu/cpu4/cpufreq/schedutil/down_rate_limit_us
+    echo 2304000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+    echo "schedutil" > /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor
+    echo 200 > /sys/devices/system/cpu/cpu5/cpufreq/schedutil/up_rate_limit_us
+    echo 10000 > /sys/devices/system/cpu/cpu5/cpufreq/schedutil/down_rate_limit_us
+    echo 2304000 > /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq
+    echo 384000 > /sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq
 
     # sched_load_boost as -6 is equivalent to target load as 85. It is per cpu tunable.
     echo -6 >  /sys/devices/system/cpu/cpu6/sched_load_boost
@@ -4159,6 +4189,8 @@ case "$target" in
     echo 1 > /proc/sys/vm/kswapd_threads
   ;;
 esac
+
+
 
 
 case "$target" in
