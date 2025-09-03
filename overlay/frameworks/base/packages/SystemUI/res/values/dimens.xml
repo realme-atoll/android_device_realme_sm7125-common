@@ -23,7 +23,7 @@
     <dimen name="status_bar_padding_end">16px</dimen>
 
    <!-- the padding on the top of the statusbar -->
-    <dimen name="status_bar_padding_top">8dp</dimen>
+    <dimen name="status_bar_padding_top">4dp</dimen>
 
     <!-- Starting padding for a left-aligned status bar clock -->
     <dimen name="status_bar_left_clock_starting_padding">6px</dimen>
