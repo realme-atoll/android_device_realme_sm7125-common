@@ -31,7 +31,7 @@
          2 = left side
          3 = right side
     -->
-    <integer name="config_fingerprintSensorLocation">3</integer>
+    <integer name="config_fingerprintSensorLocation">1</integer>
   
   <!-- Whether this device is supporting the microphone toggle -->
   <bool name="config_supportsMicToggle">true</bool>
