@@ -224,7 +224,3 @@ sys.fflag.override.settings_seamless_transfer=true
 
 # default refresh rate threshold
 debug.sf.frame_rate_multiple_threshold=0
-
-# Fingerprint
-ro.vendor.fingerprint.type=side
-ro.vendor.fingerprint.supports_gestures=true
