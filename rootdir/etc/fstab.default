@@ -41,9 +41,9 @@ vendor                                                 /vendor                  
 odm                                                    /odm                      ext4    ro,barrier=1,discard                               wait,logical,first_stage_mount
 
 # Core partitions
-/dev/block/by-name/metadata                            /metadata                 ext4    noatime,nosuid,nodev,discard                       wait,check,formattable,first_stage_mount
-/dev/block/bootdevice/by-name/userdata                 /data                     f2fs    noatime,nosuid,nodev,discard,fsync_mode=strict,reserve_root=32768,resgid=1065,fsync_mode=nobarrier,inlinecrypt     latemount,wait,check,resize,formattable,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized+wrappedkey_v0,metadata_encryption=aes-256-xts:wrappedkey_v0,keydirectory=/metadata/vold/metadata_encryption,quota,reservedsize=128M,checkpoint=fs
-/dev/block/bootdevice/by-name/cache                    /cache                    ext4    nosuid,noatime,nodev,barrier=1                     wait
+/dev/block/by-name/metadata                            /metadata                 ext4    noatime,nosuid,nodev,discard,data=journal,commit=1      wait,check,formattable,first_stage_mount
+/dev/block/bootdevice/by-name/userdata                 /data                     f2fs    noatime,nosuid,nodev,discard,reserve_root=32768,resgid=1065,fsync_mode=nobarrier,inlinecrypt     latemount,wait,check,resize,formattable,reservedsize=128M,checkpoint=fs
+/dev/block/bootdevice/by-name/cache                    /cache                    ext4    nosuid,noatime,nodev,flush_merge,data_flush                     wait
 /dev/block/bootdevice/by-name/misc                     /misc                     emmc    defaults                                           defaults
 /dev/block/bootdevice/by-name/boot                     /boot                     emmc    defaults                                           defaults
 /dev/block/bootdevice/by-name/recovery                 /recovery                 emmc    defaults                                           defaults
@@ -52,7 +52,7 @@ odm                                                    /odm                     
 # External storage
 /devices/platform/soc/8804000.sdhci/mmc_host*          /storage/sdcard1          vfat    nosuid,nodev                                       wait,voldmanaged=sdcard1:auto
 /devices/platform/soc/1da4000.ufshc_card/host*         /storage/sdcard1          vfat    nosuid,nodev                                       wait,voldmanaged=sdcard1:auto
-/devices/platform/soc/*.ssusb/*.dwc3/xhci-hcd.*.auto*  auto			 auto    defaults                                           wait,voldmanaged=usbotg:auto
+/devices/platform/soc/*.ssusb/*.dwc3/xhci-hcd.*.auto*  /storage/usbotg           vfat    nosuid,nodev                                       wait,voldmanaged=usbotg:auto
 
 # Firmware partitions
 /dev/block/bootdevice/by-name/persist                  /mnt/vendor/persist       ext4    noatime,nosuid,nodev,barrier=1                     wait
