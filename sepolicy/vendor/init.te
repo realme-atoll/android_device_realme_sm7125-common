@@ -8,3 +8,5 @@ allow init vendor_modem_efs_partition_device:lnk_file relabelto;
 allow init hal_fingerprint_default:process ptrace;
 allow init debugfs_tracing_debug:dir mounton;
 
+# Allow init to set attribute to sysfs_kprofiles
+allow init sysfs_kprofiles:file { setattr };
