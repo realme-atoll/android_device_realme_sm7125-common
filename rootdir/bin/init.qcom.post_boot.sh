@@ -74,36 +74,103 @@ dynamic_cpu_scaling() {
     done &
 }
 
-# -------------------------
-# ZRAM - Fixed 3GB Configuration
-# -------------------------
-configure_zram() {
-    # Always enable 3GB ZRAM
-    ZRamSizeBytes=$((3072 * 1024 * 1024))  # 3GB fixed
-    
-    # Stop existing swap
-    swapoff /dev/block/zram0 2>/dev/null
-    
-    # Reset ZRAM device
-    echo 1 > /sys/block/zram0/reset 2>/dev/null
-    
-    # Set best compression algorithm
-    echo lz4 > /sys/block/zram0/comp_algorithm 2>/dev/null || \
-    echo lzo > /sys/block/zram0/comp_algorithm 2>/dev/null || \
-    echo lzo-rle > /sys/block/zram0/comp_algorithm 2>/dev/null
-    
-    # Configure ZRAM
-    echo $ZRamSizeBytes > /sys/block/zram0/disksize
-    mkswap /dev/block/zram0 >/dev/null 2>&1
-    swapon /dev/block/zram0 -p 32758 2>/dev/null
+# Zram 
+Configurationconfigure_zram() {
+    # Only run if zram device node exists
+    if [ ! -e /sys/block/zram0/disksize ]; then
+        echo "[ZRAM] zram0 device not available"
+        return 1
+    fi
 
-    # Optimize compression streams
-    echo 8 > /sys/block/zram0/max_comp_streams 2>/dev/null
-    
-    # Balanced swappiness for multitasking
-    echo 100 > /proc/sys/vm/swappiness 2>/dev/null
-    echo 60 > /proc/sys/vm/vfs_cache_pressure 2>/dev/null
-    echo 0 > /proc/sys/vm/page-cluster 2>/dev/null
+    echo "[ZRAM] Starting configuration"
+
+    # Reset zram state (safe even if unused)
+    echo 1 > /sys/block/zram0/reset 2>/dev/null || true
+
+    # Force compression algorithm first (LZ4 recommended)
+    echo lz4 > /sys/block/zram0/comp_algorithm 2>/dev/null || true
+
+    # Enable dedup if kernel supports it (Oplus often does)
+    if [ -f /sys/block/zram0/use_dedup ]; then
+        echo 1 > /sys/block/zram0/use_dedup 2>/dev/null || true
+    fi
+
+    # Determine zram size (preserve your original policy: >=7GB -> 4GB, else 3GB)
+    total_ram_kb=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
+    total_ram_gb=$(((total_ram_kb + 512000) / 1024000))  # rounded GB
+
+    if [ "$total_ram_gb" -ge 7 ]; then
+        zram_size_gb=4
+        echo "[ZRAM] RAM: ${total_ram_gb}GB detected, target ${zram_size_gb}GB"
+    else
+        zram_size_gb=3
+        echo "[ZRAM] RAM: ${total_ram_gb}GB detected, target ${zram_size_gb}GB"
+    fi
+
+    # Convert to MB unit and cap at 4096 MB (use MB with 'M' suffix to avoid vendor quirks)
+    zram_size_mb=$((zram_size_gb * 1024))
+    if [ "$zram_size_mb" -gt 4096 ]; then
+        zram_size_mb=4096
+    fi
+
+    # Configure compression streams (tune for big.LITTLE)
+    cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || echo 4)
+    streams=4
+    [ "$cores" -le 4 ] && streams=2
+    echo "$streams" > /sys/block/zram0/max_comp_streams 2>/dev/null || true
+
+    # Write disksize in MB (important on many vendor kernels)
+    echo "${zram_size_mb}M" > /sys/block/zram0/disksize 2>/dev/null || {
+        echo "[ZRAM] Failed to write disksize (${zram_size_mb}M)"
+        return 1
+    }
+
+    # Disable slab debug overhead if present (prevents zram memory blowups)
+    [ -e /sys/kernel/slab/zs_handle/store_user ] && echo 0 > /sys/kernel/slab/zs_handle/store_user 2>/dev/null || true
+    [ -e /sys/kernel/slab/zspage/store_user ] && echo 0 > /sys/kernel/slab/zspage/store_user 2>/dev/null || true
+
+    # Locate mkswap/swapon (use system path fallback)
+    MKSWAP=$(command -v mkswap 2>/dev/null || echo /system/bin/mkswap)
+    SWAPON=$(command -v swapon 2>/dev/null || echo /system/bin/swapon)
+
+    # Initialize and enable swap with high priority
+    if ! $MKSWAP /dev/block/zram0 2>/dev/null; then
+        echo "[ZRAM] mkswap failed"
+        return 1
+    fi
+
+    if ! $SWAPON /dev/block/zram0 -p 32758 2>/dev/null; then
+        echo "[ZRAM] swapon failed"
+        return 1
+    fi
+
+    # Wait until swap shows up (timeout)
+    timeout=10
+    while [ $timeout -gt 0 ] && ! grep -q "/dev/block/zram0" /proc/swaps 2>/dev/null; do
+        sleep 1
+        timeout=$((timeout - 1))
+    done
+
+    if ! grep -q "/dev/block/zram0" /proc/swaps 2>/dev/null; then
+        echo "[ZRAM] swap did not appear in /proc/swaps"
+        return 1
+    fi
+
+    echo "[ZRAM] Zram swap enabled: $(awk '/zram0/ {print $1, $3 \"KB used\"}' /proc/swaps 2>/dev/null || true)"
+
+    # --- VM tuning (your original tunables) ---
+    {
+        echo 90 > /proc/sys/vm/swappiness 2>/dev/null
+        echo 100 > /proc/sys/vm/vfs_cache_pressure 2>/dev/null
+        echo 1 > /proc/sys/vm/page-cluster 2>/dev/null
+        echo 20 > /proc/sys/vm/dirty_ratio 2>/dev/null
+        echo 5  > /proc/sys/vm/dirty_background_ratio 2>/dev/null
+        echo 1024 > /proc/sys/vm/extra_free_kbytes 2>/dev/null
+        echo 1 > /proc/sys/vm/overcommit_memory 2>/dev/null
+        echo 50 > /proc/sys/vm/overcommit_ratio 2>/dev/null
+    } 2>/dev/null
+
+    return 0
 }
 
 # -------------------------
@@ -192,12 +259,8 @@ configure_multitasking() {
     fi
     
     # Stock-like VM tunables with minor improvements
-    echo 20 > /proc/sys/vm/dirty_ratio 2>/dev/null
-    echo 5 > /proc/sys/vm/dirty_background_ratio 2>/dev/null
     echo 3000 > /proc/sys/vm/dirty_expire_centisecs 2>/dev/null
     echo 500 > /proc/sys/vm/dirty_writeback_centisecs 2>/dev/null
-    echo 0 > /proc/sys/vm/overcommit_memory 2>/dev/null
-    echo 50 > /proc/sys/vm/overcommit_ratio 2>/dev/null
     
     # Keep stock memory behavior mostly intact
     echo 1 > /proc/sys/vm/compact_unevictable_allowed 2>/dev/null
@@ -305,12 +368,10 @@ configure_system() {
 # Execute all optimizations
 configure_cpu_governor
 configure_gpu
-configure_zram
 configure_multitasking
 configure_scheduler
 configure_network
 configure_thermal
 configure_system
-
-# Start intelligent CPU scaling
 dynamic_cpu_scaling
+configure_zram
