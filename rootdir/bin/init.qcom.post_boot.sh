@@ -74,102 +74,58 @@ dynamic_cpu_scaling() {
     done &
 }
 
-# Zram 
-Configurationconfigure_zram() {
-    # Only run if zram device node exists
-    if [ ! -e /sys/block/zram0/disksize ]; then
-        echo "[ZRAM] zram0 device not available"
-        return 1
-    fi
-
-    echo "[ZRAM] Starting configuration"
-
-    # Reset zram state (safe even if unused)
-    echo 1 > /sys/block/zram0/reset 2>/dev/null || true
-
-    # Force compression algorithm first (LZ4 recommended)
-    echo lz4 > /sys/block/zram0/comp_algorithm 2>/dev/null || true
-
-    # Enable dedup if kernel supports it (Oplus often does)
-    if [ -f /sys/block/zram0/use_dedup ]; then
-        echo 1 > /sys/block/zram0/use_dedup 2>/dev/null || true
-    fi
-
-    # Determine zram size (preserve your original policy: >=7GB -> 4GB, else 3GB)
-    total_ram_kb=$(awk '/MemTotal:/ {print $2}' /proc/meminfo)
-    total_ram_gb=$(((total_ram_kb + 512000) / 1024000))  # rounded GB
-
-    if [ "$total_ram_gb" -ge 7 ]; then
-        zram_size_gb=4
-        echo "[ZRAM] RAM: ${total_ram_gb}GB detected, target ${zram_size_gb}GB"
-    else
-        zram_size_gb=3
-        echo "[ZRAM] RAM: ${total_ram_gb}GB detected, target ${zram_size_gb}GB"
-    fi
-
-    # Convert to MB unit and cap at 4096 MB (use MB with 'M' suffix to avoid vendor quirks)
-    zram_size_mb=$((zram_size_gb * 1024))
-    if [ "$zram_size_mb" -gt 4096 ]; then
-        zram_size_mb=4096
-    fi
-
-    # Configure compression streams (tune for big.LITTLE)
-    cores=$(grep -c ^processor /proc/cpuinfo 2>/dev/null || echo 4)
-    streams=4
-    [ "$cores" -le 4 ] && streams=2
-    echo "$streams" > /sys/block/zram0/max_comp_streams 2>/dev/null || true
-
-    # Write disksize in MB (important on many vendor kernels)
-    echo "${zram_size_mb}M" > /sys/block/zram0/disksize 2>/dev/null || {
-        echo "[ZRAM] Failed to write disksize (${zram_size_mb}M)"
-        return 1
-    }
-
-    # Disable slab debug overhead if present (prevents zram memory blowups)
-    [ -e /sys/kernel/slab/zs_handle/store_user ] && echo 0 > /sys/kernel/slab/zs_handle/store_user 2>/dev/null || true
-    [ -e /sys/kernel/slab/zspage/store_user ] && echo 0 > /sys/kernel/slab/zspage/store_user 2>/dev/null || true
-
-    # Locate mkswap/swapon (use system path fallback)
-    MKSWAP=$(command -v mkswap 2>/dev/null || echo /system/bin/mkswap)
-    SWAPON=$(command -v swapon 2>/dev/null || echo /system/bin/swapon)
-
-    # Initialize and enable swap with high priority
-    if ! $MKSWAP /dev/block/zram0 2>/dev/null; then
-        echo "[ZRAM] mkswap failed"
-        return 1
-    fi
-
-    if ! $SWAPON /dev/block/zram0 -p 32758 2>/dev/null; then
-        echo "[ZRAM] swapon failed"
-        return 1
-    fi
-
-    # Wait until swap shows up (timeout)
-    timeout=10
-    while [ $timeout -gt 0 ] && ! grep -q "/dev/block/zram0" /proc/swaps 2>/dev/null; do
-        sleep 1
-        timeout=$((timeout - 1))
-    done
-
-    if ! grep -q "/dev/block/zram0" /proc/swaps 2>/dev/null; then
-        echo "[ZRAM] swap did not appear in /proc/swaps"
-        return 1
-    fi
-
-    echo "[ZRAM] Zram swap enabled: $(awk '/zram0/ {print $1, $3 \"KB used\"}' /proc/swaps 2>/dev/null || true)"
-
-    # --- VM tuning (your original tunables) ---
+# Zram Configuration 
+configure_zram() {
+    # Safely disable existing zram
+    swapoff /dev/block/zram0 2>/dev/null || true
+    
+    # Reset zram device
+    [ -w /sys/block/zram0/reset ] && echo 1 > /sys/block/zram0/reset
+    
+    # Set compression algorithm (LZ4 optimized for ARM Cortex-A76/A55)
+    echo lz4 > /sys/block/zram0/comp_algorithm 2>/dev/null || return 1
+    
+    # Optimize compression streams for 8-core big.LITTLE (2x A76 + 6x A55)
+    echo 4 > /sys/block/zram0/max_comp_streams 2>/dev/null || true
+    
+    # Set 4GB zram size
+    echo 4294967296 > /sys/block/zram0/disksize 2>/dev/null || return 1
+    
+    # Initialize and enable swap
+    mkswap /dev/block/zram0 2>/dev/null || return 1
+    swapon /dev/block/zram0 -p 32758 2>/dev/null || return 1
+    
+    # VM tuning - Optimized for Realme 6 Pro mobile workloads
     {
-        echo 90 > /proc/sys/vm/swappiness 2>/dev/null
-        echo 100 > /proc/sys/vm/vfs_cache_pressure 2>/dev/null
-        echo 1 > /proc/sys/vm/page-cluster 2>/dev/null
-        echo 20 > /proc/sys/vm/dirty_ratio 2>/dev/null
-        echo 5  > /proc/sys/vm/dirty_background_ratio 2>/dev/null
-        echo 1024 > /proc/sys/vm/extra_free_kbytes 2>/dev/null
-        echo 1 > /proc/sys/vm/overcommit_memory 2>/dev/null
-        echo 50 > /proc/sys/vm/overcommit_ratio 2>/dev/null
+        # Swappiness: Slightly higher for 4GB zram to utilize it effectively
+        echo 90 > /proc/sys/vm/swappiness
+        
+        # Cache pressure: Aggressive reclaim for mobile RAM management
+        echo 100 > /proc/sys/vm/vfs_cache_pressure
+        
+        # Page-cluster: Small reads optimal for mobile flash + zram combo
+        echo 1 > /proc/sys/vm/page-cluster
+        
+        # Dirty ratios: Conservative for mobile storage longevity
+        echo 20 > /proc/sys/vm/dirty_ratio
+        echo 5 > /proc/sys/vm/dirty_background_ratio
+        
+        # Extra free memory: Buffer for smooth operation
+        echo 1024 > /proc/sys/vm/extra_free_kbytes
+        
+        # Memory overcommit: Conservative for stability
+        echo 1 > /proc/sys/vm/overcommit_memory
+        echo 50 > /proc/sys/vm/overcommit_ratio
+        
+        # Additional mobile optimizations for Snapdragon 720G
+        echo 1 > /proc/sys/vm/compact_memory 2>/dev/null || true
+        echo 0 > /proc/sys/vm/oom_kill_allocating_task 2>/dev/null || true
+        
+        # Optimize readahead for mobile storage patterns
+        echo 128 > /sys/block/*/queue/read_ahead_kb 2>/dev/null || true
+        
     } 2>/dev/null
-
+    
     return 0
 }
 
