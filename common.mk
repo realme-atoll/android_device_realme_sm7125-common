@@ -241,6 +241,10 @@ PRODUCT_PACKAGES += \
     init.oppo.debug.diag.rc \
     init.oppo.display.rc_odm
 
+# ORMS
+PRODUCT_PACKAGES += \
+    vendor.oplus.hardware.orms@1.0
+
 # Vendor init files
 PRODUCT_PACKAGES += \
     init.oppo.display.rc_vendor \
