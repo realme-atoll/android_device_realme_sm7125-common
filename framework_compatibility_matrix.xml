@@ -43,7 +43,15 @@
             <instance>default</instance>
         </interface>
     </hal>
-
+    <!-- ORMS-->
+    <hal format="hidl" optional="true">
+        <name>vendor.oplus.hardware.orms.ormsHalService</name>
+        <version>1.0</version>
+        <interface>
+            <name>IOrmsHalService</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
     <!-- Power HAL -->
     <hal format="aidl">
         <name>android.hardware.power</name>
