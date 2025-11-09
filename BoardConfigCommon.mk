@@ -65,11 +65,10 @@ TARGET_BOOTLOADER_BOARD_NAME := atoll
 # Camera
 #TARGET_USES_QTI_CAMERA_DEVICE := true
 
-# Dex
-ifeq ($(HOST_OS),linux)
-    WITH_DEXPREOPT ?= false
-endif
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
+# ART
+WITH_DEXPREOPT := true
+DEX_PREOPT_DEFAULT := generate-vdex-and-image
+WITH_DEXPREOPT_DEBUG_INFO := false
 
 # Display
 TARGET_SCREEN_DENSITY := 440
