@@ -1,0 +1,94 @@
+{   "default": {
+        "feature_resolution_enable": true,
+        "feature_fps_enable": true,
+        "feature_evication_enable": true,
+        "is_need_delay_connect": [
+            "com.android.mms",
+            "com.facebook.katana",
+            "com.instagram.android",
+            "com.whatsapp.w4b",
+            "com.lemon.faceu.oversea",
+            "com.meitu.meiyancamera",
+            "daily.tools.selfiecamera",
+            "jp.naver.linecamera.android",
+            "com.intsig.camscanner",
+            "com.blink.academy.nomopro",
+            "com.commsource.beautyplus",
+            "com.bt.easyphotoeditor",
+            "com.zing.zalo",
+            "com.meitu.beautyplusme",
+            "com.meitu.boxxcam",
+            "com.manboker.headportrait",
+            "us.pinguo.selfie",
+            "com.flavionet.android.camera.lite",
+            "com.meitu.wheecam",
+            "com.meitu.meipaimv",
+            "com.githcode.trend.camera"
+        ],
+        "limit_3rd_app_size_byLevel": [
+            "autotest.oplus.com.simulatedlivebroadcast.level1",
+            "com.fingogroup.fingo.level1",
+            "com.rapido.rider.level1"
+        ],
+        "defaultMaxPreviewWidth": 3168,
+        "defaultMaxPreviewHeight": 3168,
+        "resolutionFilterForNotAddSizeAPI1": [
+            "4624x3468",
+            "4608x3456",
+            "2592x1944"
+        ]
+    },
+    "com.skype.raider": {
+        "isNeedAddDelayPackage": true
+    },
+    "com.microsoft.teams": {
+        "isNeedAddDelayPackage": true
+    },
+    "net.sourceforge.opencamera": {
+        "resolutionFilterForNotAddSizeAPI1": [
+            "4608x3456",
+            "4608x2592",
+            "4000x3000"
+        ]
+    },
+    "com.githcode.trend.camera": {
+        "resolutionFilterForNotAddSizeAPI1": [
+            "4608x3456",
+            "4608x2592",
+            "4000x3000"
+        ]
+    },
+    "air.byss.mobi.instaplacefree": {
+        "resolutionFilterForNotAddSizeAPI1": [
+            "4608x3456",
+            "4608x2592",
+            "4000x3000"
+        ],
+        "previewSizeForAPI1Width": 2400,
+        "previewSizeForAPI1Height": 1728
+    },
+    "jp.naver.linecamera.android": {
+        "needLimitFpsForAPI1": true,
+        "resolutionFilterForNotAddSizeAPI1": [
+            "4608x3456",
+            "4608x2592",
+            "4000x3000"
+        ]
+    },
+    "autotest.oppo.com.simulatedlivebroadcast": {
+        "previewSizeForAPI1Width": 3168,
+        "previewSizeForAPI1Height": 1440
+    },
+    "autotest.oplus.com.simulatedlivebroadcast": {
+        "previewSizeForAPI1Width": 3168,
+        "previewSizeForAPI1Height": 1440
+    },
+    "im.kumu.ph": {
+        "previewSizeForAPI1Width": 1920,
+        "previewSizeForAPI1Height": 1080
+    },
+    "com.manboker.headportrait": {
+        "previewSizeForAPI1Width": 1920,
+        "previewSizeForAPI1Height": 1080
+    }
+}

@@ -109,6 +109,9 @@ PRODUCT_COPY_FILES += \
 #CertifiedProps
 $(call inherit-product-if-exists, vendor/certprops/Android.mk)
 
+PRODUCT_COPY_FILES += \
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/camera/,$(TARGET_COPY_OUT_ODM)/etc/camera) 
+
 # Config Store
 PRODUCT_PACKAGES += \
     disable_configstore \
