@@ -211,6 +211,10 @@ wifi.aware.interface=wifi-aware0
 ro.soc.manufacturer=QTI
 ro.soc.model=SM7125
 
+# ScrollOptimizer
+persist.sys.perf.scroll_opt=true
+persist.sys.perf.scroll_opt.heavy_app=1
+
 # Usb
 persist.vendor.usb.config.extra=none
 vendor.usb.diag.func.name=diag
