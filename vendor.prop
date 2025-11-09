@@ -138,6 +138,8 @@ ro.surface_flinger.use_color_management=true
 ro.config.avoid_gfx_accel=true
 debug.sf.predict_hwc_composition_strategy=0
 debug.sf.auto_latch_unsignaled=0
+debug.sf.enable_gl_backpressure=0
+debug.sf.enable_adpf_cpu_hint=true
 
 # Fling
 ro.min.fling_velocity=160 
