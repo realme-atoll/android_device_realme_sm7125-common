@@ -148,12 +148,6 @@ on boot
     start vendor.rmt_storage
     start rfs_access
 
-    # Allow system to manipulate KProfiles modes and parameters
-    chown system system /sys/module/kprofiles/parameters/auto_kprofiles
-    chmod 0660 /sys/module/kprofiles/parameters/auto_kprofiles
-    chown system system /sys/module/kprofiles/parameters/kp_mode
-    chmod 0660 /sys/module/kprofiles/parameters/kp_mode
-
     chown system system /dev/cpuset/cgroup.procs
     chown system system /dev/cpuset/foreground/cgroup.procs
     chown system system /dev/cpuset/background/cgroup.procs

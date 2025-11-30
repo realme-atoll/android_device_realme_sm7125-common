@@ -218,10 +218,6 @@ PRODUCT_PACKAGES += \
     fstab.default \
     ueventd.qcom.rc
 
-# KProfiles
-PRODUCT_PACKAGES += \
-    KProfiles
-
 # Ramdisk fstab copy
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/etc/fstab.default:$(TARGET_COPY_OUT_RAMDISK)/fstab.default
