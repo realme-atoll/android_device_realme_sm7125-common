@@ -270,6 +270,9 @@ PRODUCT_PACKAGES += \
     init.qcom.post_boot.sh \
     init.qti.chg_policy.sh
 
+# VULKAN
+TARGET_USES_VULKAN := true
+
 # IPACM
 PRODUCT_PACKAGES += \
     ipacm \
