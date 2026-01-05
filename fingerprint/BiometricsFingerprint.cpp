@@ -77,34 +77,10 @@ public:
         return mClientCallback->onEnrollResult(deviceId, fingerId, groupId, remaining);
     }
 
-    Return<void> onAcquired(
-        uint64_t deviceId,
-        vendor::oplus::hardware::biometrics::fingerprint::V2_1::FingerprintAcquiredInfo acquiredInfo,
+    Return<void> onAcquired(uint64_t deviceId, vendor::oplus::hardware::biometrics::fingerprint::V2_1::FingerprintAcquiredInfo acquiredInfo,
         int32_t vendorCode) {
-
-    using VendorAcquired =
-        vendor::oplus::hardware::biometrics::fingerprint::V2_1::FingerprintAcquiredInfo;
-
-    // Filter vendor-only finger down / up events
-    if (acquiredInfo == VendorAcquired::ACQUIRED_VENDOR) {
-        if (vendorCode == 0) {
-            ALOGD("onAcquired: Finger down (vendor)");
-            return Void(); // DO NOT forward to framework
-        }
-        if (vendorCode == 1) {
-            ALOGD("onAcquired: Finger up (vendor)");
-            return Void(); // DO NOT forward to framework
-        }
+        return mClientCallback->onAcquired(deviceId, OplusToAOSPFingerprintAcquiredInfo(acquiredInfo), vendorCode);
     }
-    // Forward everything else
-    auto result = OplusToAOSPFingerprintAcquiredInfo(acquiredInfo);
-    ALOGD("onAcquired(%d)", static_cast<int>(result));
-    if (!mClientCallback->onAcquired(deviceId, result, vendorCode).isOk()) {
-        ALOGE("failed to invoke fingerprint onAcquired callback");
-    }
-    return Void();
-}
-
 
     Return<void> onAuthenticated(uint64_t deviceId, uint32_t fingerId, uint32_t groupId,
         const hidl_vec<uint8_t>& token) {
