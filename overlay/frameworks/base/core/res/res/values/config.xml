@@ -682,33 +682,11 @@
          vendor fingerprint HAL implementations. -->
     <bool name="config_fingerprintPostResetRunnableForAllClients">true</bool>
 
-    <!-- Whether device has a notch -->
-    <bool name="config_haveNotch">true</bool>
-
-    <!-- Paths to the libraries that contain device specific key handlers -->
-    <string-array name="config_deviceKeyHandlerLibs" translatable="false">
-        <item>/system/priv-app/RealmeParts/RealmeParts.apk</item>
-    </string-array>
-
-    <!-- Names of the key handler classes -->
-    <string-array name="config_deviceKeyHandlerClasses" translatable="false">
-        <item>org.aospextended.device.KeyHandler</item>
-    </string-array>
-
     <!-- Path to fast charging status file to detect whether an oem fast charger is active -->
     <string name="config_oemFastChargerStatusPath" translatable="false">/sys/class/power_supply/battery/voocchg_ing</string>
 
     <!-- Whether device has VOOC charging support -->
     <bool name="config_hasVoocCharger">true</bool>
-
-    <!-- Whether device has screen with higher aspect ratio -->
-    <bool name="config_haveHigherAspectRatioScreen">true</bool>
-
-    <!-- Full screen aspect ratio -->
-    <item name="config_screenAspectRatio" format="float" type="dimen">2.222</item>
-
-    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveBatteryLed">false</bool>
      
     <!-- The default refresh rate for a given device. Change this value to set a higher default
          refresh rate. If the hardware composer on the device supports display modes with a higher
