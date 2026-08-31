@@ -138,9 +138,9 @@
         </stream>
         <stream type="voice_call">
             <apply effect="voice_helper"/>
+        </stream>
 		<stream type="system">
             <apply effect="dlb_system_listener"/>
-        </stream>
         </stream>
         <stream type="notification">
             <apply effect="notification_helper"/>
