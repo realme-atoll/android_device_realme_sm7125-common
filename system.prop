@@ -1,6 +1,4 @@
 # Audio
-audio.deep_buffer.media=true
-audio.offload.buffer.size.kb=32
 audio.offload.gapless.enabled=true
 audio.offload.video=true
 persist.audio.fluence.speaker=true
