@@ -149,8 +149,13 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.3.vendor \
     android.hardware.drm@1.4.vendor
 
-# Dolby
-$(call inherit-product, hardware/dolby/dolby.mk)
+# Audio mods (enable any subset via flags, e.g. WITH_AUDIO_DOLBY and WITH_AUDIO_VIPER)
+ifeq ($(WITH_AUDIO_VIPER),true)
+PRODUCT_PACKAGES += ViPER4AndroidFX
+endif
+ifeq ($(WITH_AUDIO_DOLBY),true)
+$(call inherit-product-if-exists, hardware/dolby/dolby.mk)
+endif
 
 # Enable project quotas and casefolding for emulated storage without sdcardfs
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
