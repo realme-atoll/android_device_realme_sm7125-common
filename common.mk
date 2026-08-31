@@ -152,6 +152,13 @@ PRODUCT_PACKAGES += \
 # Dolby
 $(call inherit-product-if-exists, hardware/dolby/dolby.mk)
 
+# ViPER4Android
+PRODUCT_COPY_FILES += \
+    $(COMMON_PATH)/audio/v4a/lib/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/audio/v4a/lib/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib/soundfx/libv4a_fx.so \
+    $(COMMON_PATH)/audio/v4a/lib64/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libv4a_re.so \
+    $(COMMON_PATH)/audio/v4a/lib64/libv4a_re.so:$(TARGET_COPY_OUT_VENDOR)/lib64/soundfx/libv4a_fx.so
+
 # Enable project quotas and casefolding for emulated storage without sdcardfs
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
 
