@@ -100,6 +100,9 @@ vendor.qcom.bluetooth.soc=cherokee
 camera.disable_zsl_mode=1
 persist.vendor.camera.eis.enable=1
 persist.vendor.camera.is_type=2
+persist.vendor.camera.mode.select=1
+vendor.camera.videousecase=1
+vendor.debug.camera.videousecase=1
 
 # Crypto
 ro.crypto.allow_encrypt_override=true
