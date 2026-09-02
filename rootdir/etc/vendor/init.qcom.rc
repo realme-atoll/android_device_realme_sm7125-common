@@ -103,6 +103,9 @@ on init
     chown root system /sys/fs/cgroup/memory/bg/tasks
     chmod 0660 /sys/fs/cgroup/memory/bg/tasks
 
+    # Disable UFS clock gating during boot
+    write /sys/bus/platform/devices/1d84000.ufshc/clkgate_enable 0
+
 on post-fs
     chmod 0755 /sys/kernel/debug/tracing
     #ifdef OPLUS_BUG_STABLITY
@@ -523,6 +526,8 @@ on property:sys.boot_completed=1
     setprop lmkd.reinit 1
     # Enable PowerHAL hint processing
     setprop vendor.powerhal.init 1
+    # Enable UFS clock gating back after boot
+    write /sys/bus/platform/devices/1d84000.ufshc/clkgate_enable 1
 
 on property:persist.vendor.radio.atfwd.start=false
     stop vendor.atfwd
@@ -844,7 +849,7 @@ on property:persist.sys.qlogd=1
 on property:persist.sys.qlogd=0
     stop qlogd
 
-service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
+service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqbalance.conf
     class core
     user root
     group root
