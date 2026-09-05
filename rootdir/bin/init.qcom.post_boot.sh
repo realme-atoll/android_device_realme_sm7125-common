@@ -78,9 +78,10 @@ function configure_memory_parameters() {
     # on SD720G). Helps the genuine memory-pressure path; the screen-on cached-app
     # kill is a separate frameworks/base issue (PhoneWindowManager).
     echo zstd > /sys/block/zram0/comp_algorithm
-    echo 100 > /proc/sys/vm/swappiness
-    echo 60 > /proc/sys/vm/direct_swappiness
+    echo 60 > /proc/sys/vm/swappiness
+    echo 0 > /proc/sys/vm/direct_swappiness
     echo 0 > /proc/sys/vm/page-cluster
+    echo 16384 > /proc/sys/vm/min_free_kbytes
     
     if [ -f /sys/block/zram0/disksize ]; then
         # Enable deduplication if available

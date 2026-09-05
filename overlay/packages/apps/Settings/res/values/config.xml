@@ -34,6 +34,10 @@
     <integer name="config_fingerprintSensorLocation">1</integer>
   
   <!-- Whether this device is supporting the microphone toggle -->
+  <!-- Whether memory from app_info_settings is available or not. -->
+  <bool name="config_show_app_info_settings_memory">true</bool>
+
+  <!-- Whether this device is supporting the microphone toggle -->
   <bool name="config_supportsMicToggle">true</bool>
 
   <!-- Whether this device is supporting the camera toggle -->
