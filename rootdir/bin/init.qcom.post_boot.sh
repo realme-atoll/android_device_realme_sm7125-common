@@ -78,17 +78,13 @@ function configure_memory_parameters() {
     # on SD720G). Helps the genuine memory-pressure path; the screen-on cached-app
     # kill is a separate frameworks/base issue (PhoneWindowManager).
     echo zstd > /sys/block/zram0/comp_algorithm
-    echo 100 > /proc/sys/vm/swappiness
-    echo 100 > /proc/sys/vm/direct_swappiness
-
-    # This oneshot can be started in charger mode and again after boot. Never
-    # format an active swap device a second time.
-    if [ -f /sys/block/zram0/disksize ] &&
-       ! grep -q '[/]zram0' /proc/swaps 2>/dev/null; then
-        # The live device uses far less than the available 4 GB swap. Prefer
-        # low-latency compression over zstd's unused extra density.
-        echo lz4 > /sys/block/zram0/comp_algorithm
-
+    echo 60 > /proc/sys/vm/swappiness
+    echo 0 > /proc/sys/vm/direct_swappiness
+    echo 0 > /proc/sys/vm/page-cluster
+    echo 16384 > /proc/sys/vm/min_free_kbytes
+    
+    if [ -f /sys/block/zram0/disksize ]; then
+        # Enable deduplication if available
         if [ -f /sys/block/zram0/use_dedup ]; then
             echo 1 > /sys/block/zram0/use_dedup
         fi
