@@ -115,15 +115,20 @@ ro.surface_flinger.blur_disabled_by_default=true
 vendor.display.comp_mask=0
 vendor.display.disable_decimation=1
 vendor.display.disable_excl_rect=0
+vendor.display.disable_excl_rect_partial_fb=1
 vendor.display.disable_hw_recovery=1
 vendor.display.disable_hw_recovery_dump=1
 vendor.display.disable_inline_rotator=1
 vendor.display.disable_scaler=0
 vendor.display.disable_ui_3d_tonemap=1
+vendor.display.disable_layer_stitch=0
+vendor.display.idle_time=0
+vendor.display.idle_time_inactive=0
+vendor.display.enable_optimize_refresh=1
 vendor.display.qdcm.mode_combine=1
 vendor.display.enable_default_color_mode=1
 vendor.gralloc.disable_ubwc=0
-vendor.display.disable_metadata_dynamic_fps=1
+vendor.display.disable_metadata_dynamic_fps=0
 vendor.display.enable_perf_hint_large_comp_cycle=1
 ro.surface_flinger.enable_frame_rate_override=false
 ro.hwui.render_ahead=10
@@ -136,6 +141,8 @@ ro.surface_flinger.support_kernel_idle_timer=true
 ro.surface_flinger.has_HDR_display=true
 ro.surface_flinger.has_wide_color_display=true
 ro.surface_flinger.use_color_management=true
+ro.vendor.display.sensortype=2
+ro.vendor.display.svi=1
 # Inherited low-RAM (Android Go) flag that disables HW-accelerated rendering -> forces
 # slow software/CPU paths for window animations and burns battery. Wrong for 8GB/Adreno 618.
 ro.config.avoid_gfx_accel=false
@@ -231,6 +238,9 @@ vendor.usb.use_gadget_hal=0
 
 # Seamless transfer
 sys.fflag.override.settings_seamless_transfer=true
+
+# default refresh rate threshold
+debug.sf.frame_rate_multiple_threshold=0
 
 # default refresh rate threshold
 debug.sf.frame_rate_multiple_threshold=0

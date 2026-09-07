@@ -540,7 +540,7 @@
     <!-- Color mode to use when accessibility transforms are enabled. This color mode must be
      supported by the device, but not necessarily appear in config_availableColorModes. The
      regularly selected color mode will be used if this value is negative. -->
-    <integer name="config_accessibilityColorMode">2</integer>
+    <integer name="config_accessibilityColorMode">0</integer>
 
     <!-- The following two arrays specify which color space to use for display composition when a
          certain color mode is active.
@@ -561,7 +561,7 @@
     </integer-array>
     <integer-array name="config_displayCompositionColorSpaces">
         <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
-        <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
+        <item>7</item> <!-- COLOR_MODE_SRGB       -->
         <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
         <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
     </integer-array>
@@ -747,6 +747,12 @@
          * The device must be provisioned with HDCP keys (for protected content).
     -->
     <bool name="config_enableWifiDisplay">true</bool>
+    <!-- Whether the display white-balance feature is available. -->
+    <bool name="config_displayWhiteBalanceEnabled">false</bool>
+
+    <!-- Boolean indicating whether the HWC setColorTransform function can be performed efficiently
+         in hardware for individual layers. Qualcomm SDM applies color transform at display level. -->
+    <bool name="config_setColorTransformAcceleratedPerLayer">false</bool>
 
     <!-- Whether to show a custom view for FOD -->
     <bool name="config_needCustomFODView">true</bool>
