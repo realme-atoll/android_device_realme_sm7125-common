@@ -286,10 +286,14 @@ PRODUCT_PACKAGES += \
 $(call inherit-product-if-exists, vendor/lawnchair/lawnchair.mk)
 
 #LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay-service.sdm
 
-$(call soong_config_set,livedisplay_sdm,enable_dm_bool,false)
+# LiveDisplay is unsupported by hardware display engine on sm7125;
+# enabling vendor.lineage.livedisplay-service.sdm causes IPictureAdjustment.getHueRange()
+# to throw UnsupportedOperationException, fatally crashing system_server during boot.
+# PRODUCT_PACKAGES += \
+#     vendor.lineage.livedisplay-service.sdm
+
+# $(call soong_config_set_bool,livedisplay_sdm,enable_dm,false)
 
 # Media
 PRODUCT_PACKAGES += \
