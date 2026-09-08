@@ -37,4 +37,6 @@
     <string-array name="config_deviceKeyHandlerClasses" translatable="false">
         <item>org.aospextended.device.KeyHandler</item>
     </string-array>
+    <!-- Bitmask of features that should be turned on in LiveDisplay. Default is 0 (disabled). -->
+    <integer name="config_supportedLiveDisplayFeatures">0</integer>
 </resources>
