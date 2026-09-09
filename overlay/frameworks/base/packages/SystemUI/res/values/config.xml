@@ -46,6 +46,12 @@
 
     <!-- Update battery info every second when device is charging -->
     <bool name="config_alternateFastchargeInfoUpdate">true</bool>
+
+    <!-- Whether to use window background blur for the volume dialog. -->
+    <bool name="config_volumeDialogUseBackgroundBlur">true</bool>
+
+    <!-- Indicates whether the blurred wallpaper is supported -->
+    <bool name="config_supportBlurredWallpaper">true</bool>
     
     <!-- The bottom margin of the keyguard security container -->
     <dimen name="kg_security_container_min_bottom_margin">469px</dimen>
