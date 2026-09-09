@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Translucent background scrim for All Apps drawer with minor blur -->
+    <style name="LauncherTheme" parent="@style/DynamicColorsBaseLauncherTheme">
+        <item name="allAppsScrimColor">#D0FFFFFF</item>
+    </style>
+
+    <style name="LauncherTheme.Dark" parent="@style/LauncherTheme">
+        <item name="allAppsScrimColor">#D0121212</item>
+    </style>
+</resources>
