@@ -66,4 +66,7 @@
     <!-- Blur radius behind Notification Shade -->
     <dimen name="max_shade_window_blur_radius">17dp</dimen>
 
+    <!-- Volume dialog background blur radius -->
+    <dimen name="volume_dialog_background_blur_radius">17dp</dimen>
+
 </resources>
