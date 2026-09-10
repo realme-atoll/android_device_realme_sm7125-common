@@ -570,9 +570,6 @@ on property:ro.crypto.state=unsupported
     start bspFwUpdate
 # endif /* OPLUS_FEATURE_TP_BSPFWUPDATE */
 
-on property:persist.env.fastdorm.enabled=true
-    setprop persist.radio.data_no_toggle 1
-
 service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
     class core
     user vendor_qrtr
@@ -779,10 +776,6 @@ service hostapd_fst /vendor/bin/hw/hostapd -dd -g /data/vendor/wifi/hostapd/glob
     disabled
     oneshot
 
-on property:ro.data.large_tcp_window_size=true
-    # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
-    write /proc/sys/net/ipv4/tcp_adv_win_scale  2
-
 service vendor.ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
     user radio
@@ -970,20 +963,6 @@ on property:ro.vendor.oppo.radio.multisim.config=*
 #WuShuxun@CONNECTIVITY.WIFI.INTERNET.1074197, 2018/11/08,Add for make WCNSS_qcom_cfg.ini Rom-update.
 on post-fs-data
     chmod 0666 /mnt/vendor/persist/wlan/WCNSS_qcom_cfg.ini
-
-# To rename ini_temp.txt into WCNSS_qcom_cfg.ini
-on property:oppo.wifi.iniromupdate=*
-    copy /mnt/vendor/persist/ini_temp.txt /mnt/vendor/persist/wlan/WCNSS_qcom_cfg.ini
-    chmod 0666 /mnt/vendor/persist/wlan/WCNSS_qcom_cfg.ini
-
-# To enable /mnt/vendor/persist folder access right for ini romupdate feature
-on property:oppo.wifi.enablepersistaccess=*
-    chmod 0777 /mnt/vendor/persist
-
-# To restore /mnt/vendor/persist folder access right for ini romupdate feature
-on property:oppo.wifi.restorepersistaccess=*
-    chmod 0771 /mnt/vendor/persist
-#endif /* OPLUS_BUG_STABLITY */
 
 service vendor.contexthub-hal-1-0 /vendor/bin/hw/android.hardware.contexthub@1.0-service
     override
