@@ -24,8 +24,10 @@
     <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
     <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
-    <!-- Enable ACS (auto channel selection) for Wifi hotspot (SAP) -->
-    <bool translatable="false" name="config_wifi_softap_acs_supported">true</bool>
+    <!-- Disable ACS (auto channel selection) for Wifi hotspot (SAP) to prevent concurrency scan failure on WCN3990 -->
+    <bool translatable="false" name="config_wifi_softap_acs_supported">false</bool>
+    <bool translatable="false" name="config_wifiSoftap6ghzSupported">false</bool>
+    <bool translatable="false" name="config_wifiSoftap60ghzSupported">false</bool>
 
     <!-- Enable 802.11ac for Wifi hotspot (SAP) -->
     <bool translatable="false" name="config_wifi_softap_ieee80211ac_supported">true</bool>
