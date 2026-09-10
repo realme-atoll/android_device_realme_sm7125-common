@@ -68,4 +68,10 @@
         <item>192.168.48.254</item>
         <item>192.168.49.2</item>
     </string-array>
+
+    <!-- Disable legacy dnsmasq DHCP server; use modern Android NetworkStack DHCP server -->
+    <bool name="config_tether_enable_legacy_dhcp_server">false</bool>
+
+    <!-- Disable eBPF tethering offload on 4.14 kernel -->
+    <bool name="config_tether_enable_bpf_offload">false</bool>
 </resources>
