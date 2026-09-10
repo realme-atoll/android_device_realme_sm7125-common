@@ -24,9 +24,6 @@
     <bool name="doze_display_state_supported">true</bool>
     <bool name="doze_suspend_display_state_supported">false</bool>
 
-    <!-- Disable combined network icons -->
-    <bool name="flag_combined_status_bar_signal_icons">false</bool>
-
     <!-- HBM type of UDFPS overlay.
             0 - GLOBAL HBM
             1 - LOCAL HBM
