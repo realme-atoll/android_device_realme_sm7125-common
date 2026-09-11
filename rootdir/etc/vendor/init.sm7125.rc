@@ -24,6 +24,7 @@ on boot
     # Fix permissions of double tap node
     chown system system /proc/touchpanel/double_tap_enable
     chmod 0644 /proc/touchpanel/double_tap_enable
+    write /proc/touchpanel/double_tap_enable 1
 
     # Vibrator node
     chown system system /sys/class/leds/vibrator/vmax_mv
