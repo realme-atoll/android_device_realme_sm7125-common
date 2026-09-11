@@ -21,7 +21,7 @@
         <item>restart</item>
         <item>restart_recovery</item>
         <item>restart_bootloader</item>
-        <item>restart_fastboot</item>
+        <item>restart_systemui</item>
     </string-array>
 
     <!-- Whether to post reset runnable for all clients. Needed for some older
@@ -37,6 +37,7 @@
     <string-array name="config_deviceKeyHandlerClasses" translatable="false">
         <item>org.aospextended.device.KeyHandler</item>
     </string-array>
+
     <!-- Bitmask of features that should be turned on in LiveDisplay. Default is 0 (disabled). -->
     <integer name="config_supportedLiveDisplayFeatures">0</integer>
 </resources>

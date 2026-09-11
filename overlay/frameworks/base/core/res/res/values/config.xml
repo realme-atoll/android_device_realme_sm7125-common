@@ -771,6 +771,8 @@
     <integer name="config_udfps_illumination_transition_ms">0</integer>
     <!-- Enable video pause workaround for Qualcomm camera HAL -->
     <bool name="config_useVideoPauseWorkaround">true</bool>
+    <!-- Instant screenshot chord timeout -->
+    <integer name="config_screenshotChordKeyTimeout">0</integer>
 </resources>
 
 
