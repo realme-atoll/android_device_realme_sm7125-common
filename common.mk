@@ -30,6 +30,10 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_BOARD_PLATFORM := atoll
 PRODUCT_USES_QCOM_HARDWARE := true
 
+# Remove unwanted packages
+PRODUCT_PACKAGES += \
+    RemovePackages
+
 # AID/fs configs
 PRODUCT_PACKAGES += \
     fs_config_files
@@ -300,6 +304,21 @@ $(call inherit-product-if-exists, vendor/lawnchair/lawnchair.mk)
 
 # $(call soong_config_set_bool,livedisplay_sdm,enable_dm,false)
 
+# Logging
+SPAMMY_LOG_TAGS := \
+    SDM \
+    SDM-histogram \
+    SRE \
+    WifiHAL \
+    cnss-daemon \
+    sensors \
+    vendor.qti.hardware.display.composer-service
+
+ifneq ($(TARGET_BUILD_VARIANT),eng)
+PRODUCT_VENDOR_PROPERTIES += \
+    $(foreach tag,$(SPAMMY_LOG_TAGS),log.tag.$(tag)=E)
+endif
+
 # Media
 PRODUCT_PACKAGES += \
     libstagefrighthw
@@ -348,13 +367,6 @@ DEVICE_PACKAGE_OVERLAYS += \
 # Perf
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.perf@2.2.vendor
-
-#Product Properties (CAF)
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.soc.manufacturer=QTI
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.soc.model=SM7125
 
 # Power
 PRODUCT_PACKAGES += \

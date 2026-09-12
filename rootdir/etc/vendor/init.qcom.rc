@@ -31,7 +31,7 @@ import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
 import /vendor/etc/init/hw/init.qcom.factory.rc
 #ifdef OPLUS_BUG_STABILITY
-#Kai.Huang@BSP.Kernel.Stability 2020/2/12  Case:04451596 solve the testPocCVE_2016_6753 fail 
+#Kai.Huang@BSP.Kernel.Stability 2020/2/12  Case:04451596 solve the testPocCVE_2016_6753 fail
 import /vendor/etc/init/hw/init.qcom.test.rc
 #endif
 #ifdef OPLUS_FEATURE_DISPLAY
@@ -1017,10 +1017,3 @@ service vendor.hwcomposer-2-4 /vendor/bin/hw/android.hardware.graphics.composer@
     onrestart restart surfaceflinger
     task_profiles ServiceCapacityLow
     socket pps stream 0660 system system
-
-service vendor.power /vendor/bin/hw/android.hardware.power-service-qti
-    override
-    class hal
-    user system
-    group system input
-    priority -20

@@ -55,3 +55,9 @@ persist.bluetooth.sbc_hd_higher_bitrate=1
 
 # Media prefetch
 persist.mm.enable.prefetch=true
+
+# Phantom process monitoring
+sys.fflag.override.settings_enable_monitor_phantom_procs=false
+
+# Shutdown
+ro.build.shutdown_timeout=2
