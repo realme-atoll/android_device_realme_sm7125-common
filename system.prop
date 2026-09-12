@@ -9,8 +9,7 @@ ro.config.vc_call_vol_steps=11
 ro.qc.sdk.audio.fluencetype=none
 
 # Bluetooth
-vendor.bluetooth.soc=cherokee
-ro.bluetooth.library_name=libbluetooth.so 
+ro.bluetooth.library_name=libbluetooth.so
 
 # Camera
 ro.camera.hfr.enable=1
@@ -100,14 +99,9 @@ persist.data.df.mux_count=8
 persist.data.df.ul_mode=5
 persist.data.wda.enable=true
 persist.sys.radio.force_lte_ca=true
-persist.vendor.data.iwlan.enable=true
-persist.vendor.data.mode=concurrent
 ril.subscription.types=NV,RUIM
 ro.telephony.default_network=22,22
-ro.vendor.use_data_netmgrd=true
 telephony.lteOnCdmaDevice=1
-persist.sys.fflag.override.settings_network_and_internet_v2=true
-persist.sys.fflag.override.settings_provider_model=false
 
 # SSR
 persist.vendor.ssr.restart_level=ALL_ENABLE
@@ -116,13 +110,10 @@ persist.vendor.ssr.restart_level=ALL_ENABLE
 persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
 
-#SkiaGL
-debug.renderengine.backend=skiaglthreaded
-renderthread.skia.reduceopstasksplitting=true 
-
-# Disable vsync for cpu rendered apps
-debug.cpurend.vsync=false
-
-#initialize QCA1530 detection
-sys.qca1530=detect
-
+# Logs
+persist.log.tag.OpenGLRenderer=S
+persist.log.tag.SQLiteLog=S
+persist.log.tag.wificond=S
+persist.log.tag.NearbySharing=S
+persist.log.tag.TrafficStats=S
+persist.log.tag.ContrastColorUtil=S

@@ -71,7 +71,16 @@ void check_nfc_support()
     }
 }
 
+void set_hw_revision()
+{
+    string hwrev = GetProperty("ro.boot.hardware.revision", "");
+    if (hwrev.empty()) {
+        property_override("ro.boot.hardware.revision", "MP");
+    }
+}
+
 void vendor_load_properties()
 {
     check_nfc_support();
+    set_hw_revision();
 }
