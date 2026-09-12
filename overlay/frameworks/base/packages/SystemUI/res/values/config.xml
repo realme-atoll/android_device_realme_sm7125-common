@@ -55,4 +55,9 @@
     
     <!-- The bottom margin of the keyguard security container -->
     <dimen name="kg_security_container_min_bottom_margin">469px</dimen>
+    <!-- The maximum count of notifications on Keyguard. The rest will be collapsed in an overflow card.
+         Set to 2 so at least 2 full notification cards are displayed on lockscreen before collapsing to shelf icons.
+     -->
+    <integer name="keyguard_max_notification_count">2</integer>
+
 </resources>
