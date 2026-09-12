@@ -113,11 +113,12 @@ ro.crypto.volume.metadata.method=dm-default-key
 ro.crypto.volume.options=::v2
 
 # Display
+debug.hwui.renderer=skiagl
+debug.renderengine.backend=skiaglthreaded
 ro.hardware.egl=adreno
 ro.hardware.vulkan=adreno
 ro.opengles.version=196610
 ro.vendor.cabc.enable=true
-ro.surface_flinger.blur_disabled_by_default=true
 vendor.display.comp_mask=0
 vendor.display.disable_decimation=1
 vendor.display.disable_excl_rect=0
@@ -157,29 +158,20 @@ ro.surface_flinger.has_wide_color_display=true
 ro.surface_flinger.use_color_management=true
 ro.vendor.display.sensortype=2
 ro.vendor.display.svi=1
-# Inherited low-RAM (Android Go) flag that disables HW-accelerated rendering -> forces
-# slow software/CPU paths for window animations and burns battery. Wrong for 8GB/Adreno 618.
-ro.config.avoid_gfx_accel=false
-debug.sf.predict_hwc_composition_strategy=0
-debug.sf.auto_latch_unsignaled=0
-ro.vendor.qti.cgroup_follow.enable=true 
-persist.vendor.qti.inputopts.enable=true 
-persist.vendor.qti.inputopts.movetouchslop=0.6 
+debug.sf.enable_adpf_cpu_hint=true
+
+# Fling
+ro.vendor.qti.cgroup_follow.enable=true
+persist.vendor.qti.inputopts.enable=true
+persist.vendor.qti.inputopts.movetouchslop=0.6
 
 # FM
 vendor.hw.fm.init=0
-
-# FUSE passthrough
-persist.sys.fuse.passthrough.enable=true
 
 #Graphics
 debug.hwui.use_hint_manager=true
 debug.hwui.target_cpu_time_percent=30
 debug.sf.enable_adpf_cpu_hint=true
-
-# Keyguard
-keyguard.no_require_sim=true
-debug.sf.enable_gl_backpressure=0
 
 # Keystore
 ro.hardware.keystore_desede=true
@@ -194,9 +186,6 @@ vendor.media.omx=0
 drm.service.enabled=true
 
 # NFC
-persist.sys.nfc.disPowerSave=1
-ro.camera.notify_nfc=1
-persist.sys.nfc.aid_overflow=true
 ro.hardware.nfc_nci=nqx.default
 
 # PASR
@@ -228,11 +217,8 @@ persist.vendor.sensors.enable.mag_filter=true
 persist.vendor.sensors.support_direct_channel=false
 persist.vendor.sensors.allow_non_default_discovery=true
 
-# Wi-Fi
-wifi.aware.interface=wifi-aware0
-
 # SOC
-ro.soc.manufacturer=QTI
+ro.soc.manufacturer=Qualcomm
 ro.soc.model=SM7125
 
 # Usb
@@ -246,12 +232,6 @@ vendor.usb.rmnet.inst.name=rmnet
 vendor.usb.rndis.func.name=gsi
 vendor.usb.use_ffs_mtp=0
 vendor.usb.use_gadget_hal=0
-
-# Seamless transfer
-sys.fflag.override.settings_seamless_transfer=true
-
-# default refresh rate threshold
-debug.sf.frame_rate_multiple_threshold=0
 
 # default refresh rate threshold
 debug.sf.frame_rate_multiple_threshold=0
