@@ -19,9 +19,6 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 # Add common definitions for Qualcomm
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
 
-# UDFPS
-$(call soong_config_set,surfaceflinger,udfps_lib,//$(LOCAL_PATH):libudfps_extension.realme_sm7125)
-
 # speaker layout channel mask
 $(call soong_config_set_bool,android_hardware_audio,skip_speaker_layout_channel_mask_field,true)
 
@@ -173,6 +170,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
+
+$(call soong_config_set,surfaceflinger,udfps_lib,//device/realme/sm7125-common/fingerprint:libudfps_extension.realme_sm7125)
 
 # Fingerprint shims
 PRODUCT_PACKAGES += \

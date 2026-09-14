@@ -24,16 +24,11 @@
     <bool name="doze_display_state_supported">true</bool>
     <bool name="doze_suspend_display_state_supported">false</bool>
 
-    <!-- HBM type of UDFPS overlay.
-            0 - GLOBAL HBM
-            1 - LOCAL HBM
-    -->
-    <integer name="config_udfps_hbm_type">0</integer>
 
     <!-- The battery current divider, some kernel report current value in mA other in µA.
          Leave 1 if you have mA, put 1000 if you have µA-->
     <integer name="config_battCurrentDivider" translatable="false">1</integer>
-    
+
 
     <!-- Charging info current divider, if needed -->
     <integer name="config_currentInfoDivider" translatable="false">1</integer>
@@ -52,9 +47,7 @@
 
     <!-- Vibration on icon animation -->
     <bool name="config_vibrateOnIconAnimation">true</bool>
-    
-    <!-- The bottom margin of the keyguard security container -->
-    <dimen name="kg_security_container_min_bottom_margin">469px</dimen>
+
     <!-- The maximum count of notifications on Keyguard. The rest will be collapsed in an overflow card.
          Set to 2 so at least 2 full notification cards are displayed on lockscreen before collapsing to shelf icons.
      -->
