@@ -49,10 +49,7 @@
     <!-- Margin on the right side of the center clock -->
     <dimen name="status_bar_center_clock_padding_end">124px</dimen>
 
-    <!-- Bottom margin size when fingerprint in display is active -->
-    <dimen name="keyguard_indication_margin_bottom_fingerprint_in_display">@dimen/keyguard_indication_margin_bottom</dimen>
-
-    <!-- Bottom margin size -->
+    <!-- Bottom margin size: 300px ensures indication text sits cleanly above the UDFPS fingerprint icon -->
     <dimen name="keyguard_indication_margin_bottom">300px</dimen>
 
     <!-- Biometric dialog corner radius -->
