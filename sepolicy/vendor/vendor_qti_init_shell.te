@@ -8,3 +8,4 @@ allow vendor_qti_init_shell vendor_sysfs_kgsl:file { setattr write };
 
 # To set powerhal init property
 set_prop(vendor_qti_init_shell, vendor_power_prop)
+set_prop(vendor_qti_init_shell, oppo_fingerprint_prop)
