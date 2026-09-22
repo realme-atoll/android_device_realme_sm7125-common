@@ -5,7 +5,7 @@
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
     Unless required by applicable law or agreed to in writing, software
     distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,20 +17,26 @@
     <!-- Modern SubSettings-style theme: DeviceDefault.Settings with the decor
          ActionBar removed so CollapsingToolbarBaseActivity can install its own
          collapsing Material toolbar (matches the system Settings app on A12+). -->
-    <style name="AppTheme" parent="@android:style/Theme.DeviceDefault.Settings">
+    <style name="AppTheme" parent="@style/Theme.SubSettingsBase.Expressive">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
+        <item name="android:colorAccent">@android:color/system_accent1_600</item>
+        <item name="colorAccent">@android:color/system_accent1_600</item>
+        <item name="android:colorPrimary">@android:color/system_accent1_600</item>
+        <item name="colorPrimary">@android:color/system_accent1_600</item>
+        <item name="android:colorControlActivated">@android:color/system_accent1_600</item>
+        <item name="colorControlActivated">@android:color/system_accent1_600</item>
+        <item name="android:colorControlHighlight">@color/preference_ripple_color</item>
+        <item name="colorControlHighlight">@color/preference_ripple_color</item>
         <item name="preferenceTheme">@style/PreferenceTheme</item>
     </style>
 
-    <style name="PreferenceTheme" parent="@style/PreferenceThemeOverlay.SettingsBase">
-    </style>
-
-    <style name="Theme.Main.SwitchBar.Switch">
-        <item name="android:trackTint">@color/switchbar_switch_track_tint</item>
-        <item name="android:thumbTint">@color/switchbar_switch_thumb_tint</item>
-    </style>
-
-    <style name="Theme.Main.SwitchBar" parent="@android:style/ThemeOverlay.Material.ActionBar">
+    <style name="PreferenceTheme" parent="@style/PreferenceTheme.SettingsLib.Expressive">
+        <item name="android:colorAccent">@android:color/system_accent1_600</item>
+        <item name="colorAccent">@android:color/system_accent1_600</item>
+        <item name="android:colorControlActivated">@android:color/system_accent1_600</item>
+        <item name="colorControlActivated">@android:color/system_accent1_600</item>
+        <item name="android:colorControlHighlight">@color/preference_ripple_color</item>
+        <item name="colorControlHighlight">@color/preference_ripple_color</item>
     </style>
 </resources>
