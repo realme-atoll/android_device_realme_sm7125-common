@@ -36,9 +36,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.Preference.OnPreferenceClickListener;
-import androidx.preference.PreferenceFragmentCompat;
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import org.aospextended.device.util.Action;
 import org.aospextended.device.util.Utils;
@@ -46,12 +46,12 @@ import org.aospextended.device.util.Utils;
 import org.aospextended.device.R;
 import org.aospextended.device.util.ShortcutPickerHelper;
 
-public class TouchGestures extends PreferenceFragmentCompat implements
+public class TouchGestures extends SettingsBasePreferenceFragment implements
         OnPreferenceChangeListener, OnPreferenceClickListener,
         ShortcutPickerHelper.OnPickListener, MenuProvider {
 
-    private static String GESTURE_PATH = "/proc/touchpanel/gesture_enable";
-    private static String DT2W_PATH = "/proc/touchpanel/double_tap_enable";
+    public static final String GESTURE_PATH = "/proc/touchpanel/gesture_enable";
+    public static final String DT2W_PATH = "/proc/touchpanel/double_tap_enable";
 
     private static final String SETTINGS_METADATA_NAME = "com.android.settings";
 
@@ -93,9 +93,9 @@ public class TouchGestures extends PreferenceFragmentCompat implements
     private Preference mGestureSwipeLeft;
     private Preference mGestureSwipeRight;
 
-    private SwitchPreference mEnableDt2w;
-    private SwitchPreference mEnableGestures;
-    private SwitchPreference mHapticFeedback;
+    private SwitchPreferenceCompat mEnableDt2w;
+    private SwitchPreferenceCompat mEnableGestures;
+    private SwitchPreferenceCompat mHapticFeedback;
 
     private boolean mCheckPreferences;
     private SharedPreferences mPrefs;
@@ -158,13 +158,13 @@ public class TouchGestures extends PreferenceFragmentCompat implements
         prefs = getPreferenceScreen();
 
         PreferenceCategory dt2w = (PreferenceCategory) prefs.findPreference("dt2w");
-        mEnableDt2w = (SwitchPreference) prefs.findPreference(PREF_DT2W_ENABLE);
+        mEnableDt2w = (SwitchPreferenceCompat) prefs.findPreference(PREF_DT2W_ENABLE);
 
         PreferenceCategory gestures = (PreferenceCategory) prefs.findPreference("gestures");
-        mEnableGestures = (SwitchPreference) prefs.findPreference(PREF_GESTURE_ENABLE);
+        mEnableGestures = (SwitchPreferenceCompat) prefs.findPreference(PREF_GESTURE_ENABLE);
 
         PreferenceCategory haptic = (PreferenceCategory) prefs.findPreference("haptic");
-        mHapticFeedback = (SwitchPreference) findPreference(KEY_GESTURE_HAPTIC_FEEDBACK);
+        mHapticFeedback = (SwitchPreferenceCompat) findPreference(KEY_GESTURE_HAPTIC_FEEDBACK);
         mHapticFeedback.setChecked(mPrefs.getInt(Utils.TOUCHSCREEN_GESTURE_HAPTIC_FEEDBACK, 1) != 0);
         mHapticFeedback.setOnPreferenceChangeListener(this);
 
@@ -403,7 +403,7 @@ public class TouchGestures extends PreferenceFragmentCompat implements
     @Override
     public void onCreateMenu(Menu menu, MenuInflater inflater) {
         menu.add(0, MENU_RESET, 0, R.string.reset)
-                .setIcon(R.drawable.ic_settings_reset)
+                .setIcon(R.drawable.ic_custom_seekbar_reset)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
