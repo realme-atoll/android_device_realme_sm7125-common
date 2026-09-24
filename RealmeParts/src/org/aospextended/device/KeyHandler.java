@@ -46,7 +46,6 @@ import android.os.UserHandle;
 import com.android.internal.os.DeviceKeyHandler;
 import com.android.internal.util.ArrayUtils;
 import org.aospextended.device.util.Action;
-import org.aospextended.device.util.Action;
 import org.aospextended.device.util.Utils;
 import org.aospextended.device.doze.DozeUtils;
 import android.content.Intent;
@@ -61,19 +60,19 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int GESTURE_REQUEST = 1;
     private static final int GESTURE_WAKELOCK_DURATION = 2000;
 
-    private static final int GESTURE_DOUBLE_TAP_SCANCODE = 143;
+    private static final int GESTURE_DOUBLE_TAP_SCANCODE = 248;
     private static final int GESTURE_W_SCANCODE = 246;
     private static final int GESTURE_M_SCANCODE = 247;
     private static final int GESTURE_CIRCLE_SCANCODE = 249;
     private static final int GESTURE_TWO_SWIPE_SCANCODE = 250;
-    private static final int GESTURE_UP_ARROW_SCANCODE = 252;
-    private static final int GESTURE_DOWN_ARROW_SCANCODE = 251;
-    private static final int GESTURE_LEFT_ARROW_SCANCODE = 254;
-    private static final int GESTURE_RIGHT_ARROW_SCANCODE = 253;
-    private static final int GESTURE_SWIPE_UP_SCANCODE = 256;
-    private static final int GESTURE_SWIPE_DOWN_SCANCODE = 255;
-    private static final int GESTURE_SWIPE_LEFT_SCANCODE = 258;
-    private static final int GESTURE_SWIPE_RIGHT_SCANCODE = 257;
+    private static final int GESTURE_UP_ARROW_SCANCODE = 251;
+    private static final int GESTURE_DOWN_ARROW_SCANCODE = 252;
+    private static final int GESTURE_LEFT_ARROW_SCANCODE = 253;
+    private static final int GESTURE_RIGHT_ARROW_SCANCODE = 254;
+    private static final int GESTURE_SWIPE_UP_SCANCODE = 255;
+    private static final int GESTURE_SWIPE_DOWN_SCANCODE = 256;
+    private static final int GESTURE_SWIPE_LEFT_SCANCODE = 257;
+    private static final int GESTURE_SWIPE_RIGHT_SCANCODE = 258;
 
     private final Context mContext;
     private Context mAppContext = null;
@@ -97,9 +96,20 @@ public class KeyHandler implements DeviceKeyHandler {
             KeyEvent event = (KeyEvent) msg.obj;
             String action = null;
 
-            // Utils.getSharedPreferences does not work here
-            SharedPreferences mPref = mAppContext.getSharedPreferences("org.aospextended.device_preferences",
-                    Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
+            // Ensure we have the RealmeParts package context (in case early boot fallback was used)
+            if (mAppContext == null || !"org.aospextended.device".equals(mAppContext.getPackageName())) {
+                mAppContext = Utils.getAppContext(mContext);
+            }
+            SharedPreferences mPref;
+            try {
+                Context deContext = (mAppContext != null && mAppContext.isDeviceProtectedStorage())
+                        ? mAppContext : (mAppContext != null ? mAppContext.createDeviceProtectedStorageContext() : mContext.createDeviceProtectedStorageContext());
+                mPref = deContext.getSharedPreferences("org.aospextended.device_preferences",
+                        Context.MODE_PRIVATE | Context.MODE_MULTI_PROCESS);
+            } catch (Exception e) {
+                Slog.e(TAG, "Failed to get SharedPreferences in Direct Boot", e);
+                return;
+            }
 
             switch(event.getScanCode()) {
             case GESTURE_DOUBLE_TAP_SCANCODE:
@@ -186,16 +196,33 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     public KeyEvent handleKeyEvent(KeyEvent event) {
-        if (event.getAction() != KeyEvent.ACTION_UP) {
+        int scanCode = event.getScanCode();
+        if (!isGestureScanCode(scanCode)) {
             return event;
         }
-        int scanCode = event.getScanCode();
-        if (!mEventHandler.hasMessages(GESTURE_REQUEST)) {
+        if (event.getAction() == KeyEvent.ACTION_UP
+                && !mEventHandler.hasMessages(GESTURE_REQUEST)) {
             Message msg = getMessageForKeyEvent(event);
             mEventHandler.sendMessage(msg);
         }
 
-        return event;
+        return null;
+    }
+
+    private boolean isGestureScanCode(int scanCode) {
+        return scanCode == GESTURE_DOUBLE_TAP_SCANCODE
+                || scanCode == GESTURE_W_SCANCODE
+                || scanCode == GESTURE_M_SCANCODE
+                || scanCode == GESTURE_CIRCLE_SCANCODE
+                || scanCode == GESTURE_TWO_SWIPE_SCANCODE
+                || scanCode == GESTURE_UP_ARROW_SCANCODE
+                || scanCode == GESTURE_DOWN_ARROW_SCANCODE
+                || scanCode == GESTURE_LEFT_ARROW_SCANCODE
+                || scanCode == GESTURE_RIGHT_ARROW_SCANCODE
+                || scanCode == GESTURE_SWIPE_UP_SCANCODE
+                || scanCode == GESTURE_SWIPE_DOWN_SCANCODE
+                || scanCode == GESTURE_SWIPE_LEFT_SCANCODE
+                || scanCode == GESTURE_SWIPE_RIGHT_SCANCODE;
     }
 
     private Message getMessageForKeyEvent(KeyEvent keyEvent) {
