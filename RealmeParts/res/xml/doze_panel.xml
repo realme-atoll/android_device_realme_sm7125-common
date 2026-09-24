@@ -16,31 +16,47 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:key="always_on_display"
-        android:disableDependentsState="true"
-        android:title="@string/ambient_display_always_on_title"
-        android:summary="@string/ambient_display_always_on_summary"
+    <com.android.settingslib.widget.MainSwitchPreference
+        android:key="doze_enabled"
+        android:title="@string/ambient_display_enable_title"
         android:persistent="false" />
+
+    <PreferenceCategory
+        android:key="always_on_display_category">
+
+        <SwitchPreferenceCompat
+            android:key="always_on_display"
+            android:disableDependentsState="true"
+            android:title="@string/ambient_display_always_on_title"
+            android:summary="@string/ambient_display_always_on_summary"
+            android:persistent="false" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="pickup_sensor"
         android:title="@string/pickup_sensor_title">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="gesture_pick_up"
             android:defaultValue="false"
             android:title="@string/pick_up_gesture_title"
             android:summary="@string/pick_up_gesture_summary" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:key="gesture_ambient_motion"
+            android:defaultValue="false"
+            android:title="@string/ambient_motion_gesture_title"
+            android:summary="@string/ambient_motion_gesture_summary" />
+
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:disableDependentsState="true"
             android:key="gesture_raise_to_wake"
             android:summary="@string/raise_to_wake_gesture_summary"
             android:title="@string/raise_to_wake_gesture_title" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:defaultValue="false"
             android:disableDependentsState="true"
             android:key="gesture_double_tap_to_check_phone"
@@ -53,13 +69,13 @@
         android:key="proximity_sensor"
         android:title="@string/proximity_sensor_title">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="gesture_hand_wave"
             android:defaultValue="false"
             android:title="@string/hand_wave_gesture_title"
             android:summary="@string/hand_wave_gesture_summary" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="gesture_pocket"
             android:defaultValue="false"
             android:title="@string/pocket_gesture_title"
