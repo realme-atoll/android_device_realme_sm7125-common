@@ -22,6 +22,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.PowerManager;
+import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
 import android.util.Log;
 
@@ -36,17 +38,30 @@ public class AmdSensor implements SensorEventListener {
     private static final boolean DEBUG = Utils.DEBUG;
     private static final String TAG = "AmdSensor";
 
-    private static final String AMD_SENSOR = "qti.sensor.amd";
+    private static final String AMD_SENSOR = "android.sensor.tilt_detector";
+    private static final int WAKELOCK_TIMEOUT_MS = 3000;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private Context mContext;
     private ExecutorService mExecutorService;
+    private WakeLock mWakeLock;
 
     public AmdSensor(Context context) {
         mContext = context;
         mSensorManager = mContext.getSystemService(SensorManager.class);
-        mSensor = DozeUtils.getSensor(mSensorManager, AMD_SENSOR);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE, true);
+        if (mSensor == null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true);
+        }
+        if (mSensor == null) {
+            mSensor = DozeUtils.getSensor(mSensorManager, AMD_SENSOR);
+        }
+        if (mSensor == null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION, true);
+        }
+        PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
         mExecutorService = Executors.newSingleThreadExecutor();
     }
 
@@ -58,9 +73,8 @@ public class AmdSensor implements SensorEventListener {
     public void onSensorChanged(SensorEvent event) {
         if (DEBUG) Log.d(TAG, "Got sensor event: " + event.values[0]);
 
-        if (event.values[0] == 2.0f) {
-            DozeUtils.launchDozePulse(mContext);
-        }
+        mWakeLock.acquire(WAKELOCK_TIMEOUT_MS);
+        DozeUtils.launchDozePulse(mContext);
     }
 
     @Override
