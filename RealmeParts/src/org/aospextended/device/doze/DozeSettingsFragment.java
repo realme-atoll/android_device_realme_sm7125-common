@@ -25,6 +25,8 @@ import androidx.fragment.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -37,25 +39,26 @@ import android.widget.TextView;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
+import com.android.settingslib.widget.MainSwitchPreference;
+import com.android.settingslib.widget.SettingsBasePreferenceFragment;
+import androidx.preference.SwitchPreferenceCompat;
 
 import org.aospextended.device.R;
 import org.aospextended.device.util.Utils;
 
-public class DozeSettingsFragment extends PreferenceFragmentCompat implements OnPreferenceChangeListener,
+public class DozeSettingsFragment extends SettingsBasePreferenceFragment implements OnPreferenceChangeListener,
         CompoundButton.OnCheckedChangeListener {
 
-    private TextView mTextView;
-    private View mSwitchBar;
+    private MainSwitchPreference mMainSwitch;
 
-    private SwitchPreference mAlwaysOnDisplayPreference;
+    private SwitchPreferenceCompat mAlwaysOnDisplayPreference;
 
-    private SwitchPreference mPickUpPreference;
-    private SwitchPreference mHandwavePreference;
-    private SwitchPreference mPocketPreference;
-    private SwitchPreference mRaiseToWakePreference;
-    private SwitchPreference mDoubleTapPreference;
+    private SwitchPreferenceCompat mPickUpPreference;
+    private SwitchPreferenceCompat mAmbientMotionPreference;
+    private SwitchPreferenceCompat mHandwavePreference;
+    private SwitchPreferenceCompat mPocketPreference;
+    private SwitchPreferenceCompat mRaiseToWakePreference;
+    private SwitchPreferenceCompat mDoubleTapPreference;
 
     private Handler mHandler = new Handler();
 
@@ -71,7 +74,13 @@ public class DozeSettingsFragment extends PreferenceFragmentCompat implements On
 
         boolean dozeEnabled = DozeUtils.isDozeEnabled(getActivity());
 
-        mAlwaysOnDisplayPreference = (SwitchPreference) findPreference(DozeUtils.ALWAYS_ON_DISPLAY);
+        mMainSwitch = (MainSwitchPreference) findPreference("doze_enabled");
+        if (mMainSwitch != null) {
+            mMainSwitch.setChecked(dozeEnabled);
+            mMainSwitch.addOnSwitchChangeListener(this);
+        }
+
+        mAlwaysOnDisplayPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.ALWAYS_ON_DISPLAY);
         mAlwaysOnDisplayPreference.setEnabled(dozeEnabled);
         mAlwaysOnDisplayPreference.setChecked(DozeUtils.isAlwaysOnEnabled(getActivity()));
         mAlwaysOnDisplayPreference.setOnPreferenceChangeListener(this);
@@ -81,70 +90,86 @@ public class DozeSettingsFragment extends PreferenceFragmentCompat implements On
         PreferenceCategory proximitySensorCategory = (PreferenceCategory) getPreferenceScreen().
                 findPreference(DozeUtils.CATEG_PROX_SENSOR);
 
-        mPickUpPreference = (SwitchPreference) findPreference(DozeUtils.GESTURE_PICK_UP_KEY);
-        mPickUpPreference.setEnabled(dozeEnabled);
-        mPickUpPreference.setOnPreferenceChangeListener(this);
+        SensorManager sm = getActivity().getSystemService(SensorManager.class);
 
+        mPickUpPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_PICK_UP_KEY);
+        boolean hasPickup = sm != null && (sm.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE, true) != null
+                || sm.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true) != null
+                || DozeUtils.getSensor(sm, "android.sensor.tilt_detector") != null);
+        if (hasPickup) {
+            mPickUpPreference.setEnabled(dozeEnabled);
+            mPickUpPreference.setOnPreferenceChangeListener(this);
+        } else if (pickupSensorCategory != null && mPickUpPreference != null) {
+            pickupSensorCategory.removePreference(mPickUpPreference);
+        }
 
-        mDoubleTapPreference = (SwitchPreference) findPreference(DozeUtils.GESTURE_DOUBLE_TAP);
-        mDoubleTapPreference.setEnabled(dozeEnabled);
-        mDoubleTapPreference.setOnPreferenceChangeListener(this);
+        mAmbientMotionPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_AMBIENT_MOTION_KEY);
+        boolean hasLuxAod = sm != null && DozeUtils.getSensor(sm, "qti.sensor.lux_aod") != null;
+        if (hasLuxAod && mAmbientMotionPreference != null) {
+            mAmbientMotionPreference.setEnabled(dozeEnabled);
+            mAmbientMotionPreference.setOnPreferenceChangeListener(this);
+        } else if (pickupSensorCategory != null && mAmbientMotionPreference != null) {
+            pickupSensorCategory.removePreference(mAmbientMotionPreference);
+        }
 
-        mRaiseToWakePreference = (SwitchPreference) findPreference(DozeUtils.GESTURE_RAISE_TO_WAKE_KEY);
-        mRaiseToWakePreference.setEnabled(dozeEnabled);
-        mRaiseToWakePreference.setOnPreferenceChangeListener(this);
+        mRaiseToWakePreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_RAISE_TO_WAKE_KEY);
+        boolean hasTilt = sm != null && sm.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true) != null;
+        if (hasTilt && mRaiseToWakePreference != null) {
+            mRaiseToWakePreference.setEnabled(dozeEnabled);
+            mRaiseToWakePreference.setOnPreferenceChangeListener(this);
+        } else if (pickupSensorCategory != null && mRaiseToWakePreference != null) {
+            pickupSensorCategory.removePreference(mRaiseToWakePreference);
+        }
 
-        mHandwavePreference = (SwitchPreference) findPreference(DozeUtils.GESTURE_HAND_WAVE_KEY);
-        mHandwavePreference.setEnabled(dozeEnabled);
-        mHandwavePreference.setOnPreferenceChangeListener(this);
+        mDoubleTapPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_DOUBLE_TAP);
+        if (mDoubleTapPreference != null) {
+            mDoubleTapPreference.setEnabled(dozeEnabled);
+            mDoubleTapPreference.setOnPreferenceChangeListener(this);
+        }
 
-        mPocketPreference = (SwitchPreference) findPreference(DozeUtils.GESTURE_POCKET_KEY);
-        mPocketPreference.setEnabled(dozeEnabled);
-        mPocketPreference.setOnPreferenceChangeListener(this);
+        if (pickupSensorCategory != null && pickupSensorCategory.getPreferenceCount() == 0) {
+            getPreferenceScreen().removePreference(pickupSensorCategory);
+        }
 
-        // Hide proximity sensor related features if the device doesn't support them
-        if (!DozeUtils.getProxCheckBeforePulse(getActivity())) {
-            getPreferenceScreen().removePreference(proximitySensorCategory);
+        boolean hasProx = sm != null && sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, true) != null;
+        mHandwavePreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_HAND_WAVE_KEY);
+        if (hasProx && mHandwavePreference != null) {
+            mHandwavePreference.setEnabled(dozeEnabled);
+            mHandwavePreference.setOnPreferenceChangeListener(this);
+        } else if (proximitySensorCategory != null && mHandwavePreference != null) {
+            proximitySensorCategory.removePreference(mHandwavePreference);
+        }
+
+        mPocketPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_POCKET_KEY);
+        if (hasProx && mPocketPreference != null) {
+            mPocketPreference.setEnabled(dozeEnabled);
+            mPocketPreference.setOnPreferenceChangeListener(this);
+        } else if (proximitySensorCategory != null && mPocketPreference != null) {
+            proximitySensorCategory.removePreference(mPocketPreference);
+        }
+
+        // Hide proximity sensor category if proximity is not supported or empty
+        if (!DozeUtils.getProxCheckBeforePulse(getActivity()) || !hasProx
+                || (proximitySensorCategory != null && proximitySensorCategory.getPreferenceCount() == 0)) {
+            if (proximitySensorCategory != null) {
+                getPreferenceScreen().removePreference(proximitySensorCategory);
+            }
         }
 
         // Hide AOD if not supported and set all its dependents otherwise
         if (!DozeUtils.alwaysOnDisplayAvailable(getActivity())) {
             getPreferenceScreen().removePreference(mAlwaysOnDisplayPreference);
         } else {
-            pickupSensorCategory.setDependency(DozeUtils.ALWAYS_ON_DISPLAY);
-            proximitySensorCategory.setDependency(DozeUtils.ALWAYS_ON_DISPLAY);
-            mPickUpPreference.setDependency(DozeUtils.GESTURE_RAISE_TO_WAKE_KEY);
+            if (pickupSensorCategory != null && getPreferenceScreen().findPreference(DozeUtils.CATEG_PICKUP_SENSOR) != null) {
+                pickupSensorCategory.setDependency(DozeUtils.ALWAYS_ON_DISPLAY);
+            }
+            if (proximitySensorCategory != null && getPreferenceScreen().findPreference(DozeUtils.CATEG_PROX_SENSOR) != null) {
+                proximitySensorCategory.setDependency(DozeUtils.ALWAYS_ON_DISPLAY);
+            }
+            if (mPickUpPreference != null && hasTilt && mRaiseToWakePreference != null) {
+                mPickUpPreference.setDependency(DozeUtils.GESTURE_RAISE_TO_WAKE_KEY);
+            }
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View view = LayoutInflater.from(getContext()).inflate(R.layout.doze,
-                container, false);
-        ((ViewGroup) view).addView(super.onCreateView(inflater, container, savedInstanceState));
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        boolean dozeEnabled = DozeUtils.isDozeEnabled(getActivity());
-
-        mTextView = view.findViewById(R.id.switch_text);
-        mTextView.setText(getString(dozeEnabled ?
-                R.string.switch_bar_on : R.string.switch_bar_off));
-
-        mSwitchBar = view.findViewById(R.id.switch_bar);
-        Switch switchWidget = mSwitchBar.findViewById(android.R.id.switch_widget);
-        switchWidget.setChecked(dozeEnabled);
-        switchWidget.setOnCheckedChangeListener(this);
-        mSwitchBar.setActivated(dozeEnabled);
-        mSwitchBar.setOnClickListener(v -> {
-            switchWidget.setChecked(!switchWidget.isChecked());
-            mSwitchBar.setActivated(switchWidget.isChecked());
-        });
     }
 
     @Override
@@ -163,16 +188,18 @@ public class DozeSettingsFragment extends PreferenceFragmentCompat implements On
         DozeUtils.enableDoze(getActivity(), isChecked);
         DozeUtils.checkDozeService(getActivity());
 
-        mTextView.setText(getString(isChecked ? R.string.switch_bar_on : R.string.switch_bar_off));
-        mSwitchBar.setActivated(isChecked);
-
-        if (!isChecked) {
-            DozeUtils.enableAlwaysOn(getActivity(), false);
-            mAlwaysOnDisplayPreference.setChecked(false);
+        if (mAlwaysOnDisplayPreference != null) {
+            mAlwaysOnDisplayPreference.setEnabled(isChecked);
+            if (!isChecked) {
+                DozeUtils.enableAlwaysOn(getActivity(), false);
+                mAlwaysOnDisplayPreference.setChecked(false);
+            }
         }
-        mAlwaysOnDisplayPreference.setEnabled(isChecked);
 
         mPickUpPreference.setEnabled(isChecked);
+        if (mAmbientMotionPreference != null) {
+            mAmbientMotionPreference.setEnabled(isChecked);
+        }
         mRaiseToWakePreference.setEnabled(isChecked);
         mHandwavePreference.setEnabled(isChecked);
         mPocketPreference.setEnabled(isChecked);
