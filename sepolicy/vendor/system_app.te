@@ -17,6 +17,10 @@ allow system_app vendor_sysfs_battery_supply:file rw_file_perms;
 r_dir_file(system_app, vendor_sysfs_kgsl);
 allow system_app vendor_sysfs_kgsl:file rw_file_perms;
 
+# RealmeParts DC Dimming & HBM
+r_dir_file(system_app, sysfs_oppo_display);
+allow system_app sysfs_oppo_display:file rw_file_perms;
+
 get_prop(system_app, oppo_fingerprint_prop)
 
 
