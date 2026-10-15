@@ -382,6 +382,9 @@ firmware_directories /mnt/vendor/persist/ /vendor/firmware_mnt/image/
 # RealmeParts charge-limit toggle (OPLUS charge-enable switch)
 /sys/class/power_supply/battery	mmi_charging_enable	0664	system	system
 
+# RealmeParts restrict fast charge
+/sys/class/qcom-battery	restrict_chg	0666	system	system
+
 #Memory Offline
 /sys/devices/system/memory/memory* state    0660 system system
 
@@ -416,7 +419,6 @@ firmware_directories /mnt/vendor/persist/ /vendor/firmware_mnt/image/
 /sys/class/graphics/fb0     modes                    0664    system  graphics
 /sys/class/graphics/fb0     mode                     0664    system  graphics
 /sys/class/graphics/fb0     msm_cmd_autorefresh_en   0664    system  graphics
-*/
 
 #asm330 sensor
 #common sensors files
