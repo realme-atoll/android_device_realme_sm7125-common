@@ -1,0 +1,62 @@
+/*
+ * Copyright (C) 2026 The LineageOS Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.aospextended.device.battery;
+
+import android.content.Context;
+import org.aospextended.device.util.Utils;
+
+public class ForceFastChargeSettings {
+
+    public static final String[] NODES = {
+        "/sys/kernel/fast_charge/force_fast_charge",
+        "/sys/module/oplus_charger/parameters/force_fast_charge"
+    };
+    public static final String KEY = "force_fastcharge";
+
+    public static String getNode() {
+        for (String node : NODES) {
+            if (Utils.fileWritable(node)) {
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public static boolean isSupported() {
+        return getNode() != null;
+    }
+
+    public static boolean isEnabled(Context context) {
+        return Utils.getSharedPreferences(context).getBoolean(KEY, false);
+    }
+
+    public static void setEnabled(boolean enabled) {
+        String node = getNode();
+        if (node != null) {
+            Utils.writeLine(node, enabled ? "1" : "0");
+        }
+    }
+
+    public static void restore(Context context) {
+        if (!isSupported()) {
+            return;
+        }
+        if (isEnabled(context)) {
+            setEnabled(true);
+        }
+    }
+}
