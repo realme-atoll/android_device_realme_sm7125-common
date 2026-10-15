@@ -43,6 +43,10 @@
         <item>ethernet,9,9,9,-1,true</item>
     </string-array>
 
+    <!-- Wi-Fi supplicant scan interval in seconds when device is connected/idle to save standby power -->
+    <integer name="config_wifi_supplicant_scan_interval">300</integer>
+    <integer name="config_wifi_framework_scan_interval_ms">300000</integer>
+
     <!-- Configure mobile tcp buffer sizes in the form:
          rat-name:rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
          If no value is found for the rat-name in use, the system default will be applied.
@@ -176,23 +180,20 @@
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
          May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">17</integer>
+    <integer name="config_screenBrightnessDoze">14</integer>
 
     <!-- Whether the display blanks itself when transitioning from a doze to a non-doze state -->
     <bool name="config_displayBlanksAfterDoze">true</bool>
 
     <!-- Enable doze alwaysOn Display -->
     <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
-    
+
     <!-- Control whether the always on display mode is enabled by default. This value will be used
          during initialization when the setting is still null. -->
-    <bool name="config_dozeAlwaysOnEnabled">false</bool>    
-    
+    <bool name="config_dozeAlwaysOnEnabled">false</bool>
+
     <!-- If true, the display will be shifted around in ambient mode. -->
     <bool name="config_enableBurnInProtection">true</bool>
-
-    <!-- Whether the Unprocessed audio source supports the required frequency range and level -->
-    <bool name="config_supportAudioSourceUnprocessed">true</bool>
 
     <!-- Whether the Unprocessed audio source supports the required frequency range and level -->
     <bool name="config_supportAudioSourceUnprocessed">true</bool>
@@ -226,7 +227,7 @@
     <array name="config_ambientBrighteningThresholds">
         <item>100</item>
     </array>
-    
+
     <!-- Array of light sensor lux values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 control points as follows:
          (1-based arrays)
@@ -431,7 +432,7 @@
         <item>777.6</item>
         <item>800</item>
     </array>
-     
+
     <!-- Array of hysteresis constraint values for darkening, represented as tenths of a
          percent. The length of this array is assumed to be one greater than
          config_ambientThresholdLevels. The darkening threshold is calculated as
@@ -668,7 +669,9 @@
 
     <!-- Whether device has VOOC charging support -->
     <bool name="config_hasVoocCharger">true</bool>
-     
+
+    <!-- Whether device has SuperDart charging support -->
+    <bool name="config_hasSuperdartCharger">false</bool>
     <!-- The default refresh rate for a given device. Change this value to set a higher default
          refresh rate. If the hardware composer on the device supports display modes with a higher
          refresh rate than the default value specified here, the framework may use those higher
@@ -681,7 +684,7 @@
 
     <!-- Maximum strength, in percentage, supported by bright color reduction. -->
     <integer name="config_reduceBrightColorsStrengthMax">120</integer>
-    
+
     <!-- Control the behavior when the user long presses the power button.
             0 - Nothing
             1 - Global actions menu
@@ -723,7 +726,7 @@
 
     <!-- Whether we use large screen shade header which takes only one row compared to QS header -->
     <bool name="config_use_large_screen_shade_header">true</bool>
-    
+
     <!-- Boost Framework -->
     <bool name="config_supportsBoostFramework">true</bool>
 
@@ -747,14 +750,12 @@
          in hardware for individual layers. Qualcomm SDM applies color transform at display level. -->
     <bool name="config_setColorTransformAcceleratedPerLayer">false</bool>
 
-
     <!-- Suppress crash dialog for Google TTS -->
     <string name="config_appsNotReportingCrashes">com.google.android.tts</string>
 
     <!-- Enable video pause workaround for Qualcomm camera HAL -->
     <bool name="config_useVideoPauseWorkaround">true</bool>
+
     <!-- Instant screenshot chord timeout -->
     <integer name="config_screenshotChordKeyTimeout">0</integer>
 </resources>
-
-
