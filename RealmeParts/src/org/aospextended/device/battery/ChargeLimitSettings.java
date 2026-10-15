@@ -37,6 +37,7 @@ public class ChargeLimitSettings {
     public static final String KEY_ENABLE = "charge_limit_enable";
     public static final String KEY_LEVEL = "charge_limit_level";
     public static final String DEFAULT_LEVEL = "80";
+    public static final int DEFAULT_LEVEL_INT = 80;
 
     /** Resume charging once we fall this far below the cap (anti-flap). */
     private static final int HYSTERESIS = 2;
@@ -51,10 +52,14 @@ public class ChargeLimitSettings {
 
     public static int getLevel(Context context) {
         try {
-            return Integer.parseInt(Utils.getSharedPreferences(context)
-                    .getString(KEY_LEVEL, DEFAULT_LEVEL));
-        } catch (NumberFormatException e) {
-            return Integer.parseInt(DEFAULT_LEVEL);
+            return Utils.getSharedPreferences(context).getInt(KEY_LEVEL, DEFAULT_LEVEL_INT);
+        } catch (ClassCastException e) {
+            try {
+                return Integer.parseInt(Utils.getSharedPreferences(context)
+                        .getString(KEY_LEVEL, DEFAULT_LEVEL));
+            } catch (NumberFormatException nfe) {
+                return DEFAULT_LEVEL_INT;
+            }
         }
     }
 
@@ -89,6 +94,15 @@ public class ChargeLimitSettings {
             // Never leave the battery stuck not-charging when the cap is off.
             setChargingEnabled(true);
         }
+        try {
+            android.service.quicksettings.TileService.requestListeningState(
+                    context, new android.content.ComponentName(context, ChargeLimitTileService.class));
+        } catch (Exception ignored) {}
+    }
+
+    public static void setEnabled(Context context, boolean enabled) {
+        Utils.getSharedPreferences(context).edit().putBoolean(KEY_ENABLE, enabled).apply();
+        onEnableChanged(context, enabled);
     }
 
     /** Called on boot: start the monitor only if the cap is enabled. */
