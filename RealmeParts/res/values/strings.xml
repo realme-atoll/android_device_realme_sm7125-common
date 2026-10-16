@@ -28,7 +28,7 @@
     <string name="enable_gestures_summary">Enable screen off gestures</string>
     <string name="gestures_title">Gestures</string>
     <string name="gesture_double_tap_title">Gesture Double Tap</string>
-    <string name="gesture_w_title">Gesture W</string>	
+    <string name="gesture_w_title">Gesture W</string>
     <string name="gesture_m_title">Gesture M</string>
     <string name="gesture_s_title">Gesture S</string>
     <string name="gesture_circle_title">Gesture Circle</string>
@@ -101,7 +101,7 @@
 
     <!-- Ambient Display -->
     <string name="ambient_display_title">Ambient display</string>
-    <string name="ambient_display_enable_title">Ambient display</string>
+    <string name="ambient_display_enable_title">Enable</string>
     <string name="ambient_display_enable_summary">Wake screen when you receive notifications</string>
     <string name="ambient_display_gestures_title">Ambient display gestures</string>
     <string name="ambient_display_gestures_summary">Additional gestures to wake the screen</string>
@@ -130,6 +130,10 @@
     <string name="pick_up_gesture_title">Pick-up</string>
     <string name="pick_up_gesture_summary">Pulse notifications on pick-up</string>
 
+    <!-- Approach / Reach gesture -->
+    <string name="ambient_motion_gesture_title">Reach to check phone</string>
+    <string name="ambient_motion_gesture_summary">Pulse notifications when you reach for or approach your phone</string>
+
     <!-- Pocket gesture -->
     <string name="pocket_gesture_title">Pocket</string>
     <string name="pocket_gesture_summary">Pulse notifications on removal from pocket</string>
@@ -147,29 +151,16 @@
     <string name="doze_settings_help_text">These features use sensor events to launch a doze notification pulse. The chosen sensor is only enabled when the device receives a notification, this helps to reduce battery usage. There is also an option to enable the chosen sensor as soon as the screen turns off, this will cause higher battery usage.</string>
 
 
-    <!-- Label for feature switch  -->
-    <string name="switch_bar_on">On</string>
-
-    <!-- Label for feature switch -->
-    <string name="switch_bar_off">Off</string>
-
     <!-- Device specific settings -->
     <string name="device_settings_app_name">Advanced settings</string>
 
     <!-- Device gestures panel -->
     <string name="screen_gestures_panel_title">Gestures</string>
 
-    <!-- Ambient gesture haptic feedback -->
-    <string name="ambient_gesture_extras">Extras</string>
-    <string name="ambient_gesture_haptic_feedback">Haptic feedback</string>
-    <string name="ambient_gesture_haptic_feedback_summary">Vibrate when a Ambient gesture is detected</string>
 
     <!-- Touchscreen gesture haptic feedback -->
     <string name="touchscreen_gesture_haptic_feedback">Haptic feedback</string>
     <string name="touchscreen_gesture_haptic_feedback_summary">Vibrate when a Touchscreen gesture is detected</string>
-
-    <!-- Vibration Slider -->
-    <string name="vibrator_intensity_control">Vibration control</string>
 
     <!-- Raise to wake strings-->
     <string name="raise_to_wake_gesture_title">Raise to wake</string>
@@ -191,8 +182,46 @@
     <!-- Battery -->
     <string name="battery_title">Battery</string>
     <string name="charge_limit_enable_title">Charge limit</string>
-    <string name="charge_limit_enable_summary">Stop charging at a set level to reduce battery wear from sitting at 100%</string>
+    <string name="charge_limit_enable_summary">Stop charging at a set level to prolong battery lifespan</string>
     <string name="charge_limit_level_title">Charge limit level</string>
-    <string name="charge_limit_level_summary">Charging pauses at this level and resumes if it drops below it</string>
+    <string name="charge_limit_level_summary">Charging pauses at this level</string>
 
+    <!-- Display (AMOLED) -->
+    <string name="display_title">Display</string>
+    <string name="dc_dimming_title">DC Dimming</string>
+    <string name="dc_dimming_summary">Reduce screen flicker at low brightness</string>
+    <string name="hbm_title">High brightness mode</string>
+    <string name="hbm_summary">Boost maximum screen brightness under sunlight</string>
+
+    <!-- Gaming & Touch -->
+    <string name="touch_title">Touch &amp; Gaming</string>
+    <string name="game_touch_title">Game touch mode</string>
+    <string name="game_touch_summary">Increase touch sampling rate to reduce latency</string>
+    <string name="edge_mistouch_title">Edge mistouch prevention</string>
+    <string name="edge_mistouch_summary">Prevent accidental touches along screen edges</string>
+
+    <!-- Audio / Clear Speaker -->
+    <string name="audio_title">Audio</string>
+    <string name="clear_speaker_title">Clear speaker</string>
+    <string name="clear_speaker_summary">Play a 30-second audio track to clear dust and moisture from the speaker</string>
+    <string name="clear_speaker_running">Clearing speaker (%d seconds remaining)</string>
+
+    <!-- USB OTG -->
+    <string name="usb_title">USB</string>
+    <string name="otg_mode_title">USB OTG</string>
+    <string name="otg_mode_summary">Supply power to connected USB devices</string>
+    <string name="otg_mode_auto">Auto (turns off after 10 min idle)</string>
+    <string name="otg_mode_on">Always on</string>
+    <string name="otg_mode_off">Off</string>
+    <string name="otg_mode_tile_auto">Auto (10 min)</string>
+    <string name="otg_mode_tile_on">Always on</string>
+    <string name="otg_mode_tile_off">Off</string>
+
+    <!-- Additional Hardware Tuning from kernel -->
+    <string name="fastcharge_title">Restrict fast charging</string>
+    <string name="fastcharge_summary">Limit charging speed and temperature</string>
+    <string name="force_fastcharge_title">Force USB fast charge</string>
+    <string name="force_fastcharge_summary">Allow up to 900mA current on USB 2.0 ports</string>
+    <string name="skip_pcc_title">Fingerprint color override</string>
+    <string name="skip_pcc_summary">Bypass color correction during unlock\nWarning: May affect fingerprint speed and accuracy</string>
 </resources>

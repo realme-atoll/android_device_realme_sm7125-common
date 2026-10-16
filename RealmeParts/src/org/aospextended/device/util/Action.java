@@ -252,8 +252,9 @@ public class Action {
             } else if (action.equals(ACTION_WAKE_DEVICE)) {
                 PowerManager powerManager =
                         (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-                if (!powerManager.isScreenOn()) {
-                    powerManager.wakeUp(SystemClock.uptimeMillis());
+                if (powerManager != null && !powerManager.isInteractive()) {
+                    powerManager.wakeUp(SystemClock.uptimeMillis(),
+                            PowerManager.WAKE_REASON_GESTURE, TAG);
                 }
                 return;
             } else {
