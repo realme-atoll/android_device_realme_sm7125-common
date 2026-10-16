@@ -385,6 +385,10 @@ firmware_directories /mnt/vendor/persist/ /vendor/firmware_mnt/image/
 # RealmeParts restrict fast charge
 /sys/class/qcom-battery	restrict_chg	0666	system	system
 
+# RealmeParts OTG mode switches
+/sys/class/power_supply/usb	otg_switch	0666	system	system
+/sys/class/power_supply/usb	otg_online	0664	system	system
+
 #Memory Offline
 /sys/devices/system/memory/memory* state    0660 system system
 

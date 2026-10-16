@@ -52,12 +52,13 @@ public class Utils {
     }
 
     public static Context getAppContext(Context context) {
+        Context ctx = context;
         try {
-            return context.createPackageContext(
+            ctx = context.createPackageContext(
                     "org.aospextended.device", Context.CONTEXT_IGNORE_SECURITY);
         } catch (NameNotFoundException e) {
         }
-        return context;
+        return ctx.isDeviceProtectedStorage() ? ctx : ctx.createDeviceProtectedStorageContext();
     }
 
 
