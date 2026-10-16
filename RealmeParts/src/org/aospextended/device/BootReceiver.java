@@ -23,23 +23,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
 import org.aospextended.device.gestures.TouchGestures;
 import org.aospextended.device.util.Utils;
 import org.aospextended.device.doze.DozeUtils;
-import org.aospextended.device.vibration.VibratorStrengthPreference;
 import org.aospextended.device.gpu.GpuBoostSettings;
 import org.aospextended.device.battery.ChargeLimitSettings;
+import org.aospextended.device.battery.FastChargeSettings;
+import org.aospextended.device.battery.ForceFastChargeSettings;
+import org.aospextended.device.display.AutoBrightnessService;
+import org.aospextended.device.display.DcDimmingSettings;
+import org.aospextended.device.display.HbmSettings;
+import org.aospextended.device.display.SkipPccSettings;
+import org.aospextended.device.touch.GameTouchSettings;
+import org.aospextended.device.touch.EdgeMistouchSettings;
+import org.aospextended.device.otg.OtgSettings;
 
 public class BootReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-            enableComponent(context, TouchGestures.class.getName());
+        if (Intent.ACTION_LOCKED_BOOT_COMPLETED.equals(intent.getAction())
+                || Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            enableComponent(context, org.aospextended.device.gestures.TouchGesturesActivity.class.getName());
             SharedPreferences prefs = Utils.getSharedPreferences(context);
             TouchGestures.enableGestures(prefs.getBoolean(
                 TouchGestures.PREF_GESTURE_ENABLE, false));
@@ -47,9 +55,18 @@ public class BootReceiver extends BroadcastReceiver {
                 TouchGestures.PREF_DT2W_ENABLE, true));
             GpuBoostSettings.restore(context);
             ChargeLimitSettings.restore(context);
+            FastChargeSettings.restore(context);
+            ForceFastChargeSettings.restore(context);
+            DcDimmingSettings.restore(context);
+            HbmSettings.restore(context);
+            SkipPccSettings.restore(context);
+            GameTouchSettings.restore(context);
+            EdgeMistouchSettings.restore(context);
+            OtgSettings.restore(context);
+            AutoBrightnessService.start(context);
         }
+
         DozeUtils.checkDozeService(context);
-//        VibratorStrengthPreference.restore(context);
     }
 
     private void enableComponent(Context context, String component) {
