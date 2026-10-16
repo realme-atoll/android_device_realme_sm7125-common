@@ -1,5 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:key="display_category"
+        android:title="@string/display_title">
+
+        <SwitchPreferenceCompat
+            android:key="dc_dimming_enable"
+            android:title="@string/dc_dimming_title"
+            android:summary="@string/dc_dimming_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
+            android:key="hbm_enable"
+            android:title="@string/hbm_title"
+            android:summary="@string/hbm_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
+            android:key="skip_pcc_override"
+            android:title="@string/skip_pcc_title"
+            android:summary="@string/skip_pcc_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="touch_category"
+        android:title="@string/touch_title">
+
+        <SwitchPreferenceCompat
+            android:key="game_touch_enable"
+            android:title="@string/game_touch_title"
+            android:summary="@string/game_touch_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
+            android:key="edge_mistouch_enable"
+            android:title="@string/edge_mistouch_title"
+            android:summary="@string/edge_mistouch_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="gestures_category"
@@ -7,21 +50,19 @@
 
         <PreferenceScreen
                 android:key="screen_gestures"
-                android:icon="@drawable/ic_settings_gestures"
                 android:summary="@string/gestures_dashboard_summary"
                 android:title="@string/screen_off_gestures" />
 
     </PreferenceCategory>
-    
+
     <PreferenceCategory
         android:key="doze_category"
         android:title="@string/ambient_display_title">
 
-        <PreferenceScreen
-                android:key="doze"
-                android:icon="@drawable/ic_doze"
-                android:summary="@string/ambient_display_gestures_summary"
-                android:title="@string/ambient_display_gestures_title" />
+        <com.android.settingslib.PrimarySwitchPreference
+            android:key="doze"
+            android:title="@string/ambient_display_gestures_title"
+            android:summary="@string/ambient_display_gestures_summary" />
 
     </PreferenceCategory>
 
@@ -31,7 +72,6 @@
 
         <ListPreference
             android:key="gpu_boost_level"
-            android:icon="@drawable/ic_performance"
             android:title="@string/gpu_boost_title"
             android:summary="@string/gpu_boost_summary"
             android:dialogTitle="@string/gpu_boost_title"
@@ -45,33 +85,60 @@
         android:key="battery_category"
         android:title="@string/battery_title">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
+            android:key="fast_charge"
+            android:title="@string/fastcharge_title"
+            android:summary="@string/fastcharge_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
             android:key="charge_limit_enable"
-            android:icon="@drawable/ic_battery"
             android:title="@string/charge_limit_enable_title"
             android:summary="@string/charge_limit_enable_summary"
             android:defaultValue="false" />
 
-        <ListPreference
+        <org.aospextended.device.battery.ChargeLimitSeekBarPreference
             android:key="charge_limit_level"
             android:title="@string/charge_limit_level_title"
             android:summary="@string/charge_limit_level_summary"
-            android:dialogTitle="@string/charge_limit_level_title"
-            android:entries="@array/charge_limit_entries"
-            android:entryValues="@array/charge_limit_values"
+            android:min="70"
+            android:max="95"
             android:defaultValue="80"
             android:dependency="charge_limit_enable" />
 
     </PreferenceCategory>
 
-<!--
     <PreferenceCategory
-        android:key="vib_strength_category"
-        android:title="@string/vibrator_intensity_control">
+        android:key="usb_category"
+        android:title="@string/usb_title">
 
-        <org.aospextended.device.vibration.VibratorStrengthPreference
-            android:key="vib_strength"
-            android:icon="@drawable/ic_vibrate" />
+        <SwitchPreferenceCompat
+            android:key="force_fastcharge"
+            android:title="@string/force_fastcharge_title"
+            android:summary="@string/force_fastcharge_summary"
+            android:defaultValue="false" />
+
+        <ListPreference
+            android:key="otg_mode"
+            android:title="@string/otg_mode_title"
+            android:summary="@string/otg_mode_summary"
+            android:dialogTitle="@string/otg_mode_title"
+            android:entries="@array/otg_mode_entries"
+            android:entryValues="@array/otg_mode_values"
+            android:defaultValue="auto" />
+
     </PreferenceCategory>
--->
+
+    <PreferenceCategory
+        android:key="audio_category"
+        android:title="@string/audio_title">
+
+        <SwitchPreferenceCompat
+            android:key="clear_speaker"
+            android:title="@string/clear_speaker_title"
+            android:summary="@string/clear_speaker_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>
