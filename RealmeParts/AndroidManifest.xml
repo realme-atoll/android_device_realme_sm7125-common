@@ -12,17 +12,20 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.CAMERA" />
-	
+    <uses-permission android:name="android.permission.CONFIGURE_DISPLAY_BRIGHTNESS" />
+
     <protected-broadcast android:name="com.android.systemui.doze.pulse" />
 
     <uses-sdk
         android:minSdkVersion="24"
-        android:targetSdkVersion="35"/>
+        android:targetSdkVersion="36"/>
 
     <application
             android:icon="@android:drawable/sym_def_app_icon"
             android:label="@string/RealmeParts"
             android:theme="@style/AppTheme"
+            android:defaultToDeviceProtectedStorage="true"
+            android:directBootAware="true"
             >
 
         <!-- stub to ensure its loaded - DO NOT REMOVE -->
@@ -31,9 +34,13 @@
         <activity
             android:name=".RealmePartsActivity"
             android:label="@string/RealmeParts"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 	    </activity>
@@ -49,11 +56,11 @@
             </intent-filter>
             <meta-data
                 android:name="com.android.settings.icon"
-                android:resource="@drawable/ic_settings_gestures" />
+                android:resource="@drawable/ic_realmeparts" />
             <meta-data
                 android:name="com.android.settings.bg.hint"
                 android:resource="@color/icon_bg_color"  />
-            <meta-data 
+            <meta-data
                 android:name="com.android.settings.bg.argb"
                 android:value="@color/icon_bg_color"/>
             <meta-data
@@ -75,17 +82,77 @@
         <receiver android:name=".BootReceiver"
                   android:exported="true" >
           <intent-filter>
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
           </intent-filter>
         </receiver>
 
         <service android:name=".doze.DozeService"
-                 android:permission="RealmeDozeService">
-        </service>
+                 android:exported="false" />
 
         <service android:name=".battery.ChargeLimitService"
                  android:exported="false" />
+
+        <service android:name=".display.AutoBrightnessService"
+                 android:exported="false" />
+
+        <service
+            android:name=".display.HbmTileService"
+            android:icon="@drawable/ic_hbm"
+            android:label="@string/hbm_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".otg.OtgTileService"
+            android:icon="@drawable/ic_otg"
+            android:label="@string/otg_mode_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+
+        <service
+            android:name=".gestures.TouchGesturesTileService"
+            android:icon="@drawable/ic_touch_gestures"
+            android:label="@string/screen_off_gestures"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".display.DcDimmingTileService"
+            android:icon="@drawable/ic_dc_dimming"
+            android:label="@string/dc_dimming_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".battery.ChargeLimitTileService"
+            android:icon="@drawable/ic_charge_limit"
+            android:label="@string/charge_limit_enable_title"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
 
         <activity
             android:name=".doze.DozeSettingsActivity"
