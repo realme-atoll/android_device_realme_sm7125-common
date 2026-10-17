@@ -7,6 +7,11 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
+# Select the device sub-HAL before the inherited vendor hals.conf copy.
+# PRODUCT_COPY_FILES keeps the first entry for a destination.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf
+
 # Inherit proprietary targets
 $(call inherit-product-if-exists, vendor/realme/sm7125-common/sm7125-common-vendor.mk)
 
@@ -388,8 +393,7 @@ PRODUCT_PACKAGES += \
 
 # QTI FWK Detect
 PRODUCT_PACKAGES += \
-    libqti_vndfwk_detect.vendor \
-    libvndfwk_detect_jni.qti.vendor
+    libqti_vndfwk_detect.vendor
 
 # RCS
 PRODUCT_PACKAGES += \
@@ -408,7 +412,8 @@ PRODUCT_PACKAGES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
-    android.hardware.sensors-service.multihal
+    android.hardware.sensors-service.multihal \
+    sensors.realme_sm7125
     
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.sensor.accelerometer.xml \
@@ -480,7 +485,7 @@ PRODUCT_PACKAGES += \
 
 # Thermal
 PRODUCT_PACKAGES += \
-    android.hardware.thermal-service.qti
+    android.hardware.thermal-service.realme_sm7125
 
 # Touchscreen
 PRODUCT_COPY_FILES += \
