@@ -14,21 +14,25 @@ ro.lmk.kill_heaviest_task=true
 # kernel actually fills zram before lmkd starts killing.
 ro.lmk.swap_free_low_percentage=10
 
-# LMK tuning
+# LMK tuning (AOSP lmkd, Android 16). Only properties the AOSP binary reads are
+# listed; the QTI-only knobs (enable_watermark_check, use_psi, enable_userspace_lmk,
+# super_critical, psi_scrit_complete_stall_ms, direct_reclaim_pressure,
+# reclaim_scan_threshold, enhance_batch_kill) are not read by AOSP lmkd and were dropped.
 ro.lmk.filecache_min_kb=153600
 ro.lmk.stall_limit_critical=40
 ro.lmk.use_new_strategy=true
-ro.lmk.enable_watermark_check=true
-ro.lmk.enable_userspace_lmk=true
-ro.lmk.enhance_batch_kill=false
-ro.lmk.super_critical=701
-ro.lmk.kill_timeout_ms=50
-ro.lmk.psi_scrit_complete_stall_ms=150
-ro.lmk.direct_reclaim_pressure=45
-ro.lmk.reclaim_scan_threshold=0
+ro.lmk.use_minfree_levels=false
+ro.lmk.psi_partial_stall_ms=70
+ro.lmk.psi_complete_stall_ms=700
+ro.lmk.thrashing_limit=100
+ro.lmk.lowmem_min_oom_score=950
+ro.lmk.kill_timeout_ms=1000
 
 # Incremental FS
 ro.incremental.enable=1
+
+# Sensors
+ro.sensors.polling_fifo_workaround=1
 
 
 # Fling
