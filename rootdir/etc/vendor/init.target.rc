@@ -64,9 +64,10 @@ on init
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
 
-    write /dev/cpuset/top-app/cpus 0-3
-    write /dev/cpuset/foreground/cpus 0-3
-    write /dev/cpuset/foreground/boost/cpus 0-3
+    # Keep both CPU clusters available while the framework is starting.
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-7
     write /dev/cpuset/background/cpus 0-5
     write /dev/cpuset/system-background/cpus 0-5
     write /dev/cpuset/restricted/cpus 2-5
@@ -104,7 +105,6 @@ on late-init
     start surfaceflinger
     start bootanim
     start vendor.hwcomposer-2-4
-    start vendor.configstore-hal
     start vendor.qti.hardware.display.allocator
 
 on post-fs
@@ -114,7 +114,9 @@ on post-fs
 
 on late-fs
     wait_for_prop hwservicemanager.ready true
-    exec_start wait_for_keymaster
+    # Start Keymaster before the synchronous encrypted-data mount.
+    wait_for_prop vendor.sys.listeners.registered true
+    start keymaster-4-0
     mount_all --late
 
 service sec_nvm /vendor/bin/sec_nvm
