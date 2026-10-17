@@ -1,0 +1,50 @@
+# SM7125 thermal HAL
+
+Device-owned copy of LineageOS/QTI's AIDL thermal HAL, from
+`LineageOS/android_hardware_qcom_thermal`, branch `lineage-23.2-legacy-um`,
+commit `4a1526223983c5db137d0b87e8c2e1a752d2b72c`. Copyright and license
+notices are retained in each source file.
+
+Local differences:
+
+- Add SoC ID 443 to the existing lito/atoll sensor configuration. CPU, GPU,
+  and XO sensor names were checked against RMX2061 recovery sysfs.
+- Build the legacy uevent backend. This device's 4.14 thermal UAPI does
+  not implement the newer generic-netlink events used by the other backend.
+- Store the initialized sensor state in the lookup map.
+- Initialize the limit-profile value for SoCs without a profile override.
+- Keep the next-trip sentinel as a float so NaN remains representable;
+  convert to an integer only when writing a valid trip to sysfs.
+- Use unique module, executable, init RC, and VINTF fragment filenames so
+  Soong does not generate duplicate outputs alongside the QTI module.
+  Override the QTI package while retaining the service name and VINTF instance;
+  label the new executable with the existing thermal HAL SELinux type.
+
+The vendor thermal-engine and kernel thermal protection remain responsible
+for their existing mitigation policies. This is not new thermal calibration:
+the existing upstream atoll reporting thresholds are retained.
+
+Build in the ROM checkout:
+
+```sh
+m android.hardware.thermal-service.realme_sm7125
+```
+
+Host regression checks (Clang, Python 3; ASan/UBSan enabled):
+
+```sh
+python3 thermal/tests/test_monitor.py
+python3 thermal/tests/test_reads.py
+```
+
+The monitor check runs its production worker against a socketpair instead
+of Linux netlink. It covers an unstarted worker, blocked shutdown, repeated
+stop, socket cleanup and socket creation failure. The read check exercises
+production file/temperature/cooling reads and the SoC retry loop with missing,
+empty and malformed inputs. These checks do not replace a full Android HAL
+build or on-device thermal-event and shutdown tests.
+
+After flashing, check `dumpsys thermalservice` for real CPU/GPU/skin readings
+and threshold entries, and check logcat for sensor initialization failures
+and SELinux denials. Reporting and callbacks still require device validation;
+a source/build check cannot establish their runtime correctness.
