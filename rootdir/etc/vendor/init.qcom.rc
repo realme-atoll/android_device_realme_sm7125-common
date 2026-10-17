@@ -562,6 +562,9 @@ on property:ro.crypto.state=unsupported
     start bspFwUpdate
 # endif /* OPLUS_FEATURE_TP_BSPFWUPDATE */
 
+on property:persist.env.fastdorm.enabled=true
+    setprop persist.radio.data_no_toggle 1
+
 service vendor.qrtr-ns /vendor/bin/qrtr-ns -f
     class core
     user vendor_qrtr
@@ -767,6 +770,10 @@ service hostapd_fst /vendor/bin/hw/hostapd -dd -g /data/vendor/wifi/hostapd/glob
     group wifi
     disabled
     oneshot
+
+on property:ro.data.large_tcp_window_size=true
+    # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
+    write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
 service vendor.ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
