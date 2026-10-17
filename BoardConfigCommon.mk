@@ -158,8 +158,6 @@ BOARD_KERNEL_CMDLINE += video=vfb:640x400,bpp=32,memsize=3072000
 BOARD_KERNEL_CMDLINE += kpti=off
 BOARD_KERNEL_CMDLINE += irqaffinity=0-3
 
-# Media
-TARGET_USES_ION := true
 
 # Core Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 67108864             # 64MB
