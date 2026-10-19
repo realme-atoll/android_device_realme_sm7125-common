@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Solid opaque background color for All Apps drawer -->
+    <style name="LauncherTheme" parent="@style/DynamicColorsBaseLauncherTheme">
+        <item name="allAppsScrimColor">#FFFFFFFF</item>
+    </style>
+
+    <style name="LauncherTheme.Dark" parent="@style/LauncherTheme">
+        <item name="allAppsScrimColor">#FF121212</item>
+    </style>
+</resources>
+
