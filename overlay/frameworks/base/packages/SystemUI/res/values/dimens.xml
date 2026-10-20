@@ -40,6 +40,9 @@
     <!-- The absolute side margins of quick settings -->
     <dimen name="rounded_corner_content_padding">8dp</dimen>
 
+    <!-- Top padding of the QS panel to align unexpanded QS clock with the notch -->
+    <dimen name="qs_panel_padding_top">80dp</dimen>
+
     <!-- Margin on the left side of the heads up notification -->
     <dimen name="heads_up_status_bar_padding_start">115px</dimen>
 
@@ -48,9 +51,6 @@
 
     <!-- Margin on the right side of the center clock -->
     <dimen name="status_bar_center_clock_padding_end">124px</dimen>
-
-    <!-- Bottom margin size: 300px ensures indication text sits cleanly above the UDFPS fingerprint icon -->
-    <dimen name="keyguard_indication_margin_bottom">300px</dimen>
 
     <!-- Biometric dialog corner radius -->
     <dimen name="biometric_dialog_corner_size">@*android:dimen/config_dialogCornerRadius</dimen>

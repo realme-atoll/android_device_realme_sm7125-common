@@ -94,8 +94,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
 
 # Boot animation
+TARGET_BOOT_ANIMATION_RES := 1080
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
+
+# Target
+TARGET_SUPPORTS_QUICK_TAP := true
+
+# OMX
+TARGET_SUPPORTS_OMX_SERVICE := false
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -153,6 +160,8 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.4.vendor
 
 # Audio mods (enable any subset via flags, e.g. WITH_AUDIO_DOLBY and WITH_AUDIO_VIPER)
+WITH_AUDIO_VIPER ?= false
+WITH_AUDIO_DOLBY ?= true
 ifeq ($(WITH_AUDIO_VIPER),true)
 PRODUCT_PACKAGES += ViPER4AndroidFX
 endif

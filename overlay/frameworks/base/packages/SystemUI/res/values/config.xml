@@ -20,11 +20,6 @@
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
 <resources>
-    <!-- Doze: does this device support STATE_DOZE?  -->
-    <bool name="doze_display_state_supported">true</bool>
-    <bool name="doze_suspend_display_state_supported">false</bool>
-
-
     <!-- The battery current divider, some kernel report current value in mA other in µA.
          Leave 1 if you have mA, put 1000 if you have µA-->
     <integer name="config_battCurrentDivider" translatable="false">1</integer>
@@ -44,6 +39,9 @@
 
     <!-- Indicates whether the blurred wallpaper is supported -->
     <bool name="config_supportBlurredWallpaper">true</bool>
+
+    <!-- Allow devices override audio panel location to the left side -->
+    <bool name="config_audioPanelOnLeftSide">true</bool>
 
     <!-- Vibration on icon animation -->
     <bool name="config_vibrateOnIconAnimation">true</bool>
