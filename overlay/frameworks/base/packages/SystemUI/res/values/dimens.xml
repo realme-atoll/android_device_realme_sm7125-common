@@ -40,6 +40,9 @@
     <!-- The absolute side margins of quick settings -->
     <dimen name="rounded_corner_content_padding">8dp</dimen>
 
+    <!-- Top padding of the QS panel to align unexpanded QS clock with the notch -->
+    <dimen name="qs_panel_padding_top">80dp</dimen>
+
     <!-- Margin on the left side of the heads up notification -->
     <dimen name="heads_up_status_bar_padding_start">115px</dimen>
 
