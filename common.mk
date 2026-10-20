@@ -94,8 +94,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
 
 # Boot animation
+TARGET_BOOT_ANIMATION_RES := 1080
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
+
+# Target
+TARGET_SUPPORTS_QUICK_TAP := true
+
+# OMX
+TARGET_SUPPORTS_OMX_SERVICE := false
 
 # Camera
 PRODUCT_PACKAGES += \
