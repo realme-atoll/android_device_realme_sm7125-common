@@ -54,7 +54,7 @@ public class DozeSettingsFragment extends SettingsBasePreferenceFragment impleme
     private SwitchPreferenceCompat mAlwaysOnDisplayPreference;
 
     private SwitchPreferenceCompat mPickUpPreference;
-    private SwitchPreferenceCompat mAmbientMotionPreference;
+    private SwitchPreferenceCompat mApproachPreference;
     private SwitchPreferenceCompat mHandwavePreference;
     private SwitchPreferenceCompat mPocketPreference;
     private SwitchPreferenceCompat mRaiseToWakePreference;
@@ -103,13 +103,20 @@ public class DozeSettingsFragment extends SettingsBasePreferenceFragment impleme
             pickupSensorCategory.removePreference(mPickUpPreference);
         }
 
-        mAmbientMotionPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_AMBIENT_MOTION_KEY);
-        boolean hasLuxAod = sm != null && DozeUtils.getSensor(sm, "qti.sensor.lux_aod") != null;
-        if (hasLuxAod && mAmbientMotionPreference != null) {
-            mAmbientMotionPreference.setEnabled(dozeEnabled);
-            mAmbientMotionPreference.setOnPreferenceChangeListener(this);
-        } else if (pickupSensorCategory != null && mAmbientMotionPreference != null) {
-            pickupSensorCategory.removePreference(mAmbientMotionPreference);
+        mApproachPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_APPROACH_KEY);
+        if (mApproachPreference == null) {
+            mApproachPreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_AMBIENT_MOTION_KEY);
+        }
+        boolean hasApproach = sm != null && (sm.getDefaultSensor(Sensor.TYPE_MOTION_DETECT, true) != null
+                || sm.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION, true) != null
+                || DozeUtils.getSensor(sm, "qti.sensor.amd") != null
+                || sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, true) != null
+                || sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, false) != null);
+        if (hasApproach && mApproachPreference != null) {
+            mApproachPreference.setEnabled(dozeEnabled);
+            mApproachPreference.setOnPreferenceChangeListener(this);
+        } else if (pickupSensorCategory != null && mApproachPreference != null) {
+            pickupSensorCategory.removePreference(mApproachPreference);
         }
 
         mRaiseToWakePreference = (SwitchPreferenceCompat) findPreference(DozeUtils.GESTURE_RAISE_TO_WAKE_KEY);
@@ -197,8 +204,8 @@ public class DozeSettingsFragment extends SettingsBasePreferenceFragment impleme
         }
 
         mPickUpPreference.setEnabled(isChecked);
-        if (mAmbientMotionPreference != null) {
-            mAmbientMotionPreference.setEnabled(isChecked);
+        if (mApproachPreference != null) {
+            mApproachPreference.setEnabled(isChecked);
         }
         mRaiseToWakePreference.setEnabled(isChecked);
         mHandwavePreference.setEnabled(isChecked);

@@ -44,10 +44,10 @@
             android:summary="@string/pick_up_gesture_summary" />
 
         <SwitchPreferenceCompat
-            android:key="gesture_ambient_motion"
+            android:key="gesture_approach"
             android:defaultValue="false"
-            android:title="@string/ambient_motion_gesture_title"
-            android:summary="@string/ambient_motion_gesture_summary" />
+            android:title="@string/approach_gesture_title"
+            android:summary="@string/approach_gesture_summary" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"

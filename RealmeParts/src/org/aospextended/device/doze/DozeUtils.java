@@ -47,6 +47,7 @@ public final class DozeUtils {
     protected static final String CATEG_PROX_SENSOR = "proximity_sensor";
 
     protected static final String GESTURE_PICK_UP_KEY = "gesture_pick_up";
+    protected static final String GESTURE_APPROACH_KEY = "gesture_approach";
     protected static final String GESTURE_AMBIENT_MOTION_KEY = "gesture_ambient_motion";
     protected static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
     protected static final String GESTURE_POCKET_KEY = "gesture_pocket";
@@ -132,9 +133,9 @@ public final class DozeUtils {
             return false;
         }
         return sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, true) != null
+                || sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, false) != null
                 || sm.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE, true) != null
                 || sm.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true) != null
-                || getSensor(sm, "qti.sensor.lux_aod") != null
                 || getSensor(sm, "android.sensor.tilt_detector") != null;
     }
 
@@ -147,8 +148,13 @@ public final class DozeUtils {
         return isGestureEnabled(context, GESTURE_PICK_UP_KEY);
     }
 
+    protected static boolean isApproachEnabled(Context context) {
+        return isGestureEnabled(context, GESTURE_APPROACH_KEY)
+                || isGestureEnabled(context, GESTURE_AMBIENT_MOTION_KEY);
+    }
+
     protected static boolean isAmbientMotionEnabled(Context context) {
-        return isGestureEnabled(context, GESTURE_AMBIENT_MOTION_KEY);
+        return isApproachEnabled(context);
     }
 
     protected static boolean isRaiseToWakeEnabled(Context context) {
@@ -167,7 +173,7 @@ public final class DozeUtils {
         return isGestureEnabled(context, GESTURE_DOUBLE_TAP);
     }
     public static boolean sensorsEnabled(Context context) {
-        return isPickUpEnabled(context) || isAmbientMotionEnabled(context) || isHandwaveGestureEnabled(context)
+        return isPickUpEnabled(context) || isApproachEnabled(context) || isHandwaveGestureEnabled(context)
                 || isPocketGestureEnabled(context) ||  isRaiseToWakeEnabled(context) || isDoubleTapEnabled(context);
     }
 
