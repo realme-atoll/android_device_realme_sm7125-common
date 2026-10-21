@@ -118,7 +118,8 @@ public class KeyHandler implements DeviceKeyHandler {
                             Action.ACTION_WAKE_DEVICE);
 
                     if (mPref.getBoolean(DozeUtils.GESTURE_DOUBLE_TAP, false)
-                            && DozeUtils.isDozeEnabled(mContext)) {
+                            && DozeUtils.isDozeEnabled(mContext)
+                            && !DozeUtils.isAlwaysOnEnabled(mContext)) {
                         action = null;
                         DozeUtils.launchDozePulse(mAppContext);
                         doHapticFeedback();
