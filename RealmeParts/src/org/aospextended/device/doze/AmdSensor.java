@@ -22,6 +22,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.hardware.TriggerEvent;
+import android.hardware.TriggerEventListener;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.os.SystemClock;
@@ -40,25 +42,45 @@ public class AmdSensor implements SensorEventListener {
 
     private static final String AMD_SENSOR = "android.sensor.tilt_detector";
     private static final int WAKELOCK_TIMEOUT_MS = 3000;
+    private static final int MIN_PULSE_INTERVAL_MS = 1500;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
     private Context mContext;
     private ExecutorService mExecutorService;
     private WakeLock mWakeLock;
+    private long mEntryTimestamp;
+    private boolean mEnabled = false;
+    private boolean mIsTriggerSensor = false;
+
+    private final TriggerEventListener mTriggerListener = new TriggerEventListener() {
+        @Override
+        public void onTrigger(TriggerEvent event) {
+            if (DEBUG) Log.d(TAG, "Got trigger event: " + event.sensor.getName());
+            handleEvent();
+            if (mEnabled && mSensor != null) {
+                mSensorManager.requestTriggerSensor(mTriggerListener, mSensor);
+            }
+        }
+    };
 
     public AmdSensor(Context context) {
         mContext = context;
         mSensorManager = mContext.getSystemService(SensorManager.class);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE, true);
-        if (mSensor == null) {
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true);
-        }
-        if (mSensor == null) {
-            mSensor = DozeUtils.getSensor(mSensorManager, AMD_SENSOR);
-        }
-        if (mSensor == null) {
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION, true);
+        if (mSensorManager != null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE, true);
+            if (mSensor == null) {
+                mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true);
+            }
+            if (mSensor == null) {
+                mSensor = DozeUtils.getSensor(mSensorManager, AMD_SENSOR);
+            }
+            if (mSensor == null) {
+                mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_SIGNIFICANT_MOTION, true);
+            }
+            if (mSensor != null && mSensor.getReportingMode() == Sensor.REPORTING_MODE_ONE_SHOT) {
+                mIsTriggerSensor = true;
+            }
         }
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
@@ -69,12 +91,21 @@ public class AmdSensor implements SensorEventListener {
         return mExecutorService.submit(runnable);
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (DEBUG) Log.d(TAG, "Got sensor event: " + event.values[0]);
+    private void handleEvent() {
+        long delta = SystemClock.elapsedRealtime() - mEntryTimestamp;
+        if (delta < MIN_PULSE_INTERVAL_MS) {
+            return;
+        }
+        mEntryTimestamp = SystemClock.elapsedRealtime();
 
         mWakeLock.acquire(WAKELOCK_TIMEOUT_MS);
         DozeUtils.launchDozePulse(mContext);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (DEBUG) Log.d(TAG, "Got sensor event: " + event.values[0]);
+        handleEvent();
     }
 
     @Override
@@ -83,17 +114,30 @@ public class AmdSensor implements SensorEventListener {
     }
 
     protected void enable() {
-        if (DEBUG) Log.d(TAG, "Enabling");
+        if (DEBUG) Log.d(TAG, "Enabling AmdSensor");
+        mEnabled = true;
         submit(() -> {
-            mSensorManager.registerListener(this, mSensor,
-                    SensorManager.SENSOR_DELAY_NORMAL);
+            if (mSensor == null || mSensorManager == null) return;
+            if (mIsTriggerSensor) {
+                mSensorManager.requestTriggerSensor(mTriggerListener, mSensor);
+            } else {
+                mSensorManager.registerListener(this, mSensor,
+                        SensorManager.SENSOR_DELAY_NORMAL);
+            }
+            mEntryTimestamp = SystemClock.elapsedRealtime();
         });
     }
 
     protected void disable() {
-        if (DEBUG) Log.d(TAG, "Disabling");
+        if (DEBUG) Log.d(TAG, "Disabling AmdSensor");
+        mEnabled = false;
         submit(() -> {
-            mSensorManager.unregisterListener(this, mSensor);
+            if (mSensor == null || mSensorManager == null) return;
+            if (mIsTriggerSensor) {
+                mSensorManager.cancelTriggerSensor(mTriggerListener, mSensor);
+            } else {
+                mSensorManager.unregisterListener(this, mSensor);
+            }
         });
     }
 }

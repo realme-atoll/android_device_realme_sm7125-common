@@ -57,9 +57,11 @@ public class ProximitySensor implements SensorEventListener {
     public ProximitySensor(Context context) {
         mContext = context;
         mSensorManager = mContext.getSystemService(SensorManager.class);
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY, true);
-        if (mSensor == null) {
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY, false);
+        if (mSensorManager != null) {
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY, true);
+            if (mSensor == null) {
+                mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY, false);
+            }
         }
         PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, TAG);
@@ -72,6 +74,7 @@ public class ProximitySensor implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (mSensor == null) return;
         boolean isNear = event.values[0] < mSensor.getMaximumRange();
         if (mSawNear && !isNear) {
             if (shouldPulse(event.timestamp)) {
@@ -108,6 +111,7 @@ public class ProximitySensor implements SensorEventListener {
         mSawNear = false;
         mInPocketTime = 0;
         submit(() -> {
+            if (mSensorManager == null || mSensor == null) return;
             mSensorManager.registerListener(this, mSensor,
                     SensorManager.SENSOR_DELAY_NORMAL);
         });
@@ -116,6 +120,7 @@ public class ProximitySensor implements SensorEventListener {
     protected void disable() {
         if (DEBUG) Log.d(TAG, "Disabling");
         submit(() -> {
+            if (mSensorManager == null || mSensor == null) return;
             mSensorManager.unregisterListener(this, mSensor);
         });
     }

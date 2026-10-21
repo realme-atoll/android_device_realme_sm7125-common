@@ -130,9 +130,9 @@
     <string name="pick_up_gesture_title">Pick-up</string>
     <string name="pick_up_gesture_summary">Pulse notifications on pick-up</string>
 
-    <!-- Approach / Reach gesture -->
-    <string name="ambient_motion_gesture_title">Reach to check phone</string>
-    <string name="ambient_motion_gesture_summary">Pulse notifications when you reach for or approach your phone</string>
+    <!-- Approach gesture -->
+    <string name="approach_gesture_title">Approach to wake</string>
+    <string name="approach_gesture_summary">Pulse notifications and show fingerprint icon when you approach your phone</string>
 
     <!-- Pocket gesture -->
     <string name="pocket_gesture_title">Pocket</string>

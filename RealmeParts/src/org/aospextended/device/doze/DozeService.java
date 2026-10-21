@@ -34,7 +34,7 @@ public class DozeService extends Service {
     private ProximitySensor mProximitySensor;
     private AmdSensor mAmdSensor;
     private TiltSensor mTiltSensor;
-    private AmbientMotionSensor mAmbientMotionSensor;
+    private ApproachSensor mApproachSensor;
 
     @Override
     public void onCreate() {
@@ -42,7 +42,7 @@ public class DozeService extends Service {
         mProximitySensor = new ProximitySensor(this);
         mAmdSensor = new AmdSensor(this);
         mTiltSensor = new TiltSensor(this);
-        mAmbientMotionSensor = new AmbientMotionSensor(this);
+        mApproachSensor = new ApproachSensor(this);
 
         IntentFilter screenStateFilter = new IntentFilter();
         screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
@@ -64,7 +64,7 @@ public class DozeService extends Service {
         mProximitySensor.disable();
         mAmdSensor.disable();
         mTiltSensor.disable();
-        mAmbientMotionSensor.disable();
+        mApproachSensor.disable();
     }
 
     @Override
@@ -74,31 +74,23 @@ public class DozeService extends Service {
 
     private void onDisplayOn() {
         if (DEBUG) Log.d(TAG, "Display on");
-        if (DozeUtils.isPickUpEnabled(this)) {
-            mAmdSensor.disable();
-        }
-        if (DozeUtils.isAmbientMotionEnabled(this)) {
-            mAmbientMotionSensor.disable();
-        }
-        if (DozeUtils.isHandwaveGestureEnabled(this) ||
-                DozeUtils.isPocketGestureEnabled(this)) {
-            mProximitySensor.disable();
-        }
-        if (DozeUtils.isRaiseToWakeEnabled(this)) {
-            mTiltSensor.disable();
-        }
+        mAmdSensor.disable();
+        mApproachSensor.disable();
+        mProximitySensor.disable();
+        mTiltSensor.disable();
     }
 
     private void onDisplayOff() {
         if (DEBUG) Log.d(TAG, "Display off");
         if (DozeUtils.isAlwaysOnEnabled(this)) {
+            if (DEBUG) Log.d(TAG, "Always on display is active; skipping ambient pulse gestures");
             return;
         }
         if (DozeUtils.isPickUpEnabled(this)) {
             mAmdSensor.enable();
         }
-        if (DozeUtils.isAmbientMotionEnabled(this)) {
-            mAmbientMotionSensor.enable();
+        if (DozeUtils.isApproachEnabled(this)) {
+            mApproachSensor.enable();
         }
         if (DozeUtils.isHandwaveGestureEnabled(this) ||
                 DozeUtils.isPocketGestureEnabled(this)) {
