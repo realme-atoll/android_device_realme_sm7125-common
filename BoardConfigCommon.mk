@@ -46,6 +46,8 @@ TARGET_2ND_CPU_VARIANT := cortex-a76
 TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a76
 
 # Audio
+# The selected Dolby effects are arm64-only.
+$(call soong_config_set_bool,android_hardware_audio,run_64bit,true)
 AUDIO_FEATURE_ENABLED_AAC_ADTS_OFFLOAD := true
 AUDIO_FEATURE_ENABLED_AUDIOSPHERE := true
 AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
