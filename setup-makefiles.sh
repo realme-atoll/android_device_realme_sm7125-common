@@ -25,7 +25,7 @@ source "${HELPER}"
 setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${ANDROID_ROOT}" true
 
 # Warning headers and guards
-write_headers "RMX2170 RMX2061"
+write_headers "sm7125 RMX2061 RMX2170 RMX3081"
 
 # The standard common blobs
 write_makefiles "${MY_DIR}/proprietary-files.txt" true
