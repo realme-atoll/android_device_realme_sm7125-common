@@ -194,6 +194,7 @@ TARGET_COPY_OUT_ODM := odm
 
 # Metadata and Flash
 BOARD_USES_METADATA_PARTITION := true
+BOARD_RECOVERY_BLDRMSG_OFFSET := 0
 BOARD_FLASH_BLOCK_SIZE := 262144
 
 # Explicitly disable virtual A/B
