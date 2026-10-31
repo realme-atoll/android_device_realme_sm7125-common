@@ -209,12 +209,8 @@
     <!-- USB OTG -->
     <string name="usb_title">USB</string>
     <string name="otg_mode_title">USB OTG</string>
-    <string name="otg_mode_summary">Supply power to connected USB devices</string>
-    <string name="otg_mode_auto">Auto (turns off after 10 min idle)</string>
-    <string name="otg_mode_on">Always on</string>
-    <string name="otg_mode_off">Off</string>
-    <string name="otg_mode_tile_auto">Auto (10 min)</string>
-    <string name="otg_mode_tile_on">Always on</string>
+    <string name="otg_mode_summary">Supply power to connected USB devices and accessories</string>
+    <string name="otg_mode_tile_on">On</string>
     <string name="otg_mode_tile_off">Off</string>
 
     <!-- Additional Hardware Tuning from kernel -->
