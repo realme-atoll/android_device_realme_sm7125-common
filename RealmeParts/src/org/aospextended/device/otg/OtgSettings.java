@@ -19,8 +19,6 @@ package org.aospextended.device.otg;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemProperties;
 import android.service.quicksettings.TileService;
 import android.util.Log;
@@ -41,76 +39,31 @@ public class OtgSettings {
     public static final String PROP_OTG = "persist.sys.oplus.otg_support";
     public static final String PROP_USB_AUDIO = "persist.vendor.usb.audio";
 
+    // Legacy string constants kept for backwards compatibility
     public static final String MODE_AUTO = "auto";
     public static final String MODE_ON = "on";
     public static final String MODE_OFF = "off";
-
-    /** Timeout duration for AUTO mode inactivity: 10 minutes */
-    private static final long AUTO_TIMEOUT_MS = 10 * 60 * 1000L;
-    /** Poll interval while waiting to check for connected OTG devices: 30 seconds */
-    private static final long POLL_INTERVAL_MS = 30 * 1000L;
-
-    private static final Handler sHandler = new Handler(Looper.getMainLooper());
-    private static Context sContext;
-    private static long sInactivityDurationMs = 0;
-    private static boolean sWatchdogRunning = false;
-
-    private static final Runnable sWatchdogRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (sContext == null) {
-                return;
-            }
-
-            String currentMode = getMode(sContext);
-            if (!MODE_AUTO.equals(currentMode)) {
-                stopAutoTimeoutWatchdog();
-                return;
-            }
-
-            boolean isDeviceConnected = isOtgOnline();
-            if (isDeviceConnected) {
-                // Device connected: reset inactivity duration
-                sInactivityDurationMs = 0;
-                if (DEBUG) Log.d(TAG, "OTG device active, resetting inactivity timer");
-                sHandler.postDelayed(this, POLL_INTERVAL_MS);
-            } else {
-                sInactivityDurationMs += POLL_INTERVAL_MS;
-                if (DEBUG) Log.d(TAG, "OTG idle for " + (sInactivityDurationMs / 1000) + "s");
-
-                if (sInactivityDurationMs >= AUTO_TIMEOUT_MS) {
-                    Log.i(TAG, "OTG inactive for 10 minutes in Auto mode; powering down VBUS");
-                    stopAutoTimeoutWatchdog();
-                    // Power off OTG switch in kernel
-                    Utils.writeLine(NODE_OTG_SWITCH, "0");
-                    try {
-                        SystemProperties.set(PROP_OTG, "0");
-                    } catch (Exception ignored) {}
-                    // Notify QS Tile if visible
-                    notifyTileUpdate(sContext);
-                } else {
-                    sHandler.postDelayed(this, POLL_INTERVAL_MS);
-                }
-            }
-        }
-    };
 
     public static boolean isSupported() {
         return Utils.fileWritable(NODE_OTG_SWITCH);
     }
 
-    public static String getMode(Context context) {
+    public static boolean isEnabled(Context context) {
         SharedPreferences prefs = Utils.getSharedPreferences(context);
-        if (prefs.contains(KEY)) {
-            return prefs.getString(KEY, MODE_AUTO);
+        try {
+            return prefs.getBoolean(KEY, true);
+        } catch (ClassCastException e) {
+            // Migration from legacy String mode ("auto", "on", "off")
+            String mode = prefs.getString(KEY, MODE_ON);
+            boolean enabled = !MODE_OFF.equals(mode);
+            prefs.edit().remove(KEY).putBoolean(KEY, enabled).apply();
+            return enabled;
         }
-        // Fallback for legacy preference key
-        return prefs.getString(LEGACY_KEY, MODE_AUTO);
     }
 
-    public static void setMode(Context context, String mode) {
-        Utils.getSharedPreferences(context).edit().putString(KEY, mode).apply();
-        applyMode(context, mode);
+    public static void setEnabled(Context context, boolean enabled) {
+        Utils.getSharedPreferences(context).edit().putBoolean(KEY, enabled).apply();
+        apply(context, enabled);
     }
 
     public static boolean isOtgOnline() {
@@ -123,46 +76,18 @@ public class OtgSettings {
         return val != null && "1".equals(val.trim());
     }
 
-    public static void applyMode(Context context, String mode) {
+    public static void apply(Context context, boolean enabled) {
         if (!isSupported()) {
             return;
         }
 
-        sContext = context != null ? context.getApplicationContext() : null;
-
-        switch (mode) {
-            case MODE_AUTO:
-                // Enable OTG VBUS
-                Utils.writeLine(NODE_OTG_SWITCH, "1");
-                try {
-                    SystemProperties.set(PROP_OTG, "1");
-                    SystemProperties.set(PROP_USB_AUDIO, "1");
-                } catch (Exception ignored) {}
-                startAutoTimeoutWatchdog();
-                break;
-
-            case MODE_ON:
-                // Always on: cancel timeout watchdog, keep VBUS energized continuously
-                stopAutoTimeoutWatchdog();
-                Utils.writeLine(NODE_OTG_SWITCH, "1");
-                try {
-                    SystemProperties.set(PROP_OTG, "1");
-                    SystemProperties.set(PROP_USB_AUDIO, "1");
-                } catch (Exception ignored) {}
-                break;
-
-            case MODE_OFF:
-                // Off: cancel timeout watchdog and de-energize VBUS
-                stopAutoTimeoutWatchdog();
-                Utils.writeLine(NODE_OTG_SWITCH, "0");
-                try {
-                    SystemProperties.set(PROP_OTG, "0");
-                } catch (Exception ignored) {}
-                break;
-
-            default:
-                break;
-        }
+        Utils.writeLine(NODE_OTG_SWITCH, enabled ? "1" : "0");
+        try {
+            SystemProperties.set(PROP_OTG, enabled ? "1" : "0");
+            if (enabled) {
+                SystemProperties.set(PROP_USB_AUDIO, "1");
+            }
+        } catch (Exception ignored) {}
 
         if (context != null) {
             notifyTileUpdate(context);
@@ -173,25 +98,20 @@ public class OtgSettings {
         if (!isSupported()) {
             return;
         }
-        applyMode(context, getMode(context));
+        apply(context, isEnabled(context));
     }
 
-    private static synchronized void startAutoTimeoutWatchdog() {
-        sInactivityDurationMs = 0;
-        sHandler.removeCallbacks(sWatchdogRunnable);
-        sHandler.postDelayed(sWatchdogRunnable, POLL_INTERVAL_MS);
-        sWatchdogRunning = true;
-        if (DEBUG) Log.d(TAG, "Started OTG Auto timeout watchdog");
+    @Deprecated
+    public static String getMode(Context context) {
+        return isEnabled(context) ? MODE_ON : MODE_OFF;
     }
 
-    private static synchronized void stopAutoTimeoutWatchdog() {
-        sHandler.removeCallbacks(sWatchdogRunnable);
-        sInactivityDurationMs = 0;
-        sWatchdogRunning = false;
-        if (DEBUG) Log.d(TAG, "Stopped OTG Auto timeout watchdog");
+    @Deprecated
+    public static void setMode(Context context, String mode) {
+        setEnabled(context, !MODE_OFF.equals(mode));
     }
 
-    private static void notifyTileUpdate(Context context) {
+    public static void notifyTileUpdate(Context context) {
         try {
             TileService.requestListeningState(
                     context, new ComponentName(context, OtgTileService.class));
