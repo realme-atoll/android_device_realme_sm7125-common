@@ -22,10 +22,6 @@ import android.service.quicksettings.TileService;
 
 import org.aospextended.device.R;
 
-/**
- * Quick Settings Tile for USB OTG that cycles through:
- * Auto (10 min idle) -> Always On -> Off -> Auto
- */
 public class OtgTileService extends TileService {
 
     @Override
@@ -40,16 +36,8 @@ public class OtgTileService extends TileService {
         if (!OtgSettings.isSupported()) {
             return;
         }
-        String current = OtgSettings.getMode(this);
-        String next;
-        if (OtgSettings.MODE_OFF.equals(current)) {
-            next = OtgSettings.MODE_AUTO;
-        } else if (OtgSettings.MODE_AUTO.equals(current)) {
-            next = OtgSettings.MODE_ON;
-        } else {
-            next = OtgSettings.MODE_OFF;
-        }
-        OtgSettings.setMode(this, next);
+        boolean next = !OtgSettings.isEnabled(this);
+        OtgSettings.setEnabled(this, next);
         updateTileState();
     }
 
@@ -67,24 +55,13 @@ public class OtgTileService extends TileService {
             return;
         }
 
-        String mode = OtgSettings.getMode(this);
+        boolean enabled = OtgSettings.isEnabled(this);
         tile.setLabel(getString(R.string.otg_mode_title));
-        if (OtgSettings.MODE_AUTO.equals(mode)) {
-            tile.setState(Tile.STATE_ACTIVE);
-            tile.setIcon(Icon.createWithResource(this, R.drawable.ic_otg_auto));
-            tile.setSubtitle(getString(R.string.otg_mode_tile_auto));
-            tile.setContentDescription(getString(R.string.otg_mode_title) + ", " + getString(R.string.otg_mode_tile_auto));
-        } else if (OtgSettings.MODE_ON.equals(mode)) {
-            tile.setState(Tile.STATE_ACTIVE);
-            tile.setIcon(Icon.createWithResource(this, R.drawable.ic_otg));
-            tile.setSubtitle(getString(R.string.otg_mode_tile_on));
-            tile.setContentDescription(getString(R.string.otg_mode_title) + ", " + getString(R.string.otg_mode_tile_on));
-        } else {
-            tile.setState(Tile.STATE_INACTIVE);
-            tile.setIcon(Icon.createWithResource(this, R.drawable.ic_otg));
-            tile.setSubtitle(getString(R.string.otg_mode_tile_off));
-            tile.setContentDescription(getString(R.string.otg_mode_title) + ", " + getString(R.string.otg_mode_tile_off));
-        }
+        tile.setIcon(Icon.createWithResource(this, R.drawable.ic_otg));
+        tile.setState(enabled ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
+        tile.setSubtitle(enabled ? getString(R.string.otg_mode_tile_on) : getString(R.string.otg_mode_tile_off));
+        tile.setContentDescription(getString(R.string.otg_mode_title) + ", "
+                + (enabled ? getString(R.string.otg_mode_tile_on) : getString(R.string.otg_mode_tile_off)));
         tile.updateTile();
     }
 }

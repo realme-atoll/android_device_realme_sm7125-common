@@ -76,7 +76,7 @@ public class RealmeParts extends SettingsBasePreferenceFragment implements
     private SwitchPreferenceCompat mGameTouch;
     private SwitchPreferenceCompat mEdgeMistouch;
     private SwitchPreferenceCompat mClearSpeaker;
-    private ListPreference mOtgMode;
+    private SwitchPreferenceCompat mOtgSwitch;
     private SwitchPreferenceCompat mSkipPcc;
     private SwitchPreferenceCompat mFastCharge;
     private SwitchPreferenceCompat mForceFastCharge;
@@ -248,13 +248,12 @@ public class RealmeParts extends SettingsBasePreferenceFragment implements
 
         PreferenceCategory usb = (PreferenceCategory) getPreferenceScreen()
                  .findPreference("usb_category");
-        mOtgMode = (ListPreference) findPreference(OtgSettings.KEY);
+        mOtgSwitch = (SwitchPreferenceCompat) findPreference(OtgSettings.KEY);
         if (OtgSettings.isSupported()) {
-            mOtgMode.setValue(OtgSettings.getMode(getContext()));
-            mOtgMode.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
-            mOtgMode.setOnPreferenceChangeListener(this);
-        } else if (usb != null && mOtgMode != null) {
-            usb.removePreference(mOtgMode);
+            mOtgSwitch.setChecked(OtgSettings.isEnabled(getContext()));
+            mOtgSwitch.setOnPreferenceChangeListener(this);
+        } else if (usb != null && mOtgSwitch != null) {
+            usb.removePreference(mOtgSwitch);
         }
 
         mForceFastCharge = (SwitchPreferenceCompat) findPreference(ForceFastChargeSettings.KEY);
@@ -363,8 +362,8 @@ public class RealmeParts extends SettingsBasePreferenceFragment implements
             Utils.getSharedPreferences(getContext()).edit()
                     .putBoolean(ForceFastChargeSettings.KEY, enabled).apply();
         } else if (OtgSettings.KEY.equals(key)) {
-            String mode = (String) newValue;
-            OtgSettings.setMode(getContext(), mode);
+            boolean enabled = (Boolean) newValue;
+            OtgSettings.setEnabled(getContext(), enabled);
         } else if ("clear_speaker".equals(key)) {
 
             boolean enable = (Boolean) newValue;
