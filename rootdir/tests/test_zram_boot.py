@@ -30,7 +30,7 @@ class ZramBootTest(unittest.TestCase):
             lmk.mkdir(parents=True)
             calls = root / 'calls'
             source = SCRIPT.read_text().split('function configure_memory_parameters() {', 1)[1]
-            source = source.split('    # Configure Low Memory Killer parameters', 1)[0]
+            source = source.split('    # Set global VM parameters', 1)[0]
             for prefix in ('/sys/', '/proc/', '/dev/block/'):
                 source = source.replace(prefix, str(root) + prefix)
             prelude = f'''echo() {{
