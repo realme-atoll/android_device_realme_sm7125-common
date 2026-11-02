@@ -107,6 +107,10 @@ persist.vendor.ssr.restart_level=ALL_ENABLE
 persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
 
+# Blur
+ro.sf.blurs_are_expensive=0
+ro.launcher.blur.appLaunch=1
+
 # Logs
 persist.log.tag.OpenGLRenderer=S
 persist.log.tag.SQLiteLog=S
