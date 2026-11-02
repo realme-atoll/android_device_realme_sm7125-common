@@ -29,5 +29,7 @@
 #
 # Function to start sensors for SSC enabled platforms
 #
-cp /vendor/etc/sensors/scripts/* /data/vendor/sensors/scripts/
-chmod a+rw /data/vendor/sensors/scripts/*
+if [ -d /vendor/etc/sensors/scripts ] && [ -n "$(ls -A /vendor/etc/sensors/scripts 2>/dev/null)" ]; then
+    cp /vendor/etc/sensors/scripts/* /data/vendor/sensors/scripts/
+    chmod a+rw /data/vendor/sensors/scripts/*
+fi

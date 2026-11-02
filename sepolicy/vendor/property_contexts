@@ -1,7 +1,12 @@
 # Fingerprint
+oppo.fingerprint.                       u:object_r:oppo_fingerprint_prop:s0
+oppo.optical.goodix.fp                  u:object_r:oppo_fingerprint_prop:s0
 persist.vendor.fingerprint.             u:object_r:oppo_fingerprint_prop:s0
 vendor.fingerprint.                     u:object_r:oppo_fingerprint_prop:s0
 vendor.oppo.biometrics.fingerprint.     u:object_r:oppo_fingerprint_prop:s0
+
+# Debug
+oppo.eng.factory.no                     u:object_r:oppo_debug_prop:s0
 
 # Bluetooth LEA
 ro.vendor.bluetooth.lea.*               u:object_r:vendor_bluetooth_prop:s0

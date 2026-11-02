@@ -27,6 +27,7 @@ prebuilt_etc {
 
 prebuilt_etc {
     name: "init.oppo.display.rc_odm",
+    filename: "init.oppo.display.rc",
     src: "etc/odm/init.oppo.display.rc",
     sub_dir: "init/hw",
     device_specific: true,
@@ -35,6 +36,7 @@ prebuilt_etc {
 // Vendor-specific files in etc/vendor/
 prebuilt_etc {
     name: "init.oppo.display.rc_vendor",
+    filename: "init.oppo.display.rc",
     src: "etc/vendor/init.oppo.display.rc",
     sub_dir: "init/hw",
     vendor: true,

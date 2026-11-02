@@ -1,16 +1,10 @@
-import /vendor/etc/init/hw/init.${ro.build.product}.rc
+# Touchpanel, Vibrator, and NFC service configuration for sm7125
 
 on init
     # Update Fastchg FW
     chmod 0660 /proc/fastchg_fw_update
     chown system system /proc/fastchg_fw_update
     write /proc/fastchg_fw_update 1
-
-on fs
-    mkdir /mnt/vendor/oppo_product 0771 system system
-    mkdir /mnt/vendor/oppo_version 0771 system system
-    mount ext4 /dev/block/mapper/version.${ro.vendor.version_variant} /mnt/vendor/oppo_version ro
-    mount ext4 /dev/block/mapper/oppo_product /mnt/vendor/oppo_product ro
 
 on boot
     # ZRAM needs no disk-style swap readahead. vendor_init can write this
