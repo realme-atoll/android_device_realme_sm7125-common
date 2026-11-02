@@ -237,3 +237,13 @@ vendor.usb.rmnet.inst.name=rmnet
 vendor.usb.rndis.func.name=gsi
 vendor.usb.use_ffs_mtp=0
 vendor.usb.use_gadget_hal=0
+
+# Seamless transfer
+sys.fflag.override.settings_seamless_transfer=true
+
+# default refresh rate threshold
+debug.sf.frame_rate_multiple_threshold=0
+
+# Adaptive Performance Framework (requires the paired uclamp kernel)
+debug.hwui.use_hint_manager=true
+debug.sf.enable_adpf_cpu_hint=true
