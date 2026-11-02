@@ -30,6 +30,7 @@ import org.aospextended.device.gestures.TouchGestures;
 import org.aospextended.device.util.Utils;
 import org.aospextended.device.doze.DozeUtils;
 import org.aospextended.device.gpu.GpuBoostSettings;
+import org.aospextended.device.performance.KProfilesSettings;
 import org.aospextended.device.battery.ChargeLimitSettings;
 import org.aospextended.device.battery.FastChargeSettings;
 import org.aospextended.device.battery.ForceFastChargeSettings;
@@ -54,6 +55,7 @@ public class BootReceiver extends BroadcastReceiver {
             TouchGestures.enableDt2w(prefs.getBoolean(
                 TouchGestures.PREF_DT2W_ENABLE, true));
             GpuBoostSettings.restore(context);
+            KProfilesSettings.restore(context);
             ChargeLimitSettings.restore(context);
             FastChargeSettings.restore(context);
             ForceFastChargeSettings.restore(context);
