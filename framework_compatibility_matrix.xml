@@ -22,6 +22,17 @@
         </interface>
     </hal>
 
+    <!-- Health HAL (legacy 2.1 service shipped in the vendor image) -->
+    <hal format="hidl">
+        <name>android.hardware.health</name>
+        <version>2.1</version>
+        <optional>false</optional>
+        <interface>
+            <name>IHealth</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+
     <!-- Media CAS HAL -->
     <hal format="aidl">
         <name>android.hardware.cas</name>
