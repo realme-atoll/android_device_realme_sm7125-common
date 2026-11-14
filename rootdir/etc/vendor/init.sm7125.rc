@@ -36,13 +36,13 @@ on init
     write /dev/cpuctl/foreground_window/cpu.uclamp.max 100
     chown system system /dev/cpuctl/foreground_window/cpu.uclamp.min
     chmod 0664 /dev/cpuctl/foreground_window/cpu.uclamp.min
-    write /dev/cpuctl/foreground_window/cpu.uclamp.min 6.25
+    write /dev/cpuctl/foreground_window/cpu.uclamp.min 6
     chown system system /dev/cpuctl/top-app/cpu.uclamp.max
     chmod 0664 /dev/cpuctl/top-app/cpu.uclamp.max
     write /dev/cpuctl/top-app/cpu.uclamp.max 100
     chown system system /dev/cpuctl/top-app/cpu.uclamp.min
     chmod 0664 /dev/cpuctl/top-app/cpu.uclamp.min
-    write /dev/cpuctl/top-app/cpu.uclamp.min 12.50
+    write /dev/cpuctl/top-app/cpu.uclamp.min 12
     chown system system /dev/cpuctl/rt/cpu.uclamp.max
     chmod 0664 /dev/cpuctl/rt/cpu.uclamp.max
     write /dev/cpuctl/rt/cpu.uclamp.max 100

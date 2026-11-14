@@ -140,7 +140,9 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_ADDITIONAL_FLAGS := \
     LLVM=1 \
-    LLVM_IAS=1
+    LLVM_IAS=1 \
+    HOSTCC=clang \
+    HOSTCXX=clang++
 TARGET_KERNEL_SOURCE := kernel/realme/sm7125
 TARGET_KERNEL_CONFIG := atoll_defconfig
 KERNEL_SUPPORTS_LLVM_TOOLS := true
@@ -251,7 +253,6 @@ include device/lineage/sepolicy/libion/sepolicy.mk
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 
-# SurfaceFlinger
 # SurfaceFlinger
 TARGET_USE_AOSP_SURFACEFLINGER := true
 
