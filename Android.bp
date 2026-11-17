@@ -5,7 +5,6 @@ soong_namespace {
         ],
 }
 
-
 install_symlink {
     name: "firmware_wlan_mac.bin_symlink",
     vendor: true,

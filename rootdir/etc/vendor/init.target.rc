@@ -28,17 +28,7 @@
 #
 
 on early-init
-    #ifndef OPLUS_ARCH_EXTENDS
-    #Suresh.Alla@MULTIMEDIA.AUDIODRIVER.CODEC, 2020/07/30, Modify for audio config
-    #exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_q6_pdr audio_q6_notifier audio_snd_event audio_apr audio_adsp_loader audio_q6 audio_native audio_usf  audio_pinctrl_lpi audio_swr audio_platform audio_hdmi audio_stub audio_wcd_core audio_wsa881x audio_bolero_cdc audio_wsa_macro audio_va_macro audio_rx_macro audio_tx_macro audio_wcd937x audio_wcd937x_slave audio_wcd938x audio_wcd938x_slave audio_machine_atoll
-    #else /*OPLUS_ARCH_EXTENDS*/
-    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_q6_pdr audio_q6_notifier audio_snd_event audio_apr audio_adsp_loader audio_q6 audio_native audio_usf  audio_pinctrl_lpi audio_swr audio_platform audio_hdmi audio_stub audio_wcd_core audio_wsa881x audio_bolero_cdc audio_wsa_macro audio_va_macro audio_rx_macro audio_tx_macro audio_wcd937x audio_wcd937x_slave audio_wcd938x audio_wcd938x_slave audio_extend audio_machine_atoll audio_tfa98xx-v6 audio_aw882xx audio_sia81xx
-    #endif /*OPLUS_ARCH_EXTENDS*/
     write /proc/sys/kernel/sched_boost 1
-    mkdir /dsp 0771 media media
-    mkdir /firmware 0771 system system
-    mkdir /bt_firmware 0771 system system
-    symlink /data/tombstones /tombstones
 
     # configure governor settings
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor schedutil
@@ -119,17 +109,8 @@ on late-fs
     start keymaster-4-0
     mount_all --late
 
-service sec_nvm /vendor/bin/sec_nvm
-    class core
-    user system
-    group system
-
 on post-fs-data
     mkdir /data/tombstones 0771 system system
-    mkdir /tombstones/modem 0771 system system
-    mkdir /tombstones/lpass 0771 system system
-    mkdir /tombstones/wcnss 0771 system system
-    mkdir /tombstones/dsps 0771 system system
     #ifdef OPLUS_FEATURE_DOLBY
     #LinJunqian@MULTIMEDIA.AUDIOSERVER.EFFECT, 2019/09/18, add for dolby
     mkdir /data/vendor/dolby 0770 media media
@@ -145,7 +126,6 @@ on post-fs-data
 
 on boot
     start vendor.rmt_storage
-    start rfs_access
 
     chown system system /dev/cpuset/cgroup.procs
     chown system system /dev/cpuset/foreground/cgroup.procs
@@ -163,6 +143,41 @@ on boot
     chown system system /dev/stune/top-app/cgroup.procs
     chmod 0666 /dev/stune/background/cgroup.procs
     chmod 0666 /dev/stune/top-app/cgroup.procs
+
+    # Display nodes for RealmeParts
+    chown system system /sys/kernel/oppo_display/dimlayer_bl_en
+    chmod 0666 /sys/kernel/oppo_display/dimlayer_bl_en
+    chown system system /sys/kernel/oppo_display/hbm
+    chmod 0666 /sys/kernel/oppo_display/hbm
+    chown system system /sys/kernel/oppo_display/skip_pcc_override
+    chmod 0666 /sys/kernel/oppo_display/skip_pcc_override
+
+    # Touchpanel nodes for RealmeParts
+    chown system system /proc/touchpanel/game_switch_enable
+    chmod 0666 /proc/touchpanel/game_switch_enable
+    chown system system /proc/touchpanel/oplus_tp_limit_enable
+    chmod 0666 /proc/touchpanel/oplus_tp_limit_enable
+    chown system system /proc/touchpanel/gesture_enable
+    chmod 0666 /proc/touchpanel/gesture_enable
+    chown system system /proc/touchpanel/double_tap_enable
+    chmod 0666 /proc/touchpanel/double_tap_enable
+
+    # Charging nodes for RealmeParts
+    chown system system /sys/class/qcom-battery/restrict_chg
+    chmod 0666 /sys/class/qcom-battery/restrict_chg
+    chown system system /sys/kernel/fast_charge/force_fast_charge
+    chmod 0666 /sys/kernel/fast_charge/force_fast_charge
+    chown system system /sys/module/oplus_charger/parameters/force_fast_charge
+    chmod 0666 /sys/module/oplus_charger/parameters/force_fast_charge
+    chown system system /sys/class/power_supply/battery/mmi_charging_enable
+    chmod 0664 /sys/class/power_supply/battery/mmi_charging_enable
+
+    # OTG nodes for RealmeParts
+    chown system system /sys/class/power_supply/usb/otg_switch
+    chmod 0666 /sys/class/power_supply/usb/otg_switch
+    chown system system /sys/class/power_supply/usb/otg_online
+    chmod 0664 /sys/class/power_supply/usb/otg_online
+
 
 on property:sys.boot_completed=1
     # Setup runtime cpusets
@@ -184,9 +199,6 @@ on property:sys.boot_completed=1
     write /proc/sys/vm/dirty_expire_centisecs 3000
     write /proc/sys/vm/dirty_background_ratio 10
 
-#Load WLAN driver
-    insmod /vendor/lib/modules/qca_cld3_wlan.ko
-
 #USB controller configuration
     setprop vendor.usb.rndis.func.name "gsi"
     setprop vendor.usb.rmnet.func.name "gsi"
@@ -194,6 +206,7 @@ on property:sys.boot_completed=1
     setprop vendor.usb.dpl.inst.name "dpl"
     setprop vendor.usb.qdss.inst.name "qdss"
     setprop sys.usb.configfs 1
+    write /sys/class/power_supply/usb/otg_switch 1
 
 #start camera server as daemon
 #service qcamerasvr /system/bin/mm-qcamera-daemon
@@ -461,22 +474,6 @@ on property:init.svc.vendor.hwcomposer-2-4=restarting
 #     group system
 #     disabled
 #endif
-
-service qfp-daemon /vendor/bin/qfp-daemon
-    class late_start
-    user system
-    group system drmrpc diag input
-
-service energy-awareness /system/vendor/bin/energy-awareness
-    class main
-    user system
-    group system
-    oneshot
-
-service smcinvoked /system/bin/smcinvoked
-    class main
-    user system
-    group system
 
 service dcvs-sh /vendor/bin/init.qti.dcvs.sh
     class late_start
