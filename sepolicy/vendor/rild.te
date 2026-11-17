@@ -7,8 +7,4 @@ r_dir_file(rild, mnt_vendor_file);
 set_prop(rild, oppo_debug_prop);
 
 
-allow rild mnt_vendor_file:file write;
-
-allow rild mnt_vendor_file:file write;
-allow rild mnt_vendor_file:file write;
-
+allow rild mnt_vendor_file:file rw_file_perms;

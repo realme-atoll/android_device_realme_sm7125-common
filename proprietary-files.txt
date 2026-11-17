@@ -783,6 +783,10 @@ vendor/lib64/libprotobuf-cpp-lite-3.9.1.so
 # Public libraries
 vendor/etc/public.libraries.txt
 
+# IRQ Balance
+vendor/bin/msm_irqbalance
+vendor/etc/msm_irqbalance.conf
+
 # QDCM
 vendor/bin/qdcmss
 vendor/etc/init/qdcmss.rc
