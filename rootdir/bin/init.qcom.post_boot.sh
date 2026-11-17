@@ -35,21 +35,23 @@ function configure_read_ahead_kb_values() {
     MemTotalStr=`cat /proc/meminfo | grep MemTotal`
     MemTotal=${MemTotalStr:16:8}
 
-    dmpts=$(ls /sys/block/*/queue/read_ahead_kb | grep -e dm -e mmc)
+    dmpts=$(ls /sys/block/*/queue/read_ahead_kb 2>/dev/null | grep -E "dm-|mmc|sd[a-z]")
 
     # Set 128 for <= 3GB &
     # set 512 for >= 4GB targets.
     if [ $MemTotal -le 3145728 ]; then
-        echo 128 > /sys/block/mmcblk0/bdi/read_ahead_kb
-        echo 128 > /sys/block/mmcblk0rpmb/bdi/read_ahead_kb
         for dm in $dmpts; do
             echo 128 > $dm
         done
+        for bdi in /sys/class/bdi/*/read_ahead_kb; do
+            [ -f "$bdi" ] && echo 128 > "$bdi"
+        done
     else
-        echo 512 > /sys/block/mmcblk0/bdi/read_ahead_kb
-        echo 512 > /sys/block/mmcblk0rpmb/bdi/read_ahead_kb
         for dm in $dmpts; do
             echo 512 > $dm
+        done
+        for bdi in /sys/class/bdi/*/read_ahead_kb; do
+            [ -f "$bdi" ] && echo 512 > "$bdi"
         done
     fi
 }
@@ -76,17 +78,13 @@ function configure_memory_parameters() {
     # on SD720G). Helps the genuine memory-pressure path; the screen-on cached-app
     # kill is a separate frameworks/base issue (PhoneWindowManager).
     echo zstd > /sys/block/zram0/comp_algorithm
-    echo 100 > /proc/sys/vm/swappiness
-    echo 100 > /proc/sys/vm/direct_swappiness
-
-    # This oneshot can be started in charger mode and again after boot. Never
-    # format an active swap device a second time.
-    if [ -f /sys/block/zram0/disksize ] &&
-       ! grep -q '[/]zram0' /proc/swaps 2>/dev/null; then
-        # The live device uses far less than the available 4 GB swap. Prefer
-        # low-latency compression over zstd's unused extra density.
-        echo lz4 > /sys/block/zram0/comp_algorithm
-
+    echo 60 > /proc/sys/vm/swappiness
+    echo 0 > /proc/sys/vm/direct_swappiness
+    echo 0 > /proc/sys/vm/page-cluster
+    echo 16384 > /proc/sys/vm/min_free_kbytes
+    
+    if [ -f /sys/block/zram0/disksize ]; then
+        # Enable deduplication if available
         if [ -f /sys/block/zram0/use_dedup ]; then
             echo 1 > /sys/block/zram0/use_dedup
         fi
@@ -234,13 +232,8 @@ echo 0 > /proc/sys/kernel/sched_conservative_pl
 
 # Input boost: also wake the big cluster (cpu6) on touch, not just little (cpu0). 1267200
 # is the big-cluster hispeed OPP -> snappier app launch / touch without slamming to 2.3GHz max.
-echo "0:1248000 6:1555200" > /sys/module/cpu_boost/parameters/input_boost_freq
-echo 80 > /sys/module/cpu_boost/parameters/input_boost_ms
-# While the input boost is active, ask WALT for conservative sched boost (2):
-# tasks whose demand exceeds the little cluster are placed on the gold cores
-# immediately instead of waiting for the next migration window. 1 (full
-# throttle) would move everything to gold; 2 keeps light tasks on silver.
-echo 2 > /sys/module/cpu_boost/parameters/sched_boost_on_input
+echo "0:1248000 6:1267200" > /sys/module/cpu_boost/parameters/input_boost_freq
+echo 60 > /sys/module/cpu_boost/parameters/input_boost_ms
 
 # Set Memory parameters
 configure_memory_parameters

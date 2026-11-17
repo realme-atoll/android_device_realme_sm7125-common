@@ -43,6 +43,10 @@
         <item>ethernet,9,9,9,-1,true</item>
     </string-array>
 
+    <!-- Wi-Fi supplicant scan interval in seconds when device is connected/idle to save standby power -->
+    <integer name="config_wifi_supplicant_scan_interval">300</integer>
+    <integer name="config_wifi_framework_scan_interval_ms">300000</integer>
+
     <!-- Configure mobile tcp buffer sizes in the form:
          rat-name:rmem_min,rmem_def,rmem_max,wmem_min,wmem_def,wmem_max
          If no value is found for the rat-name in use, the system default will be applied.
@@ -176,20 +180,10 @@
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
          May be less than the minimum allowed brightness setting
          that can be set by the user. -->
-    <integer name="config_screenBrightnessDoze">17</integer>
+    <integer name="config_screenBrightnessDoze">14</integer>
 
     <!-- Whether the display blanks itself when transitioning from a doze to a non-doze state -->
     <bool name="config_displayBlanksAfterDoze">true</bool>
-
-    <!-- Enable doze alwaysOn Display -->
-    <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
-    
-    <!-- Control whether the always on display mode is enabled by default. This value will be used
-         during initialization when the setting is still null. -->
-    <bool name="config_dozeAlwaysOnEnabled">false</bool>    
-    
-    <!-- If true, the display will be shifted around in ambient mode. -->
-    <bool name="config_enableBurnInProtection">true</bool>
 
     <!-- Whether the Unprocessed audio source supports the required frequency range and level -->
     <bool name="config_supportAudioSourceUnprocessed">true</bool>
@@ -276,6 +270,155 @@
         <item>206</item>
         <item>255</item>
     </integer-array>
+
+    <!-- An array describing the screen's backlight values corresponding to the brightness
+         values in the config_screenBrightnessNits array.
+         This array should be equal in size to config_screenBrightnessBacklight. -->
+    <integer-array name="config_screenBrightnessBacklight">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+        <item>60</item>
+        <item>65</item>
+        <item>70</item>
+        <item>75</item>
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>95</item>
+        <item>100</item>
+        <item>105</item>
+        <item>110</item>
+        <item>115</item>
+        <item>120</item>
+        <item>125</item>
+        <item>130</item>
+        <item>135</item>
+        <item>140</item>
+        <item>145</item>
+        <item>150</item>
+        <item>155</item>
+        <item>160</item>
+        <item>165</item>
+        <item>170</item>
+        <item>175</item>
+        <item>180</item>
+        <item>185</item>
+        <item>190</item>
+        <item>195</item>
+        <item>200</item>
+        <item>205</item>
+        <item>210</item>
+        <item>215</item>
+        <item>220</item>
+        <item>225</item>
+        <item>230</item>
+        <item>235</item>
+        <item>240</item>
+        <item>245</item>
+        <item>250</item>
+        <item>255</item>
+    </integer-array>
+
+    <!-- An array of floats describing the screen brightness in nits corresponding to the backlight
+         values in the config_screenBrightnessBacklight array.  On OLED displays these  values
+         should be measured with an all white image while the display is in the fully on state.
+         Note that this value should *not* reflect the maximum brightness value for any high
+         brightness modes but only the maximum brightness value obtainable in a sustainable manner.
+         This array should be equal in size to config_screenBrightnessBacklight -->
+    <array name="config_screenBrightnessNits">
+        <item>2.685</item>
+        <item>3.343</item>
+        <item>4.13</item>
+        <item>5.216</item>
+        <item>6.308</item>
+        <item>7.565</item>
+        <item>9.269</item>
+        <item>10.98</item>
+        <item>13.25</item>
+        <item>15.49</item>
+        <item>18.42</item>
+        <item>20.6</item>
+        <item>22.71</item>
+        <item>24.68</item>
+        <item>26.31</item>
+        <item>28.39</item>
+        <item>30.34</item>
+        <item>32.39</item>
+        <item>33.94</item>
+        <item>35.94</item>
+        <item>45.12</item>
+        <item>54</item>
+        <item>62.31</item>
+        <item>70.73</item>
+        <item>78.85</item>
+        <item>86.41</item>
+        <item>93.53</item>
+        <item>102.3</item>
+        <item>109.1</item>
+        <item>118.7</item>
+        <item>126.4</item>
+        <item>136.9</item>
+        <item>147.8</item>
+        <item>158.9</item>
+        <item>168.3</item>
+        <item>177.4</item>
+        <item>186.6</item>
+        <item>195.7</item>
+        <item>204.5</item>
+        <item>214</item>
+        <item>234</item>
+        <item>254</item>
+        <item>272.1</item>
+        <item>290.6</item>
+        <item>313.4</item>
+        <item>330.4</item>
+        <item>360.5</item>
+        <item>396.3</item>
+        <item>415.6</item>
+        <item>438.3</item>
+        <item>469.8</item>
+        <item>498.8</item>
+        <item>519.7</item>
+        <item>527.4</item>
+        <item>544.6</item>
+        <item>574.6</item>
+        <item>594.9</item>
+        <item>612.5</item>
+        <item>635.8</item>
+        <item>656.6</item>
+        <item>671.6</item>
+        <item>692.2</item>
+        <item>707.3</item>
+        <item>727.3</item>
+        <item>759.2</item>
+        <item>777.6</item>
+        <item>800</item>
+    </array>
 
     <!-- Array of hysteresis constraint values for darkening, represented as tenths of a
          percent. The length of this array is assumed to be one greater than
@@ -380,7 +523,7 @@
     <!-- Color mode to use when accessibility transforms are enabled. This color mode must be
      supported by the device, but not necessarily appear in config_availableColorModes. The
      regularly selected color mode will be used if this value is negative. -->
-    <integer name="config_accessibilityColorMode">2</integer>
+    <integer name="config_accessibilityColorMode">0</integer>
 
     <!-- The following two arrays specify which color space to use for display composition when a
          certain color mode is active.
@@ -401,7 +544,7 @@
     </integer-array>
     <integer-array name="config_displayCompositionColorSpaces">
         <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
-        <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
+        <item>7</item> <!-- COLOR_MODE_SRGB       -->
         <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
         <item>0</item> <!-- COLOR_MODE_DEFAULT    -->
     </integer-array>
@@ -525,34 +668,12 @@
          vendor fingerprint HAL implementations. -->
     <bool name="config_fingerprintPostResetRunnableForAllClients">true</bool>
 
-    <!-- Whether device has a notch -->
-    <bool name="config_haveNotch">true</bool>
-
-    <!-- Paths to the libraries that contain device specific key handlers -->
-    <string-array name="config_deviceKeyHandlerLibs" translatable="false">
-        <item>/system/priv-app/RealmeParts/RealmeParts.apk</item>
-    </string-array>
-
-    <!-- Names of the key handler classes -->
-    <string-array name="config_deviceKeyHandlerClasses" translatable="false">
-        <item>org.aospextended.device.KeyHandler</item>
-    </string-array>
-
     <!-- Path to fast charging status file to detect whether an oem fast charger is active -->
     <string name="config_oemFastChargerStatusPath" translatable="false">/sys/class/power_supply/battery/voocchg_ing</string>
 
     <!-- Whether device has VOOC charging support -->
     <bool name="config_hasVoocCharger">true</bool>
 
-    <!-- Whether device has screen with higher aspect ratio -->
-    <bool name="config_haveHigherAspectRatioScreen">true</bool>
-
-    <!-- Full screen aspect ratio -->
-    <item name="config_screenAspectRatio" format="float" type="dimen">2.222</item>
-
-    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveBatteryLed">false</bool>
-     
     <!-- The default refresh rate for a given device. Change this value to set a higher default
          refresh rate. If the hardware composer on the device supports display modes with a higher
          refresh rate than the default value specified here, the framework may use those higher
@@ -563,8 +684,8 @@
          config_defaultPeakRefreshRate will act as the default frame rate. -->
     <integer name="config_defaultRefreshRate">90</integer>
 
-    <!-- Whether to show min/max refresh rate in display settings -->
-    <bool name="config_show_refresh_rate_controls">true</bool>
+    <!-- Maximum strength, in percentage, supported by bright color reduction. -->
+    <integer name="config_reduceBrightColorsStrengthMax">120</integer>
 
     <!-- Control the behavior when the user long presses the power button.
             0 - Nothing
@@ -600,7 +721,7 @@
     <bool name="config_enableShellMainThread">true</bool>
 
     <!-- The max scale for the wallpaper when it's zoomed in -->
-    <item name="config_wallpaperMaxScale" format="float" type="dimen">1</item>
+    <item name="config_wallpaperMaxScale" format="float" type="dimen">1.10</item>
 
     <!-- Turbulence effect -->
     <bool name="config_mediaControlsTurbulenceByDefault">false</bool>
@@ -608,6 +729,8 @@
     <!-- Whether we use large screen shade header which takes only one row compared to QS header -->
     <bool name="config_use_large_screen_shade_header">true</bool>
 
+    <!-- Boost Framework -->
+    <bool name="config_supportsBoostFramework">true</bool>
 
     <!-- Whether WiFi display is supported by this device.
          There are many prerequisites for this feature to work correctly.
@@ -622,15 +745,19 @@
          * The device must be provisioned with HDCP keys (for protected content).
     -->
     <bool name="config_enableWifiDisplay">true</bool>
+    <!-- Whether the display white-balance feature is available. -->
+    <bool name="config_displayWhiteBalanceEnabled">false</bool>
 
-    <!-- Whether WM DisplayContent supports high performance transitions
-         (lower-end devices may want to disable) -->
-    <bool name="config_deviceSupportsHighPerfTransitions">false</bool>
-    <!-- Cap on cached (background) app processes kept by ActivityManager.
-         AOSP default is 1024, which on this 8GB device left ~300 processes
-         alive after boot and the kernel reclaiming ~14GB in the first five
-         minutes. 64 most-recent cached apps is plenty; ActivityManager trims
-         the rest gracefully in LRU order. Measured: 303 -> 247 processes,
-         memory PSI 27% -> ~1% within two minutes. -->
-    <integer name="config_customizedMaxCachedProcesses">64</integer>
+    <!-- Boolean indicating whether the HWC setColorTransform function can be performed efficiently
+         in hardware for individual layers. Qualcomm SDM applies color transform at display level. -->
+    <bool name="config_setColorTransformAcceleratedPerLayer">false</bool>
+
+    <!-- Suppress crash dialog for Google TTS -->
+    <string name="config_appsNotReportingCrashes">com.google.android.tts</string>
+
+    <!-- Enable video pause workaround for Qualcomm camera HAL -->
+    <bool name="config_useVideoPauseWorkaround">true</bool>
+
+    <!-- Instant screenshot chord timeout -->
+    <integer name="config_screenshotChordKeyTimeout">0</integer>
 </resources>

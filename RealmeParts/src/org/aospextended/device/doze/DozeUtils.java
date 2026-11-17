@@ -47,6 +47,8 @@ public final class DozeUtils {
     protected static final String CATEG_PROX_SENSOR = "proximity_sensor";
 
     protected static final String GESTURE_PICK_UP_KEY = "gesture_pick_up";
+    protected static final String GESTURE_APPROACH_KEY = "gesture_approach";
+    protected static final String GESTURE_AMBIENT_MOTION_KEY = "gesture_ambient_motion";
     protected static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
     protected static final String GESTURE_POCKET_KEY = "gesture_pocket";
     protected static final String GESTURE_RAISE_TO_WAKE_KEY = "gesture_raise_to_wake";
@@ -77,13 +79,17 @@ public final class DozeUtils {
             Context con = context.createPackageContext("com.android.systemui", 0);
             int id = con.getResources().getIdentifier("doze_proximity_check_before_pulse",
                     "bool", "com.android.systemui");
-            return con.getResources().getBoolean(id);
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
+            if (id != 0) {
+                return con.getResources().getBoolean(id);
+            }
+        } catch (Exception e) {
+            // Fallback to sensor availability check
         }
+        SensorManager sm = context.getSystemService(SensorManager.class);
+        return sm != null && sm.getDefaultSensor(Sensor.TYPE_PROXIMITY) != null;
     }
 
-    protected static boolean enableDoze(Context context, boolean enable) {
+    public static boolean enableDoze(Context context, boolean enable) {
         return Settings.Secure.putInt(context.getContentResolver(),
                 DOZE_ENABLED, enable ? 1 : 0);
     }
@@ -95,16 +101,17 @@ public final class DozeUtils {
 
     public static void launchDozePulse(Context context) {
         if (DEBUG) Log.d(TAG, "Launch doze pulse");
-        context.sendBroadcastAsUser(new Intent(DOZE_INTENT),
-                new UserHandle(UserHandle.USER_CURRENT));
+        Intent intent = new Intent(DOZE_INTENT);
+        intent.setPackage("com.android.systemui");
+        context.sendBroadcastAsUser(intent, UserHandle.CURRENT);
     }
 
-    protected static boolean enableAlwaysOn(Context context, boolean enable) {
+    public static boolean enableAlwaysOn(Context context, boolean enable) {
         return Settings.Secure.putIntForUser(context.getContentResolver(),
                 DOZE_ALWAYS_ON, enable ? 1 : 0, UserHandle.USER_CURRENT);
     }
 
-    protected static boolean isAlwaysOnEnabled(Context context) {
+    public static boolean isAlwaysOnEnabled(Context context) {
         final boolean enabledByDefault = context.getResources()
                 .getBoolean(com.android.internal.R.bool.config_dozeAlwaysOnEnabled);
 
@@ -113,17 +120,41 @@ public final class DozeUtils {
                 UserHandle.USER_CURRENT) != 0;
     }
 
-    protected static boolean alwaysOnDisplayAvailable(Context context) {
+    public static boolean alwaysOnDisplayAvailable(Context context) {
         return new AmbientDisplayConfiguration(context).alwaysOnAvailable();
     }
 
+    public static boolean isDozeAvailable(Context context) {
+        if (alwaysOnDisplayAvailable(context)) {
+            return true;
+        }
+        SensorManager sm = context.getSystemService(SensorManager.class);
+        if (sm == null) {
+            return false;
+        }
+        return sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, true) != null
+                || sm.getDefaultSensor(Sensor.TYPE_PROXIMITY, false) != null
+                || sm.getDefaultSensor(Sensor.TYPE_PICK_UP_GESTURE, true) != null
+                || sm.getDefaultSensor(Sensor.TYPE_TILT_DETECTOR, true) != null
+                || getSensor(sm, "android.sensor.tilt_detector") != null;
+    }
+
     protected static boolean isGestureEnabled(Context context, String gesture) {
-        return PreferenceManager.getDefaultSharedPreferences(context)
+        return Utils.getSharedPreferences(context)
                 .getBoolean(gesture, false);
     }
 
     protected static boolean isPickUpEnabled(Context context) {
         return isGestureEnabled(context, GESTURE_PICK_UP_KEY);
+    }
+
+    protected static boolean isApproachEnabled(Context context) {
+        return isGestureEnabled(context, GESTURE_APPROACH_KEY)
+                || isGestureEnabled(context, GESTURE_AMBIENT_MOTION_KEY);
+    }
+
+    protected static boolean isAmbientMotionEnabled(Context context) {
+        return isApproachEnabled(context);
     }
 
     protected static boolean isRaiseToWakeEnabled(Context context) {
@@ -142,7 +173,7 @@ public final class DozeUtils {
         return isGestureEnabled(context, GESTURE_DOUBLE_TAP);
     }
     public static boolean sensorsEnabled(Context context) {
-        return isPickUpEnabled(context) || isHandwaveGestureEnabled(context)
+        return isPickUpEnabled(context) || isApproachEnabled(context) || isHandwaveGestureEnabled(context)
                 || isPocketGestureEnabled(context) ||  isRaiseToWakeEnabled(context) || isDoubleTapEnabled(context);
     }
 

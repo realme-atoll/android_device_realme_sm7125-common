@@ -1,20 +1,6 @@
 # Display
-debug.sf.hw=0
-debug.egl.hw=0
 debug.sf.latch_unsignaled=1
-debug.mdpcomp.logs=0
-vendor.gralloc.disable_ubwc=0
-vendor.display.disable_scaler=0
-vendor.display.disable_excl_rect=0
-vendor.display.disable_excl_rect_partial_fb=1
-vendor.display.comp_mask=0
-vendor.display.disable_rotator_ubwc=1
-vendor.display.disable_layer_stitch=0
-vendor.display.disable_hw_recovery_dump=1
-vendor.display.disable_rotator_downscale=1
-vendor.display.idle_time=0
-vendor.display.idle_time_inactive=0
-vendor.display.disable_metadata_dynamic_fps=1
+debug.sf.disable_client_composition_cache=0
 
 # LMKD
 ro.config.low_ram=false
@@ -62,7 +48,40 @@ ro.config.avoid_gfx_accel=false
 # Fling
 ro.min.fling_velocity=160
 ro.max.fling_velocity=20000
-ro.vendor.qti.cgroup_follow.enable=true
-persist.vendor.qti.inputopts.enable=true
-persist.vendor.qti.inputopts.movetouchslop=0.6
 ro.qcom.adreno.qgl.ShaderStorageImageExtendedFormats=0
+
+# Framework & UI Performance
+renderthread.skia.reduceopstasksplitting=true
+ro.hwui.render_ahead=0
+persist.sys.fuse.passthrough.enable=true
+persist.sys.nfc.disPowerSave=1
+persist.sys.nfc.aid_overflow=true
+persist.sys.perf.scroll_opt=false
+persist.sys.perf.scroll_opt.heavy_app=1
+wifi.aware.interface=wifi-aware0
+
+# Cached app compaction
+persist.device_config.activity_manager.use_compaction=true
+
+# Bluetooth SBC HD higher bitrate
+persist.bluetooth.sbc_hd_higher_bitrate=1
+
+# Media prefetch
+persist.mm.enable.prefetch=true
+
+# Phantom process monitoring
+sys.fflag.override.settings_enable_monitor_phantom_procs=false
+
+# Shutdown
+ro.build.shutdown_timeout=2
+
+# Disable vsync for cpu rendered apps
+debug.cpurend.vsync=false
+
+# Initialize QCA1530 detection
+sys.qca1530=detect
+
+# Feature flags
+persist.sys.fflag.override.settings_network_and_internet_v2=true
+persist.sys.fflag.override.settings_provider_model=false
+

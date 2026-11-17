@@ -1,1 +1,3 @@
 allow ueventd tmpfs:lnk_file read;
+
+r_dir_file(ueventd, vendor_persist_wcnss_service_file)
