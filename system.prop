@@ -79,9 +79,6 @@ ro.nfc.port=I2C
 # Perf
 ro.vendor.qti.sys.fw.bservice_enable=true
 
-# Pre-Rendering
-ro.vendor.perf.scroll_opt=true
-
 #Radio
 DEVICE_PROVISIONED=1
 persist.data.df.dev_name=rmnet_usb0
@@ -108,8 +105,8 @@ persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
 
 # Blur
-ro.sf.blurs_are_expensive=0
-ro.launcher.blur.appLaunch=1
+ro.sf.blurs_are_expensive=1
+ro.launcher.blur.appLaunch=0
 
 # Logs
 persist.log.tag.OpenGLRenderer=S

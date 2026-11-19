@@ -10,9 +10,4 @@
     <!-- Taskbar stashed size: eliminates bottom gap below full-screen apps in gesture navigation -->
     <dimen name="taskbar_stashed_size">24.0dp</dimen>
 
-    <!-- Reduced launcher depth & reveal blur radii (0.5x stock ratio for Adreno 618) -->
-    <!-- Stock: 30dp (0.5x = 15.0dp) -->
-    <dimen name="max_depth_blur_radius_enhanced">15.0dp</dimen>
-    <!-- Stock: 75dp (0.5x = 37.5dp) -->
-    <dimen name="wallpaper_reveal_blur_radius">37.5dp</dimen>
 </resources>
