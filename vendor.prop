@@ -170,7 +170,7 @@ ro.hardware.keystore_desede=true
 
 # Media
 debug.media.codec2=2
-debug.stagefright.c2inputsurface=0
+debug.stagefright.c2inputsurface=-1
 vendor.media.omx=0
 drm.service.enabled=true
 
@@ -208,6 +208,9 @@ persist.vendor.radio.oppo.signal.adapt=1
 ro.vendor.radio.oppo.signal.adapt=true
 persist.vendor.radio.enable_temp_dds=true
 persist.vendor.radio.data_ltd_sys_ind=1
+persist.vendor.radio.calls.on.ims=1
+persist.vendor.radio.videopause.mode=1
+persist.radio.videopause.mode=1
 
 # Seamless transfer
 sys.fflag.override.settings_seamless_transfer=true
