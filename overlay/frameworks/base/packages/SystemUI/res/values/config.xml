@@ -34,9 +34,6 @@
     <!-- Update battery info every second when device is charging -->
     <bool name="config_alternateFastchargeInfoUpdate">true</bool>
 
-    <!-- Allow devices override audio panel location to the left side -->
-    <bool name="config_audioPanelOnLeftSide">true</bool>
-
     <!-- Vibration on icon animation -->
     <bool name="config_vibrateOnIconAnimation">true</bool>
 

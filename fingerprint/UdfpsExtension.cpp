@@ -22,6 +22,10 @@
 #include <drm/sde_drm.h>
 #endif
 
+#ifndef FOD_PRESSED_LAYER_ZORDER
+#define FOD_PRESSED_LAYER_ZORDER 0x20000000u
+#endif
+
 uint32_t getUdfpsDimZOrder(uint32_t z) {
     return 0x41000005;
 }
