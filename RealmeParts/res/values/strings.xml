@@ -220,4 +220,20 @@
     <string name="force_fastcharge_summary">Allow up to 900mA current on USB 2.0 ports</string>
     <string name="skip_pcc_title">Fingerprint color override</string>
     <string name="skip_pcc_summary">Bypass color correction during unlock\nWarning: May affect fingerprint speed and accuracy</string>
+
+    <!-- Touchscreen modes (OPLUS touch driver, /proc/touchpanel) -->
+    <string name="touchscreen_title">Touchscreen</string>
+    <string name="game_mode_title">Game touch mode</string>
+    <string name="game_mode_summary">Higher touch report rate and lighter jitter filtering for lower input latency in games (small battery cost)</string>
+    <string name="glove_mode_title">Glove mode</string>
+    <string name="glove_mode_summary">Increase touch sensitivity for gloves or thick screen protectors</string>
+
+    <!-- KProfiles -->
+    <string name="kprofiles_title">Performance profile</string>
+    <string name="kprofiles_dialog_title">Performance profile - changes touch boost duration</string>
+    <string name="kprofiles_default">Default - current tuning</string>
+    <string name="kprofiles_battery">Battery - shorter touch boosts</string>
+    <string name="kprofiles_balanced">Balanced - standard touch boosts</string>
+    <string name="kprofiles_performance">Performance - longer touch boosts</string>
+    <string name="kprofiles_apply_failed">Could not apply performance profile</string>
 </resources>

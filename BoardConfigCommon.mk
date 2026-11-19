@@ -53,6 +53,9 @@ WITH_DEXPREOPT_DEBUG_INFO := false
 # Audio
 AUDIO_FEATURE_ENABLED_AAC_ADTS_OFFLOAD := true
 AUDIO_FEATURE_ENABLED_AUDIOSPHERE := true
+# The selected Dolby effects are arm64-only.
+$(call soong_config_set_bool,android_hardware_audio,run_64bit,true)
+
 AUDIO_FEATURE_ENABLED_EXTN_FORMATS := true
 AUDIO_FEATURE_ENABLED_HDMI_SPK := true
 AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
@@ -73,12 +76,6 @@ TARGET_BOOTLOADER_BOARD_NAME := atoll
 #TARGET_USES_QTI_CAMERA_DEVICE := true
 BOARD_LOW_LATENCY_CAPTURE_DURATION := 20
 
-# Dex
-ifeq ($(HOST_OS),linux)
-    WITH_DEXPREOPT ?= false
-endif
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
-
 # Display
 TARGET_SCREEN_DENSITY := 440
 TARGET_USES_HWC2 := true
@@ -90,6 +87,10 @@ endif
 BOARD_USES_ADRENO := true
 TARGET_HAS_HDR_DISPLAY := true
 TARGET_HAS_WIDE_COLOR_DISPLAY := true
+
+# Legacy Qualcomm blobs require the real ION allocator on Android 17.
+# LineageOS legacy ION support by Nolen Johnson (review.lineageos.org/492616).
+$(call soong_config_set_bool,libion,legacy_impl,true)
 
 # Disable sparse on all filesystem images
 TARGET_USERIMAGES_SPARSE_EROFS_DISABLED := true
@@ -172,8 +173,14 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 100663296        # 96MB
 
 
 # Super Partition Sizes
+ifeq ($(TARGET_DEVICE),RMX2061)
+# Match the GPT layout; keep 4 MiB outside the logical partition group.
+BOARD_SUPER_PARTITION_SIZE := 8183087104
+BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 8178892800
+else
 BOARD_SUPER_PARTITION_SIZE := 8476688384
 BOARD_QTI_DYNAMIC_PARTITIONS_SIZE := 8472494080
+endif
 
 # Dynamic Super Partitions
 BOARD_SUPER_PARTITION_GROUPS := qti_dynamic_partitions
@@ -206,6 +213,12 @@ BOARD_FLASH_BLOCK_SIZE := 262144
 AB_OTA_UPDATER := false
 
 -include vendor/lineage/config/BoardConfigReservedSize.mk
+
+# Leave room for the Oplus bundle by reducing unused read-only filesystem padding.
+ifeq ($(TARGET_INCLUDE_OPLUS_CAMERA),true)
+BOARD_ODMIMAGE_PARTITION_RESERVED_SIZE := 134217728
+BOARD_VENDORIMAGE_PARTITION_RESERVED_SIZE := 134217728
+endif
 
 # Platform
 TARGET_BOARD_PLATFORM := atoll
@@ -246,6 +259,7 @@ VENDOR_SECURITY_PATCH := $(PLATFORM_SECURITY_PATCH)
 # Sepolicy
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include device/lineage/sepolicy/libperfmgr/sepolicy.mk
+include device/lineage/sepolicy/libion/sepolicy.mk
 SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/private
 BOARD_SEPOLICY_DIRS += $(COMMON_PATH)/sepolicy/vendor
 

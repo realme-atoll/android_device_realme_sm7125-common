@@ -30,6 +30,7 @@ import org.aospextended.device.gestures.TouchGestures;
 import org.aospextended.device.util.Utils;
 import org.aospextended.device.doze.DozeUtils;
 import org.aospextended.device.gpu.GpuBoostSettings;
+import org.aospextended.device.performance.KProfilesSettings;
 import org.aospextended.device.battery.ChargeLimitSettings;
 import org.aospextended.device.battery.FastChargeSettings;
 import org.aospextended.device.battery.ForceFastChargeSettings;
@@ -39,6 +40,7 @@ import org.aospextended.device.display.HbmSettings;
 import org.aospextended.device.display.SkipPccSettings;
 import org.aospextended.device.touch.GameTouchSettings;
 import org.aospextended.device.touch.EdgeMistouchSettings;
+import org.aospextended.device.touch.TouchModeSettings;
 import org.aospextended.device.otg.OtgSettings;
 
 public class BootReceiver extends BroadcastReceiver {
@@ -54,6 +56,7 @@ public class BootReceiver extends BroadcastReceiver {
             TouchGestures.enableDt2w(prefs.getBoolean(
                 TouchGestures.PREF_DT2W_ENABLE, true));
             GpuBoostSettings.restore(context);
+            KProfilesSettings.restore(context);
             ChargeLimitSettings.restore(context);
             FastChargeSettings.restore(context);
             ForceFastChargeSettings.restore(context);
@@ -62,6 +65,7 @@ public class BootReceiver extends BroadcastReceiver {
             SkipPccSettings.restore(context);
             GameTouchSettings.restore(context);
             EdgeMistouchSettings.restore(context);
+            TouchModeSettings.restore(context);
             OtgSettings.restore(context);
             AutoBrightnessService.start(context);
         }

@@ -61,19 +61,19 @@ public class KeyHandler implements DeviceKeyHandler {
     private static final int GESTURE_REQUEST = 1;
     private static final int GESTURE_WAKELOCK_DURATION = 2000;
 
-    private static final int GESTURE_DOUBLE_TAP_SCANCODE = 248;
+    private static final int GESTURE_DOUBLE_TAP_SCANCODE = 143;
     private static final int GESTURE_W_SCANCODE = 246;
     private static final int GESTURE_M_SCANCODE = 247;
     private static final int GESTURE_CIRCLE_SCANCODE = 249;
     private static final int GESTURE_TWO_SWIPE_SCANCODE = 250;
-    private static final int GESTURE_UP_ARROW_SCANCODE = 251;
-    private static final int GESTURE_DOWN_ARROW_SCANCODE = 252;
-    private static final int GESTURE_LEFT_ARROW_SCANCODE = 253;
-    private static final int GESTURE_RIGHT_ARROW_SCANCODE = 254;
-    private static final int GESTURE_SWIPE_UP_SCANCODE = 255;
-    private static final int GESTURE_SWIPE_DOWN_SCANCODE = 256;
-    private static final int GESTURE_SWIPE_LEFT_SCANCODE = 257;
-    private static final int GESTURE_SWIPE_RIGHT_SCANCODE = 258;
+    private static final int GESTURE_UP_ARROW_SCANCODE = 252;
+    private static final int GESTURE_DOWN_ARROW_SCANCODE = 251;
+    private static final int GESTURE_LEFT_ARROW_SCANCODE = 254;
+    private static final int GESTURE_RIGHT_ARROW_SCANCODE = 253;
+    private static final int GESTURE_SWIPE_UP_SCANCODE = 256;
+    private static final int GESTURE_SWIPE_DOWN_SCANCODE = 255;
+    private static final int GESTURE_SWIPE_LEFT_SCANCODE = 258;
+    private static final int GESTURE_SWIPE_RIGHT_SCANCODE = 257;
 
     private final Context mContext;
     private Context mAppContext = null;
@@ -98,6 +98,22 @@ public class KeyHandler implements DeviceKeyHandler {
         public void handleMessage(Message msg) {
             KeyEvent event = (KeyEvent) msg.obj;
             String action = null;
+
+            // Credential-encrypted preferences are unavailable before unlock.
+            // Wake gestures are safe to handle while locked.
+            if (mUserManager == null || !mUserManager.isUserUnlocked()) {
+                switch (event.getScanCode()) {
+                case GESTURE_DOUBLE_TAP_SCANCODE:
+                case GESTURE_UP_ARROW_SCANCODE:
+                case GESTURE_SWIPE_UP_SCANCODE:
+                    Action.processAction(mContext, Action.ACTION_WAKE_DEVICE, false);
+                    break;
+                default:
+                    if (DEBUG) Slog.d(TAG, "Ignoring gesture before user unlock");
+                    break;
+                }
+                return;
+            }
 
             // Ensure we have the RealmeParts package context (in case early boot fallback was used)
             if (mAppContext == null || !"org.aospextended.device".equals(mAppContext.getPackageName())) {

@@ -45,3 +45,10 @@ genfscon proc /ui_soc_decimal              u:object_r:proc_decimal:s0
 # Fast charge
 genfscon sysfs /kernel/fast_charge                           u:object_r:vendor_sysfs_battery_supply:s0
 genfscon sysfs /module/oplus_charger/parameters/force_fast_charge u:object_r:vendor_sysfs_battery_supply:s0
+# Label only the mode control, not the whole sysfs kernel subtree.
+genfscon sysfs /kernel/kprofiles/kp_mode u:object_r:vendor_sysfs_kprofiles:s0
+
+# Global KGSL allocation counters for the device memtrack backend.
+genfscon sysfs /devices/virtual/kgsl/kgsl/page_alloc u:object_r:vendor_sysfs_kgsl_proc:s0
+genfscon sysfs /devices/virtual/kgsl/kgsl/coherent u:object_r:vendor_sysfs_kgsl_proc:s0
+genfscon sysfs /devices/virtual/kgsl/kgsl/secure u:object_r:vendor_sysfs_kgsl_proc:s0

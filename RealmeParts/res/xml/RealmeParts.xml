@@ -71,6 +71,16 @@
         android:title="@string/performance_title">
 
         <ListPreference
+            android:key="kprofiles_mode"
+            android:icon="@drawable/ic_performance"
+            android:title="@string/kprofiles_title"
+            android:dialogTitle="@string/kprofiles_dialog_title"
+            android:entries="@array/kprofiles_entries"
+            android:entryValues="@array/kprofiles_values"
+            android:persistent="false"
+            android:defaultValue="0" />
+
+        <ListPreference
             android:key="gpu_boost_level"
             android:title="@string/gpu_boost_title"
             android:summary="@string/gpu_boost_summary"
@@ -78,6 +88,26 @@
             android:entries="@array/gpu_boost_entries"
             android:entryValues="@array/gpu_boost_values"
             android:defaultValue="2" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="touchscreen_category"
+        android:title="@string/touchscreen_title">
+
+        <SwitchPreference
+            android:key="game_touch_mode"
+            android:icon="@drawable/ic_game_mode"
+            android:title="@string/game_mode_title"
+            android:summary="@string/game_mode_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreference
+            android:key="glove_mode"
+            android:icon="@drawable/ic_glove_mode"
+            android:title="@string/glove_mode_title"
+            android:summary="@string/glove_mode_summary"
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 

@@ -82,6 +82,9 @@ on init
 
     # Disable UFS clock gating during boot
     write /sys/bus/platform/devices/1d84000.ufshc/clkgate_enable 0
+    # Support legacy paths
+    symlink /sdcard /mnt/sdcard
+    symlink /sdcard /storage/sdcard0
 
 on post-fs
     chmod 0755 /sys/kernel/debug/tracing
@@ -99,6 +102,7 @@ on early-boot
     write /sys/devices/virtual/npu/msm_npu/boot 1
     write /sys/devices/virtual/cvp/cvp/boot 1
     exec u:r:vendor_qti_init_shell:s0 -- /vendor/bin/init.qcom.early_boot.sh
+    setprop ro.sf.lcd_density ${vendor.display.lcd_density}
 
     # SSR
     write /sys/bus/msm_subsys/devices/subsys0/restart_level RELATED
@@ -240,6 +244,12 @@ on boot
 
 # msm specific files that need to be created on /data
 on post-fs-data
+    # Prepare the stock RIL's existing NV stores before its services start.
+    mkdir /data/opponvitems 0771 radio radio
+    restorecon_recursive /data/opponvitems
+    mkdir /cache/opponvitems 0770 radio radio
+    restorecon_recursive /cache/opponvitems
+
     mkdir /data/vendor/misc 01771 system system
 
     # Create directory used for dump collection
@@ -473,9 +483,9 @@ on property:persist.vendor.sys.rawdump_copy=0
 
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed "
-    #Reset read ahead for dm-0 and dm-1 to 512kb
-    write /sys/block/dm-0/queue/read_ahead_kb 512
-    write /sys/block/dm-1/queue/read_ahead_kb 512
+    # Keep UFS-backed dynamic partitions at the random-I/O-friendly value.
+    write /sys/block/dm-0/queue/read_ahead_kb 128
+    write /sys/block/dm-1/queue/read_ahead_kb 128
     #WDSP FW boot sysfs node used by STHAL
     chown media audio /sys/kernel/wdsp0/boot
     chown media audio /sys/kernel/wcd_cpe0/fw_name
@@ -567,10 +577,9 @@ on property:sys.sysctl.tcp_adv_win_scale=*
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
     -g@android:vendor_wpa_wlan0
-#   we will start as root and wpa_supplicant will switch to user wifi
-#   after setting up the capabilities required for WEXT
-#   user wifi
-#   group wifi inet keystore
+    user wifi
+    group wifi net_raw net_admin
+    capabilities NET_RAW NET_ADMIN
 #    interface android.hardware.wifi.supplicant@1.0::ISupplicant default
 #    interface android.hardware.wifi.supplicant@1.1::ISupplicant default
     interface aidl android.hardware.wifi.supplicant.ISupplicant/default
@@ -773,6 +782,8 @@ on property:persist.sys.qlogd=1
 on property:persist.sys.qlogd=0
     stop qlogd
 
+# The kernel balances IRQs itself (CONFIG_IRQ_SBALANCE); the userspace daemon
+# would only fight it over smp_affinity. Kept defined so nothing else breaks.
 service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqbalance.conf
     class core
     user root

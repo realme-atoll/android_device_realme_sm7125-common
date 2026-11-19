@@ -44,6 +44,7 @@
 
 # Oppo nv
 /data/opponvitems(/.*)?    u:object_r:rm_vendor_radio_vendor_data_file:s0
+/cache/opponvitems(/.*)?   u:object_r:vendor_oppo_radio_cache_file:s0
 
 # MMC
 /sys/devices/virtual/bdi/[0-999]+:[0-999]+/read_ahead_kb               u:object_r:vendor_sysfs_mmc_host:s0
@@ -64,3 +65,6 @@
 
 # Device-owned AIDL thermal HAL
 /vendor/bin/hw/android\.hardware\.thermal-service\.realme_sm7125    u:object_r:hal_thermal_default_exec:s0
+
+# Device-owned legacy KGSL memtrack backend.
+/vendor/bin/hw/android\.hardware\.memtrack-service\.realme_sm7125 u:object_r:hal_memtrack_default_exec:s0

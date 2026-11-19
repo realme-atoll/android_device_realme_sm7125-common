@@ -61,117 +61,54 @@ function enable_swap() {
     if [ ! -f /proc/swaps ] || [ -z "$(cat /proc/swaps | grep zram0)" ]; then
         return 0
     fi
+    # Atoll uses UFS, not mmcblk. Large 512 KB readahead wastes page cache on
+    # random app workloads; 128 KB keeps useful pages resident for longer.
+    for read_ahead in /sys/block/sd*/queue/read_ahead_kb \
+                      /sys/block/dm-*/queue/read_ahead_kb; do
+        [ -f "$read_ahead" ] && echo 128 > "$read_ahead"
+    done
 }
 
 function configure_memory_parameters() {
     # Unified memory configuration for Atoll device (Realme 6 Pro: 6GB/8GB RAM)
     # Combines ZRAM setup and memory management parameters
-    
-    ProductName=`getprop ro.product.name`
-    arch_type=`uname -m`
+
     MemTotalStr=`cat /proc/meminfo | grep MemTotal`
     MemTotal=${MemTotalStr:16:8}
-    
-    # Configure ZRAM parameters with zstd compression.
-    # zstd gives ~3.1x vs lz4's ~2x ratio -> ~50% more effective RAM, so more
-    # apps stay resident under pressure (trades a little swap-in latency, fine
-    # on SD720G). Helps the genuine memory-pressure path; the screen-on cached-app
-    # kill is a separate frameworks/base issue (PhoneWindowManager).
-    echo zstd > /sys/block/zram0/comp_algorithm
-    echo 60 > /proc/sys/vm/swappiness
-    echo 0 > /proc/sys/vm/direct_swappiness
-    echo 0 > /proc/sys/vm/page-cluster
-    echo 16384 > /proc/sys/vm/min_free_kbytes
-    
-    if [ -f /sys/block/zram0/disksize ]; then
-        # Enable deduplication if available
+
+    # This oneshot can be started in charger mode and again after boot. Never
+    # format an active swap device a second time.
+    if [ -f /sys/block/zram0/disksize ] &&
+       ! grep -q '[/]zram0' /proc/swaps 2>/dev/null &&
+       [ "$(cat /sys/block/zram0/initstate)" = "0" ]; then
+        echo lz4 > /sys/block/zram0/comp_algorithm || return 1
+
         if [ -f /sys/block/zram0/use_dedup ]; then
-            echo 1 > /sys/block/zram0/use_dedup
+            echo 0 > /sys/block/zram0/use_dedup
         fi
-        
+
+        # Keep normal writes on LZ4; recompression remains explicitly triggered.
+        if [ -w /sys/block/zram0/recomp_algorithm ]; then
+            echo "algo=zstd priority=1" > /sys/block/zram0/recomp_algorithm ||
+                echo "ZRAM: secondary ZSTD unavailable; retaining LZ4" >&2
+        fi
+
         # Configure ZRAM size based on total RAM
         if [ $MemTotal -le 4194304 ]; then
-            # 4GB RAM: 2.5GB ZRAM
-            echo 2684354560 > /sys/block/zram0/disksize
-            echo 4 > /sys/module/lowmemorykiller/parameters/almk_totalram_ratio
+            echo 2684354560 > /sys/block/zram0/disksize || return 1
         elif [ $MemTotal -le 6291456 ]; then
-            # 6GB RAM: 3GB ZRAM
-            echo 3221225472 > /sys/block/zram0/disksize
-            echo 6 > /sys/module/lowmemorykiller/parameters/almk_totalram_ratio
+            echo 3221225472 > /sys/block/zram0/disksize || return 1
         elif [ $MemTotal -le 8388608 ]; then
-            # 8GB RAM: 4GB ZRAM
-            echo 4294967296 > /sys/block/zram0/disksize
-            echo 8 > /sys/module/lowmemorykiller/parameters/almk_totalram_ratio
+            echo 4294967296 > /sys/block/zram0/disksize || return 1
         else
-            # 12GB+ RAM: 5GB ZRAM
-            echo 5368709120 > /sys/block/zram0/disksize
-            echo 10 > /sys/module/lowmemorykiller/parameters/almk_totalram_ratio
+            echo 5368709120 > /sys/block/zram0/disksize || return 1
         fi
-        
-        # Initialize and enable ZRAM swap
-        mkswap /dev/block/zram0
-        swapon /dev/block/zram0 -p 32758
+
+        mkswap /dev/block/zram0 || return 1
+        swapon /dev/block/zram0 -p 32758 || return 1
     fi
-    
-    # Configure Low Memory Killer parameters
-    # Read adj series and set adj threshold for PPR and ALMK
-    adj_series=`cat /sys/module/lowmemorykiller/parameters/adj`
-    adj_1="${adj_series#*,}"
-    set_almk_ppr_adj="${adj_1%%,*}"
-    
-    # Calculate PPR adj threshold (HOME adj and below should not be affected)
-    set_almk_ppr_adj=$(((set_almk_ppr_adj * 6) + 6))
-    echo $set_almk_ppr_adj > /sys/module/lowmemorykiller/parameters/adj_max_shift
-    
-    # Calculate vmpressure_file_min for 64-bit architecture
-    if [ "$arch_type" == "aarch64" ]; then
-        minfree_series=`cat /sys/module/lowmemorykiller/parameters/minfree`
-        minfree_1="${minfree_series#*,}"
-        rem_minfree_1="${minfree_1%%,*}"
-        minfree_2="${minfree_1#*,}"
-        rem_minfree_2="${minfree_2%%,*}"
-        minfree_3="${minfree_2#*,}"
-        rem_minfree_3="${minfree_3%%,*}"
-        minfree_4="${minfree_3#*,}"
-        rem_minfree_4="${minfree_4%%,*}"
-        minfree_5="${minfree_4#*,}"
-        
-        vmpres_file_min=$((minfree_5 + (minfree_5 - rem_minfree_4)))
-        echo $vmpres_file_min > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
-    fi
-    
-    # Enable Adaptive LMK
-    echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
-    
-    # Enable OOM reaper
-    if [ -f /sys/module/lowmemorykiller/parameters/oom_reaper ]; then
-        echo 1 > /sys/module/lowmemorykiller/parameters/oom_reaper
-    fi
-    
-    # Configure Process Reclaim parameters
-    if [ -f /sys/devices/soc0/soc_id ]; then
-        soc_id=`cat /sys/devices/soc0/soc_id`
-    else
-        soc_id=`cat /sys/devices/system/soc/soc0/id`
-    fi
-    
-    # Set PPR parameters (excluding premium SoCs)
-    case "$soc_id" in
-        "321" | "341" | "292" | "319" | "246" | "291" | "305" | "312")
-            # Skip PPR for premium targets
-            ;;
-        *)
-            echo $set_almk_ppr_adj > /sys/module/process_reclaim/parameters/min_score_adj
-            echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
-            echo 50 > /sys/module/process_reclaim/parameters/pressure_min
-            echo 70 > /sys/module/process_reclaim/parameters/pressure_max
-            echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
-            echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
-            ;;
-    esac
-    
+
     # Set global VM parameters
-    echo 0 > /sys/module/vmpressure/parameters/allocstall_threshold
     # wsf was forced to 1 (laziest reclaim -> kswapd wakes late -> direct-reclaim
     # stalls/jank). Keep the upstream default distance so short-lived allocation
     # bursts do not look like sustained low-memory pressure to userspace lmkd.
@@ -182,8 +119,6 @@ function configure_memory_parameters() {
     # Configure read-ahead values
     configure_read_ahead_kb_values
     
-    # Enable swap
-    enable_swap
 }
 
 # Core control parameters on silver
@@ -234,6 +169,13 @@ echo 0 > /proc/sys/kernel/sched_conservative_pl
 # is the big-cluster hispeed OPP -> snappier app launch / touch without slamming to 2.3GHz max.
 echo "0:1248000 6:1267200" > /sys/module/cpu_boost/parameters/input_boost_freq
 echo 60 > /sys/module/cpu_boost/parameters/input_boost_ms
+echo "0:1248000 6:1555200" > /sys/module/cpu_boost/parameters/input_boost_freq
+echo 80 > /sys/module/cpu_boost/parameters/input_boost_ms
+# While the input boost is active, ask WALT for conservative sched boost (2):
+# tasks whose demand exceeds the little cluster are placed on the gold cores
+# immediately instead of waiting for the next migration window. 1 (full
+# throttle) would move everything to gold; 2 keeps light tasks on silver.
+echo 2 > /sys/module/cpu_boost/parameters/sched_boost_on_input
 
 # Set Memory parameters
 configure_memory_parameters
@@ -307,10 +249,6 @@ echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 # reordering -> worse read tail-latency / "feels slow initially" on UFS. Cover sda-sdf,
 # not just sda, so every LUN (incl. the one backing /data) gets the better scheduler.
 for q in /sys/block/sd*/queue/scheduler; do echo deadline > $q; done
-
-# 2 kswapd threads (OPLUS multi-kswapd). 8GB/8-core: a single kswapd can't keep up when
-# zram reclaim is active, forcing foreground tasks into direct reclaim = stalls/jank.
-echo 2 > /proc/sys/vm/kswapd_threads
 
 # ---- GPU (Adreno 618) tuning ----
 # Stock had NO gpu governor setup, leaving the Adreno on raw defaults. Keep the correct

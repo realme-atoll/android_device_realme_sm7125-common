@@ -118,7 +118,6 @@ PRODUCT_COPY_FILES += \
 
 # Config Store
 PRODUCT_PACKAGES += \
-    disable_configstore \
     vendor.qti.hardware.capabilityconfigstore@1.0 \
     vendor.qti.hardware.capabilityconfigstore@1.0.vendor
 
@@ -137,7 +136,7 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.4-service \
     android.hardware.graphics.mapper@3.0-impl-qti-display \
     android.hardware.graphics.mapper@4.0-impl-qti-display \
-    vendor.qti.hardware.memtrack-service \
+    android.hardware.memtrack-service.realme_sm7125 \
     vendor.qti.hardware.display.allocator-service \
     vendor.qti.hardware.display.mapper@1.1.vendor \
     vendor.qti.hardware.display.mapper@2.0.vendor \
@@ -172,6 +171,9 @@ SYSTEMUI_OPTIMIZE_JAVA := true
 # Fastbootd
 PRODUCT_PACKAGES += \
     fastbootd
+
+# Face unlock
+TARGET_FACE_UNLOCK_SUPPORTED := true
 
 # Fingerprint
 PRODUCT_PACKAGES += \
@@ -334,8 +336,7 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video_le.xml
 
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/media/vendor,$(TARGET_COPY_OUT_VENDOR)/etc) \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/media/odm/,$(TARGET_COPY_OUT_ODM)/etc)
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/media/vendor,$(TARGET_COPY_OUT_VENDOR)/etc)
 
 # Minijail
 PRODUCT_PACKAGES += \
@@ -369,6 +370,10 @@ DEVICE_PACKAGE_OVERLAYS += \
 PRODUCT_PACKAGES += \
     vendor.qti.hardware.perf@2.2.vendor
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/perf/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
+
+
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power-service.lineage-libperfmgr \
@@ -377,6 +382,10 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
+
+# Pixel scheduler QoS is unavailable on 4.14; ADPF manages uclamp separately.
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 #performance critical applications
 PRODUCT_DEXPREOPT_SPEED_APPS += \
@@ -437,7 +446,7 @@ PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH) \
     kernel/realme/sm7125 \
     hardware/google/interfaces \
-    hardware/google/pixel \
+    hardware/google/pixel/power-libperfmgr \
     hardware/lineage/interfaces/power-libperfmgr \
     hardware/oplus \
     hardware/qcom-caf/common/libqti-perfd-client
@@ -557,8 +566,6 @@ PRODUCT_PACKAGES += \
     android.frameworks.cameraservice.device@2.0.vendor \
     android.frameworks.cameraservice.service@2.0.vendor \
     android.frameworks.cameraservice.service@2.1.vendor \
-    android.frameworks.displayservice@1.0.vendor \
-    android.frameworks.stats@1.0.vendor \
     android.hardware.atrace@1.0.vendor \
     android.frameworks.sensorservice@1.0.vendor \
     android.hardware.audio.common@4.0.vendor \
@@ -576,7 +583,6 @@ PRODUCT_PACKAGES += \
     android.hardware.automotive.can@1.0.vendor \
     android.hardware.automotive.evs@1.0.vendor \
     android.hardware.automotive.evs@1.1.vendor \
-    android.hardware.automotive.sv@1.0.vendor \
     android.hardware.automotive.vehicle@2.0.vendor \
     android.hardware.biometrics.face@1.0.vendor \
     android.hardware.biometrics.fingerprint@2.1.vendor \
@@ -612,8 +618,6 @@ PRODUCT_PACKAGES += \
     android.hardware.confirmationui@1.0.vendor \
     android.hardware.contexthub@1.0.vendor \
     android.hardware.contexthub@1.1.vendor \
-    android.hardware.dumpstate@1.0.vendor \
-    android.hardware.dumpstate@1.1.vendor \
     android.hardware.fastboot@1.0.vendor \
     android.hardware.gatekeeper@1.0.vendor \
     android.hardware.gnss.measurement_corrections@1.0.vendor \
@@ -628,9 +632,6 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.composer@2.2.vendor \
     android.hardware.graphics.composer@2.3.vendor \
     android.hardware.graphics.composer@2.4.vendor \
-    android.hardware.input.classifier@1.0.vendor \
-    android.hardware.input.common@1.0.vendor \
-    android.hardware.ir@1.0.vendor \
     android.hardware.keymaster@3.0.vendor \
     android.hardware.keymaster@4.0.vendor \
     android.hardware.keymaster@4.1.vendor \
@@ -692,7 +693,6 @@ PRODUCT_PACKAGES += \
     android.system.wifi.keystore@1.0.vendor \
     libstdc++_vendor \
     vendor.qti.hardware.camera.device@1.0.vendor \
-    android.hardware.health.storage@1.0.vendor \
     android.hardware.health@1.0.vendor \
     android.hardware.health@2.0.vendor \
     android.hardware.health@2.1.vendor \
