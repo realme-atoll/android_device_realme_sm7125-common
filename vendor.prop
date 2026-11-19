@@ -83,6 +83,10 @@ ro.vendor.audio.dolby.dax.support=true
 ro.vendor.audio.dolby.spatial.profile=true
 ro.audio.monitorRotation=true
 
+# Sound trigger / Hotword
+ro.audio.soundtrigger=false
+ro.audio.soundtrigger.lowpower=false
+
 # Bluetooth
 persist.bluetooth.a2dp_offload.cap=sbc-aac-aptx-aptxhd-ldac
 persist.bluetooth.a2dp_offload.disabled=true

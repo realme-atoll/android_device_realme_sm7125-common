@@ -45,4 +45,7 @@
 
     <!-- Keep mobile data off when Wi-Fi is active to avoid LTE modem background wakelocks -->
     <bool name="def_mobile_data_always_on">false</bool>
+
+    <!-- Disable hotword detection by default to prevent software audio polling loop -->
+    <integer name="def_hotword_detection_enabled">0</integer>
 </resources>

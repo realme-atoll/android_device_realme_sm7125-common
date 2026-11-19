@@ -765,4 +765,7 @@
 
     <!-- Instant screenshot chord timeout -->
     <integer name="config_screenshotChordKeyTimeout">0</integer>
+
+    <!-- Whether the device supports sound trigger. Set to false to avoid automatic CPU fallback hotword polling -->
+    <bool name="config_soundTriggerSupported">false</bool>
 </resources>
