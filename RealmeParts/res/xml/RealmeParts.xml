@@ -27,24 +27,6 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="touch_category"
-        android:title="@string/touch_title">
-
-        <SwitchPreferenceCompat
-            android:key="game_touch_enable"
-            android:title="@string/game_touch_title"
-            android:summary="@string/game_touch_summary"
-            android:defaultValue="false" />
-
-        <SwitchPreferenceCompat
-            android:key="edge_mistouch_enable"
-            android:title="@string/edge_mistouch_title"
-            android:summary="@string/edge_mistouch_summary"
-            android:defaultValue="false" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
         android:key="gestures_category"
         android:title="@string/gestures">
 
@@ -72,8 +54,8 @@
 
         <ListPreference
             android:key="kprofiles_mode"
-            android:icon="@drawable/ic_performance"
             android:title="@string/kprofiles_title"
+            android:summary="@string/kprofiles_summary"
             android:dialogTitle="@string/kprofiles_dialog_title"
             android:entries="@array/kprofiles_entries"
             android:entryValues="@array/kprofiles_values"
@@ -95,18 +77,22 @@
         android:key="touchscreen_category"
         android:title="@string/touchscreen_title">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="game_touch_mode"
-            android:icon="@drawable/ic_game_mode"
             android:title="@string/game_mode_title"
             android:summary="@string/game_mode_summary"
             android:defaultValue="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="glove_mode"
-            android:icon="@drawable/ic_glove_mode"
             android:title="@string/glove_mode_title"
             android:summary="@string/glove_mode_summary"
+            android:defaultValue="false" />
+
+        <SwitchPreferenceCompat
+            android:key="edge_mistouch_enable"
+            android:title="@string/edge_mistouch_title"
+            android:summary="@string/edge_mistouch_summary"
             android:defaultValue="false" />
 
     </PreferenceCategory>

@@ -73,8 +73,8 @@ public class RealmeParts extends SettingsBasePreferenceFragment implements
     private Preference mGesturesPref;
     private ListPreference mGpuBoost;
     private ListPreference mKProfiles;
-    private SwitchPreference mGameMode;
-    private SwitchPreference mGloveMode;
+    private TwoStatePreference mGameMode;
+    private TwoStatePreference mGloveMode;
     private SwitchPreferenceCompat mChargeLimitEnable;
     private ChargeLimitSeekBarPreference mChargeLimitLevel;
     private SwitchPreferenceCompat mDcDimming;
@@ -177,28 +177,6 @@ public class RealmeParts extends SettingsBasePreferenceFragment implements
             getPreferenceScreen().removePreference(dozeCategory);
         }
 
-        PreferenceCategory touch = (PreferenceCategory) getPreferenceScreen()
-                 .findPreference("touch_category");
-        mGameTouch = (SwitchPreferenceCompat) findPreference(GameTouchSettings.KEY);
-        if (GameTouchSettings.isSupported()) {
-            mGameTouch.setChecked(GameTouchSettings.isEnabled(getContext()));
-            mGameTouch.setOnPreferenceChangeListener(this);
-        } else if (touch != null && mGameTouch != null) {
-            touch.removePreference(mGameTouch);
-        }
-
-        mEdgeMistouch = (SwitchPreferenceCompat) findPreference(EdgeMistouchSettings.KEY);
-        if (EdgeMistouchSettings.isSupported()) {
-            mEdgeMistouch.setChecked(EdgeMistouchSettings.isEnabled(getContext()));
-            mEdgeMistouch.setOnPreferenceChangeListener(this);
-        } else if (touch != null && mEdgeMistouch != null) {
-            touch.removePreference(mEdgeMistouch);
-        }
-
-        if (touch != null && touch.getPreferenceCount() == 0) {
-            getPreferenceScreen().removePreference(touch);
-        }
-
         PreferenceCategory performance = (PreferenceCategory) getPreferenceScreen()
                  .findPreference("performance_category");
         mGpuBoost = (ListPreference) findPreference(GpuBoostSettings.KEY);
@@ -227,20 +205,35 @@ public class RealmeParts extends SettingsBasePreferenceFragment implements
 
         PreferenceCategory touchscreen = (PreferenceCategory) getPreferenceScreen()
                  .findPreference("touchscreen_category");
-        mGameMode = (SwitchPreference) findPreference(TouchModeSettings.KEY_GAME_MODE);
-        mGloveMode = (SwitchPreference) findPreference(TouchModeSettings.KEY_GLOVE_MODE);
+        mGameMode = (TwoStatePreference) findPreference(TouchModeSettings.KEY_GAME_MODE);
+        mGloveMode = (TwoStatePreference) findPreference(TouchModeSettings.KEY_GLOVE_MODE);
         if (TouchModeSettings.isGameModeSupported()) {
-            mGameMode.setChecked(TouchModeSettings.isGameModeEnabled(getContext()));
-            mGameMode.setOnPreferenceChangeListener(this);
-        } else if (touchscreen != null) {
+            if (mGameMode != null) {
+                mGameMode.setChecked(TouchModeSettings.isGameModeEnabled(getContext()));
+                mGameMode.setOnPreferenceChangeListener(this);
+            }
+        } else if (touchscreen != null && mGameMode != null) {
             touchscreen.removePreference(mGameMode);
         }
         if (TouchModeSettings.isGloveModeSupported()) {
-            mGloveMode.setChecked(TouchModeSettings.isGloveModeEnabled(getContext()));
-            mGloveMode.setOnPreferenceChangeListener(this);
-        } else if (touchscreen != null) {
+            if (mGloveMode != null) {
+                mGloveMode.setChecked(TouchModeSettings.isGloveModeEnabled(getContext()));
+                mGloveMode.setOnPreferenceChangeListener(this);
+            }
+        } else if (touchscreen != null && mGloveMode != null) {
             touchscreen.removePreference(mGloveMode);
         }
+
+        mEdgeMistouch = (SwitchPreferenceCompat) findPreference(EdgeMistouchSettings.KEY);
+        if (EdgeMistouchSettings.isSupported()) {
+            if (mEdgeMistouch != null) {
+                mEdgeMistouch.setChecked(EdgeMistouchSettings.isEnabled(getContext()));
+                mEdgeMistouch.setOnPreferenceChangeListener(this);
+            }
+        } else if (touchscreen != null && mEdgeMistouch != null) {
+            touchscreen.removePreference(mEdgeMistouch);
+        }
+
         if (touchscreen != null && touchscreen.getPreferenceCount() == 0) {
             getPreferenceScreen().removePreference(touchscreen);
         }

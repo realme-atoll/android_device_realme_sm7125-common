@@ -225,15 +225,18 @@
     <string name="touchscreen_title">Touchscreen</string>
     <string name="game_mode_title">Game touch mode</string>
     <string name="game_mode_summary">Higher touch report rate and lighter jitter filtering for lower input latency in games (small battery cost)</string>
+
+     <!-- Glove mode -->
     <string name="glove_mode_title">Glove mode</string>
     <string name="glove_mode_summary">Increase touch sensitivity for gloves or thick screen protectors</string>
 
     <!-- KProfiles -->
     <string name="kprofiles_title">Performance profile</string>
-    <string name="kprofiles_dialog_title">Performance profile - changes touch boost duration</string>
-    <string name="kprofiles_default">Default - current tuning</string>
-    <string name="kprofiles_battery">Battery - shorter touch boosts</string>
-    <string name="kprofiles_balanced">Balanced - standard touch boosts</string>
-    <string name="kprofiles_performance">Performance - longer touch boosts</string>
+    <string name="kprofiles_summary">Select a kernel power and performance profile</string>
+    <string name="kprofiles_dialog_title">Performance profile</string>
+    <string name="kprofiles_default">Default (system tuning)</string>
+    <string name="kprofiles_battery">Battery (power saving)</string>
+    <string name="kprofiles_balanced">Balanced (optimal for daily use)</string>
+    <string name="kprofiles_performance">Performance (higher clocks &amp; responsiveness)</string>
     <string name="kprofiles_apply_failed">Could not apply performance profile</string>
 </resources>

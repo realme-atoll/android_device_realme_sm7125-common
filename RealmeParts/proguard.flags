@@ -3,3 +3,13 @@
 -keepclassmembers public class org.aospextended.device.KeyHandler {
     *;
 }
+
+# Keep all RealmeParts components and dynamically referenced preference classes
+-keep class org.aospextended.device.** {
+    *;
+}
+
+-keepclassmembers class org.aospextended.device.** {
+    *;
+}
+
