@@ -148,16 +148,9 @@ ro.surface_flinger.use_color_management=true
 ro.vendor.display.sensortype=2
 ro.vendor.display.svi=1
 debug.sf.enable_adpf_cpu_hint=true
-debug.sf.predict_hwc_composition_strategy=1
-debug.sf.auto_latch_unsignaled=1
+debug.sf.predict_hwc_composition_strategy=0
+debug.sf.auto_latch_unsignaled=0
 debug.graphics.game_default_frame_rate.disabled=true
-debug.sf.use_phase_offsets_as_durations=1
-debug.sf.late.sf.duration=10500000
-debug.sf.late.app.duration=16500000
-debug.sf.early.sf.duration=13000000
-debug.sf.early.app.duration=16500000
-debug.sf.earlyGl.sf.duration=13500000
-debug.sf.earlyGl.app.duration=15000000
 
 # Fling
 ro.vendor.qti.cgroup_follow.enable=true
@@ -169,12 +162,6 @@ vendor.hw.fm.init=0
 
 #Graphics
 debug.hwui.use_hint_manager=true
-ro.hwui.texture_cache_size=72
-ro.hwui.layer_cache_size=48
-ro.hwui.r_buffer_cache_size=8
-ro.hwui.path_cache_size=32
-ro.hwui.drop_shadow_cache_size=6
-ro.hwui.texture_cache_flushrate=0.4
 
 # Keystore
 ro.hardware.keystore_desede=true

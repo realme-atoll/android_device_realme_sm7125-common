@@ -237,7 +237,7 @@ echo 0 > /proc/sys/kernel/sched_conservative_pl
 # Input boost: also wake the big cluster (cpu6) on touch, not just little (cpu0). 1267200
 # is the big-cluster hispeed OPP -> snappier app launch / touch without slamming to 2.3GHz max.
 echo "0:1248000 6:1555200" > /sys/module/cpu_boost/parameters/input_boost_freq
-echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
+echo 80 > /sys/module/cpu_boost/parameters/input_boost_ms
 # While the input boost is active, ask WALT for conservative sched boost (2):
 # tasks whose demand exceeds the little cluster are placed on the gold cores
 # immediately instead of waiting for the next migration window. 1 (full

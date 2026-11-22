@@ -41,7 +41,7 @@ public class ForceFastChargeSettings {
     }
 
     public static boolean isEnabled(Context context) {
-        return Utils.getSharedPreferences(context).getBoolean(KEY, false);
+        return Utils.getSharedPreferences(context).getBoolean(KEY, true);
     }
 
     public static void setEnabled(boolean enabled) {
@@ -55,8 +55,6 @@ public class ForceFastChargeSettings {
         if (!isSupported()) {
             return;
         }
-        if (isEnabled(context)) {
-            setEnabled(true);
-        }
+        setEnabled(isEnabled(context));
     }
 }

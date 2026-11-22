@@ -51,10 +51,10 @@ public class OtgSettings {
     public static boolean isEnabled(Context context) {
         SharedPreferences prefs = Utils.getSharedPreferences(context);
         try {
-            return prefs.getBoolean(KEY, true);
+            return prefs.getBoolean(KEY, false);
         } catch (ClassCastException e) {
             // Migration from legacy String mode ("auto", "on", "off")
-            String mode = prefs.getString(KEY, MODE_ON);
+            String mode = prefs.getString(KEY, MODE_OFF);
             boolean enabled = !MODE_OFF.equals(mode);
             prefs.edit().remove(KEY).putBoolean(KEY, enabled).apply();
             return enabled;

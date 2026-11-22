@@ -116,13 +116,13 @@
             android:key="force_fastcharge"
             android:title="@string/force_fastcharge_title"
             android:summary="@string/force_fastcharge_summary"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
         <SwitchPreferenceCompat
             android:key="otg_mode"
             android:title="@string/otg_mode_title"
             android:summary="@string/otg_mode_summary"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
 
     </PreferenceCategory>
 
