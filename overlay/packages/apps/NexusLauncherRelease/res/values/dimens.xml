@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Wallpaper max scale: enables All-Apps wallpaper depth zoom & live blur in prebuilt NexusLauncher -->
+    <item name="config_wallpaperMaxScale" format="float" type="dimen">1.10</item>
+
+    <!-- Taskbar stashed size: eliminates bottom gap below full-screen apps in gesture navigation -->
+    <dimen name="taskbar_stashed_size">24.0dp</dimen>
+
+</resources>

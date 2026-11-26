@@ -24,9 +24,6 @@ $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 # Add common definitions for Qualcomm
 $(call inherit-product, hardware/qcom-caf/common/common.mk)
 
-# UDFPS
-$(call soong_config_set,surfaceflinger,udfps_lib,//$(LOCAL_PATH):libudfps_extension.realme_sm7125)
-
 # speaker layout channel mask
 $(call soong_config_set_bool,android_hardware_audio,skip_speaker_layout_channel_mask_field,true)
 
@@ -35,12 +32,20 @@ PRODUCT_USE_DYNAMIC_PARTITIONS := true
 PRODUCT_BOARD_PLATFORM := atoll
 PRODUCT_USES_QCOM_HARDWARE := true
 
+# Remove unwanted packages
+PRODUCT_PACKAGES += \
+    RemovePackages
+
 # AID/fs configs
 PRODUCT_PACKAGES += \
     fs_config_files
 
 # API
 PRODUCT_SHIPPING_API_LEVEL := 29
+
+# 4.14 kernel predates CC_IS_CLANG/LD_IS_LLD/AS_IS_LLVM Kconfig symbols, so it
+# cannot satisfy FCM kernel-requirement config checks at higher matrix levels.
+PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 # Audio
 PRODUCT_PACKAGES += \
@@ -89,8 +94,15 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml
 
 # Boot animation
+TARGET_BOOT_ANIMATION_RES := 1080
 TARGET_SCREEN_HEIGHT := 2400
 TARGET_SCREEN_WIDTH := 1080
+
+# Target
+TARGET_SUPPORTS_QUICK_TAP := true
+
+# OMX
+TARGET_SUPPORTS_OMX_SERVICE := false
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -103,9 +115,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml
-
-#CertifiedProps
-$(call inherit-product-if-exists, vendor/certprops/Android.mk)
 
 # Config Store
 PRODUCT_PACKAGES += \
@@ -150,7 +159,7 @@ PRODUCT_PACKAGES += \
     android.hardware.drm@1.4.vendor
 
 # Dolby
-$(call inherit-product, hardware/dolby/dolby.mk)
+$(call inherit-product-if-exists, hardware/dolby/dolby.mk)
 
 # Enable project quotas and casefolding for emulated storage without sdcardfs
 $(call inherit-product, $(SRC_TARGET_DIR)/product/emulated_storage.mk)
@@ -172,6 +181,15 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
+
+$(call soong_config_set,surfaceflinger,udfps_lib,//device/realme/sm7125-common/fingerprint:libudfps_extension.realme_sm7125)
+
+# Fingerprint shims
+PRODUCT_PACKAGES += \
+    libshims_aidl_fingerprint_v2.oplus \
+    libshims_aidl_fingerprint_v3.oplus \
+    libshims_aidl_fingerprint_v4.oplus \
+    libshims_fingerprint.oplus
 
 #FM
 PRODUCT_PACKAGES += \
@@ -225,6 +243,10 @@ PRODUCT_PACKAGES += \
     init.oppo.debug.diag.rc \
     init.oppo.display.rc_odm
 
+# ORMS
+PRODUCT_PACKAGES += \
+    vendor.oplus.hardware.orms@1.0
+
 # Vendor init files
 PRODUCT_PACKAGES += \
     init.oppo.display.rc_vendor \
@@ -276,10 +298,29 @@ PRODUCT_PACKAGES += \
 $(call inherit-product-if-exists, vendor/lawnchair/lawnchair.mk)
 
 #LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay-service.sdm
 
-$(call soong_config_set_bool,livedisplay_sdm,enable_dm,false)
+# LiveDisplay is unsupported by hardware display engine on sm7125;
+# enabling vendor.lineage.livedisplay-service.sdm causes IPictureAdjustment.getHueRange()
+# to throw UnsupportedOperationException, fatally crashing system_server during boot.
+# PRODUCT_PACKAGES += \
+#     vendor.lineage.livedisplay-service.sdm
+
+# $(call soong_config_set_bool,livedisplay_sdm,enable_dm,false)
+
+# Logging
+SPAMMY_LOG_TAGS := \
+    SDM \
+    SDM-histogram \
+    SRE \
+    WifiHAL \
+    cnss-daemon \
+    sensors \
+    vendor.qti.hardware.display.composer-service
+
+ifneq ($(TARGET_BUILD_VARIANT),eng)
+PRODUCT_VENDOR_PROPERTIES += \
+    $(foreach tag,$(SPAMMY_LOG_TAGS),log.tag.$(tag)=E)
+endif
 
 # Media
 PRODUCT_PACKAGES += \
@@ -295,19 +336,13 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video_le.xml
 
 PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/media/vendor,$(TARGET_COPY_OUT_VENDOR)/etc) 
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/configs/media/vendor,$(TARGET_COPY_OUT_VENDOR)/etc)
 
 # Minijail
 PRODUCT_PACKAGES += \
     libminijail \
     libavservices_minijail \
     libavservices_minijail.vendor
-
-#mount 
-PRODUCT_PACKAGES += \
-     vendor_bt_firmware_mountpoint \
-     vendor_dsp_mountpoint \
-     vendor_firmware_mnt_mountpoint
 
 # Network
 PRODUCT_COPY_FILES += \
@@ -326,16 +361,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/nfc/libese-nxp.conf:$(TARGET_COPY_OUT_VENDOR)/etc/libese-nxp.conf \
     $(LOCAL_PATH)/configs/nfc/nfc_features.xml:$(TARGET_COPY_OUT_ODM)/etc/permissions/sku_nfc/nfc_features.xml
 
-#NotchBar Killer
-PRODUCT_PACKAGES += \
-    NotchBarKiller \
-    NoCutoutOverlay
-
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-lineage \
-    $(LOCAL_PATH)/overlay-evolution
+    $(LOCAL_PATH)/overlay-lineage
 
 # Perf
 PRODUCT_PACKAGES += \
@@ -344,12 +373,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/perf/msm_irqbalance.conf:$(TARGET_COPY_OUT_VENDOR)/etc/msm_irqbalance.conf
 
-#Product Properties (CAF)
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.soc.manufacturer=QTI
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.soc.model=SM7125
 
 # Power
 PRODUCT_PACKAGES += \
@@ -358,10 +381,7 @@ PRODUCT_PACKAGES += \
     libqti-perfd-client
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
-
-# Pixel scheduler QoS is unavailable on 4.14; ADPF manages uclamp separately.
-PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json \
     $(LOCAL_PATH)/configs/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
 #performance critical applications
@@ -373,11 +393,10 @@ PRODUCT_DEXPREOPT_SPEED_APPS += \
 PRODUCT_PACKAGES += \
     libprotobuf-cpp-full-3.9.1-vendorcompat \
     libprotobuf-cpp-lite-3.9.1-vendorcompat
-    
+
 # QTI FWK Detect
 PRODUCT_PACKAGES += \
-    libqti_vndfwk_detect.vendor \
-    libvndfwk_detect_jni.qti.vendor
+    libqti_vndfwk_detect.vendor
 
 # RCS
 PRODUCT_PACKAGES += \
@@ -491,7 +510,7 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.vibrator.service
 
 PRODUCT_COPY_FILES += \
-    vendor/qcom/opensource/vibrator/excluded-input-devices.xml:$(TARGET_COPY_OUT_VENDOR)/etc/excluded-input-devices.xml
+    $(LOCAL_PATH)/vibrator/excluded-input-devices.xml:$(TARGET_COPY_OUT_VENDOR)/etc/excluded-input-devices.xml
 
 # Vulkan
 PRODUCT_COPY_FILES += \

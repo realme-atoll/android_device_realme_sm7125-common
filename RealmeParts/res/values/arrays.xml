@@ -57,29 +57,14 @@
         <item>3</item>
     </string-array>
 
-    <!-- Battery charge limit (SOC cap) -->
-    <string-array name="charge_limit_entries" translatable="false">
-        <item>70%</item>
-        <item>75%</item>
-        <item>80%</item>
-        <item>85%</item>
-        <item>90%</item>
-    </string-array>
-
-    <string-array name="charge_limit_values" translatable="false">
-        <item>70</item>
-        <item>75</item>
-        <item>80</item>
-        <item>85</item>
-        <item>90</item>
-    </string-array>
-
+    <!-- KProfiles -->
     <string-array name="kprofiles_entries">
         <item>@string/kprofiles_default</item>
         <item>@string/kprofiles_battery</item>
         <item>@string/kprofiles_balanced</item>
         <item>@string/kprofiles_performance</item>
     </string-array>
+
     <string-array name="kprofiles_values" translatable="false">
         <item>0</item>
         <item>1</item>

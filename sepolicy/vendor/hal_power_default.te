@@ -1,3 +1,7 @@
+allow hal_power_default self:capability sys_nice;
+allow hal_power_default domain:process setsched;
+dontaudit hal_power_default { platform_app priv_app untrusted_app_all }:process setsched;
+
 allow hal_power_default proc_touchpanel:dir search;
 allow hal_power_default proc_touchpanel:file rw_file_perms;
 

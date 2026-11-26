@@ -146,7 +146,7 @@ echo 0 > /proc/sys/kernel/sched_conservative_pl
 # Input boost: also wake the big cluster (cpu6) on touch, not just little (cpu0). 1267200
 # is the big-cluster hispeed OPP -> snappier app launch / touch without slamming to 2.3GHz max.
 echo "0:1248000 6:1555200" > /sys/module/cpu_boost/parameters/input_boost_freq
-echo 80 > /sys/module/cpu_boost/parameters/input_boost_ms
+echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
 # While the input boost is active, ask WALT for conservative sched boost (2):
 # tasks whose demand exceeds the little cluster are placed on the gold cores
 # immediately instead of waiting for the next migration window. 1 (full
@@ -225,6 +225,10 @@ echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 # reordering -> worse read tail-latency / "feels slow initially" on UFS. Cover sda-sdf,
 # not just sda, so every LUN (incl. the one backing /data) gets the better scheduler.
 for q in /sys/block/sd*/queue/scheduler; do echo deadline > $q; done
+
+# 2 kswapd threads (OPLUS multi-kswapd). 8GB/8-core: a single kswapd can't keep up when
+# zram reclaim is active, forcing foreground tasks into direct reclaim = stalls/jank.
+echo 2 > /proc/sys/vm/kswapd_threads
 
 # ---- GPU (Adreno 618) tuning ----
 # Stock had NO gpu governor setup, leaving the Adreno on raw defaults. Keep the correct

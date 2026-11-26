@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+    <!-- Charging speed thresholds (in microwatts).
+         < 2W: Charging slowly
+         2W - 5W: Charging
+         > 6W: Charging rapidly -->
+    <integer name="config_chargingSlowlyThreshold">2000000</integer>
+    <integer name="config_chargingFastThreshold">5000000</integer>
+    <integer name="config_chargingFastThreshold_v2">5000000</integer>
+</resources>

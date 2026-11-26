@@ -1,38 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (c) 2006, The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
-*/
+     Copyright (C) 2024-2026 The LineageOS Project
+     SPDX-License-Identifier: Apache-2.0
 -->
 <resources>
     <!-- the padding on the start of the statusbar -->
-    <dimen name="status_bar_padding_start">3px</dimen>
+    <dimen name="status_bar_padding_start">0dp</dimen>
 
     <!-- the padding on the end of the statusbar -->
-    <dimen name="status_bar_padding_end">16px</dimen>
-
-   <!-- the padding on the top of the statusbar -->
-    <dimen name="status_bar_padding_top">4dp</dimen>
+    <dimen name="status_bar_padding_end">0dp</dimen>
 
     <!-- Starting padding for a left-aligned status bar clock -->
-    <dimen name="status_bar_left_clock_starting_padding">6px</dimen>
+    <dimen name="status_bar_left_clock_starting_padding">0dp</dimen>
 
     <!-- Height of the status bar header bar when on Keyguard -->
-    <dimen name="status_bar_header_height_keyguard">@*android:dimen/status_bar_height</dimen>
+    <dimen name="status_bar_header_height_keyguard">28dp</dimen>
 
     <!-- Margin on the left side of the carrier text on Keyguard -->
-    <dimen name="keyguard_carrier_text_margin">@dimen/status_bar_padding_start</dimen>
+    <dimen name="keyguard_carrier_text_margin">0dp</dimen>
 
     <!-- Margin on the right side of the system icon group on Keyguard. -->
     <dimen name="system_icons_keyguard_padding_end">0dp</dimen>
@@ -40,24 +25,10 @@
     <!-- The absolute side margins of quick settings -->
     <dimen name="rounded_corner_content_padding">8dp</dimen>
 
-    <!-- Margin on the left side of the heads up notification -->
-    <dimen name="heads_up_status_bar_padding_start">115px</dimen>
+    <!-- Biometric dialog corner radius -->
+    <dimen name="biometric_dialog_corner_size">@*android:dimen/config_dialogCornerRadius</dimen>
 
-    <!-- Margin on the left side of the center clock -->
-    <dimen name="status_bar_center_clock_padding_start">0px</dimen>
-
-    <!-- Margin on the right side of the center clock -->
-    <dimen name="status_bar_center_clock_padding_end">124px</dimen>
-
-    <!-- The maximum count of notifications on Keyguard (only when ambient play indication is showing on keyguard).
-         The rest will be collapsed in an overflow card.
-     -->
-    <integer name="keyguard_max_notification_count_ambient_play">2</integer>
-
-    <!-- Location on the screen of the center of the physical power button. -->
-    <dimen name="physical_power_button_center_screen_location_y">912px</dimen>
-
-    <!-- Blur radius behind Notification Shade -->
-    <dimen name="max_shade_window_blur_radius">17dp</dimen>
+    <!-- Horizontal padding of keyguard indication area -->
+    <dimen name="keyguard_indication_area_padding">16dp</dimen>
 
 </resources>

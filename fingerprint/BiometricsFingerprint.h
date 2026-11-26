@@ -61,18 +61,22 @@ public:
     Return<RequestStatus> authenticate(uint64_t operationId, uint32_t gid) override;
 
     // ::V2_3::IBiometricsFingerprint follow.
-    Return<bool> isUdfps(uint32_t sensorId) override;
+    Return<bool> isUdfps(uint32_t /*sensorId*/) override { return isUdfps(); }
     Return<void> onFingerDown(uint32_t x, uint32_t y, float minor, float major) override;
     Return<void> onFingerUp() override;
 
-    Return<void> onShowUdfpsOverlay() ;
-    Return<void> onHideUdfpsOverlay() ;
+    Return<void> onShowUdfpsOverlay();
+    Return<void> onHideUdfpsOverlay();
+
+    static bool isUdfps();
+    static bool setDimlayerHbm(unsigned int value);
+    static bool setFpPress(unsigned int value);
+    static bool isDozeMode();
 
 private:
     sp<vendor::oplus::hardware::biometrics::fingerprint::V2_1::IBiometricsFingerprint> mOplusBiometricsFingerprint;
     sp<vendor::oplus::hardware::biometrics::fingerprint::V2_1::IBiometricsFingerprintClientCallback> mOplusClientCallback;
     static Return<RequestStatus> OplusToAOSPRequestStatus(vendor::oplus::hardware::biometrics::fingerprint::V2_1::RequestStatus req);
-    Return<bool> isDozeMode();
 };
 
 }  // namespace implementation

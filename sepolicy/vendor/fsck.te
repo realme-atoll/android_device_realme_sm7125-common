@@ -1,13 +1,5 @@
 # Block device access
-allow fsck vendor_modem_efs_partition_device:blk_file { read write };
-allow fsck fsck:capability { kill };
-
 allow fsck block_device:blk_file { ioctl };
+allow fsck vendor_modem_efs_partition_device:blk_file rw_file_perms;
+allow fsck sysfs:file getattr;
 allow fsck self:capability kill;
-allow fsck vendor_modem_efs_partition_device:blk_file { open read };
-
-# e2fsck stats mount points from /proc/mounts to see whether the checked fs
-# is mounted, which trips a search on /mnt/vendor. fsck is a coredomain and
-# system/sepolicy neverallows coredomain access to mnt_vendor_file:dir, so
-# this cannot be allowed from vendor policy; silence the harmless denial.
-dontaudit fsck mnt_vendor_file:dir search;

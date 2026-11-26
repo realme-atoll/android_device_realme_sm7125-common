@@ -9,11 +9,16 @@ allow vendor_init {
 allow vendor_init proc_decimal:file { write };
 allow vendor_init vendor_persist_file:lnk_file read;
 allow vendor_init proc_touchpanel:file { write };
-allow vendor_init block_device:lnk_file setattr;
+allow vendor_init {
+  block_device
+  vendor_rawdump_block_device
+}:lnk_file setattr;
 allow vendor_init proc_fw_update:file { write };
 
 set_prop(vendor_init, vendor_freq_prop);
 set_prop(vendor_init, vendor_camera_prop);
+set_prop(vendor_init, vendor_ims_prop);
+set_prop(vendor_init, oppo_fingerprint_prop);
 
 # Allow setting properties
 allow vendor_init vendor_cgroup_follow_prop:property_service set;
@@ -30,7 +35,6 @@ allow vendor_init rm_vendor_radio_vendor_data_file:dir create_dir_perms;
 allow vendor_init rm_vendor_radio_vendor_data_file:dir relabelto;
 allow vendor_init rm_vendor_radio_vendor_data_file:file { getattr relabelto };
 allow vendor_init vendor_oppo_radio_cache_file:dir create_dir_perms;
-
 
 # Set the default RT utilization clamp before hint sessions start.
 allow vendor_init proc_sched:file w_file_perms;
