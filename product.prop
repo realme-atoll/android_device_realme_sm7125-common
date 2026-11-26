@@ -57,9 +57,6 @@ persist.sys.nfc.disPowerSave=1
 persist.sys.nfc.aid_overflow=true
 wifi.aware.interface=wifi-aware0
 
-# Cached app compaction
-persist.device_config.activity_manager.use_compaction=true
-
 # Bluetooth SBC HD higher bitrate
 persist.bluetooth.sbc_hd_higher_bitrate=1
 
