@@ -39,3 +39,6 @@ dontaudit vendor_init proc_security:file write;
 dontaudit fsck sysfs:file read;
 dontaudit vendor_hvdcp kmsg_device:chr_file { getattr write };
 dontaudit kernel self:qipcrtr_socket create;
+dontaudit hal_fingerprint_default default_prop:property_service set;
+dontaudit vendor_init cache_file:dir { getattr search };
+dontaudit toolbox adb_data_file:dir search;
